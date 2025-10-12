@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "GMTestAuto", group = "Sensor")
+@Autonomous(name = "GMTestAuto-1", group = "Sensor")
 
 public class GMTestAuto extends BaseAuto {
     @Override
