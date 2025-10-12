@@ -6,6 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class GMTestAuto extends BaseAuto {
     @Override
     protected void auto(){
-        // testAxes();
+        testAxes();
     }
 }
