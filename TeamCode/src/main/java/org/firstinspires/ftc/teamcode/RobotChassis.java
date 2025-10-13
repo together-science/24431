@@ -1,0 +1,22 @@
+package org.firstinspires.ftc.teamcode;
+
+// an interface is a contract - classes that implement an interface
+// can be used by code that uses the interface methods.
+// this is kind of the answer to the missing multiple inheritance in Java
+
+public interface RobotChassis {
+    // will switch off motors and stop (brake)
+    void stop();
+    // switch off motors and coast
+    void coast();
+    // will engage motors to drive in direction and turn toward it
+    void startDrive(double speed, double direction, double turnSpeed);
+    // will engage motors to strafe in direction but hold heading
+    void startStrafe(double speed, double direction, double heading, double turnSpeed);
+    // will engage motors to strafe in direction but with current heading
+    void startStrafe(double speed, double direction);
+    // engage motors to turn towards heading, on the spot
+    void startTurn(double turnSpeed, double heading);
+
+    // still to come: higher-level routines that iterate and wait (driveTo, strafeTo)
+}

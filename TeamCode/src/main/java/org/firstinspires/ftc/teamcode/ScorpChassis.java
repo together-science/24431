@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-public class ScorpChassis {
+public class ScorpChassis implements RobotChassis {
     private final DcMotor      lf;
     private final DcMotor      rf;
     private final DcMotor      lb;
@@ -163,6 +163,32 @@ public class ScorpChassis {
         rf.setPower(rightSpeed);
         lb.setPower(leftSpeed);
         rb.setPower(rightSpeed);
+
+    }
+
+    @Override
+    public void stop() {
+    }
+
+    @Override
+    public void coast() {
+    }
+
+    @Override
+    public void startDrive(double speed, double direction, double turnSpeed) {
+    }
+
+    @Override
+    public void startStrafe(double speed, double direction, double heading, double turnSpeed) {
+    }
+
+    @Override
+    public void startStrafe(double speed, double direction) {
+
+    }
+
+    @Override
+    public void startTurn(double turnSpeed, double heading) {
 
     }
 }
