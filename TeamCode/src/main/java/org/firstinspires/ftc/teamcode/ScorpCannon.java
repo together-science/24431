@@ -6,10 +6,25 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ScorpCannon {
     private final DcMotor wheel;
     private final Servo trigger;
+    private static final double SPEED = 1.0;
+    private static final double POSITION_CHARGED = 0.0;
+    private static final double POSITION_TRIGGERED = 1.0;
+    private static final long SERVO_DELAY = 200;
 
     ScorpCannon(HardwareMap hm, String wheelName, String triggerName) {
         this.wheel = hm.get(DcMotor.class, wheelName);
         this.trigger = hm.get(Servo.class, triggerName);
+
+        if (wheel != null) {
+            // no encoder, coast on zero
+            wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            // direction is controlled in hardware config, leave this alone!
+            wheel.setDirection(DcMotor.Direction.FORWARD);
+        }
+        if (trigger != null) {
+            trigger.setPosition(POSITION_CHARGED);
+        }
     }
 
     void spinUp() {
@@ -18,6 +33,28 @@ public class ScorpCannon {
             return;
         }
 
-        // spin up the wheel ...
+        wheel.setPower(SPEED);
+    }
+
+    void spinDown() {
+        // check if we in fact have a cannon
+        if (this.wheel == null) {
+            return;
+        }
+
+        // spin down the wheel ...
+        wheel.setPower(0);
+    }
+
+    void fire() {
+        try {
+            trigger.setPosition(POSITION_CHARGED);
+            Thread.sleep(SERVO_DELAY);
+            trigger.setPosition(POSITION_TRIGGERED);
+            Thread.sleep(SERVO_DELAY);
+        } catch (InterruptedException ignored) {
+        } finally {
+            trigger.setPosition(POSITION_CHARGED);
+        }
     }
 }
