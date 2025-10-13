@@ -123,37 +123,6 @@ public class BaseAuto extends LinearOpMode {
         moveRobot(0, 0);
     }
     
-    public void setUpOtos(){
-        telemetry.addLine("Configuring OTOS...");
-        telemetry.update();
-
-        myOtos.setLinearUnit(DistanceUnit.INCH);
-        myOtos.setAngularUnit(AngleUnit.DEGREES);
-
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
-        myOtos.setOffset(offset);
-
-        myOtos.setLinearScalar(1.0); //This needs updating
-        myOtos.setAngularScalar(1.0); // So does this
-
-        myOtos.calibrateImu();
-
-        myOtos.resetTracking();
-
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
-        myOtos.setPosition(currentPosition);
-
-        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
-        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
-        myOtos.getVersionInfo(hwVersion, fwVersion);
-
-        telemetry.addLine("OTOS configured! Press start to get position data!");
-        telemetry.addLine();
-        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
-        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
-        telemetry.update();
-    }
-    
     @Override
     public void runOpMode() {
         leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
@@ -162,23 +131,12 @@ public class BaseAuto extends LinearOpMode {
         intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
         sorter = new ScorpSorter(hardwareMap, "sorter_servo");
 
-        chassis.init();
+        if(chassis.init()){
+            telemetry.addLine("Init completed");
+            telemetry.update();
+        }
 
-        /* The next two lines define Hub orientation.
-         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
-         *
-         * To Do:  EDIT these two lines to match YOUR mounting configuration.
-         */
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-
-        //imu = hardwareMap.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
-        
         autoInit();
-        
-        setUpOtos();
 
         while (opModeInInit()) {
             telemetry.addData(">", "Waiting ...");
