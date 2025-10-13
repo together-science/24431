@@ -4,12 +4,15 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
+//import com.qualcomm.robotcore.hardware.Servo; // Not used yet <--
 
 public class ScorpChassis {
-    private DcMotor lf=null, rf=null, lb=null, rb=null;
-    private IMU imu = null;
-    private SparkFunOTOS otos = null;
+    private final DcMotor lf;
+    private final DcMotor rf;
+    private final DcMotor lb;
+    private final DcMotor rb;
+    private final SparkFunOTOS otos;
+    private final IMU imu;
 
     ScorpChassis(HardwareMap hm, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
         this.lf = hm.get(DcMotor.class, lfName);

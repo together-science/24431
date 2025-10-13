@@ -28,6 +28,9 @@ public class BaseAuto extends LinearOpMode {
 
     private ScorpCannon leftCannon = null;
     private ScorpCannon rightCannon = null;
+    private ScorpChassis chassis = null;
+    private ScorpIntake intake = null;
+    private ScorpSorter sorter = null;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
     // but still be displayed by sendTelemetry()
@@ -153,14 +156,9 @@ public class BaseAuto extends LinearOpMode {
     
     @Override
     public void runOpMode() {
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-        myOtos = hardwareMap.get(SparkFunOTOS.class, "oscar");
         leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
         rightCannon = new ScorpCannon(hardwareMap, "right_cannon_wheel", "right_cannon_trigger");
-
+        chassis = new ScorpChassis(hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -176,7 +174,7 @@ public class BaseAuto extends LinearOpMode {
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-        imu = hardwareMap.get(IMU.class, "imu");
+        //imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
