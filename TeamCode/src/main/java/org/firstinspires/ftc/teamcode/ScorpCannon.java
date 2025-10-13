@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class ScorpCannon {
-    private DcMotor wheel;
-    private Servo trigger;
+    private final DcMotor wheel;
+    private final Servo trigger;
 
     ScorpCannon(HardwareMap hm, String wheelName, String triggerName) {
         this.wheel = hm.get(DcMotor.class, wheelName);
