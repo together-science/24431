@@ -2,32 +2,46 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-
+import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-//import com.qualcomm.robotcore.hardware.Servo; // Not used yet <--
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class ScorpChassis {
-    private final DcMotor lf;
-    private final DcMotor rf;
-    private final DcMotor lb;
-    private final DcMotor rb;
+    private final DcMotor      lf;
+    private final DcMotor      rf;
+    private final DcMotor      lb;
+    private final DcMotor      rb;
     private final SparkFunOTOS otos;
-    private final IMU imu;
+    private final IMU          imu;
+    private final LinearOpMode op;
+    static final double     COUNTS_PER_MOTOR_REV    = 537.7*(24.0/35.0);
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0;
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0;
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     STRAFE_CORRECTION       = 1.0;
+    static final double     DRIVE_SPEED_FAST        = 0.4;
+    static final double     DRIVE_SPEED_NORMAL      = 0.2;
+    static final double     DRIVE_SPEED_SLOW        = 0.1;
+    static final double     TURN_SPEED              = 0.5;
+    static final double     HEADING_THRESHOLD       = 1.0;
+    static final double     P_TURN_GAIN             = 0.02;
+    static final double     P_DRIVE_GAIN            = 0.03;
 
-    ScorpChassis(HardwareMap hm, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
+    ScorpChassis(LinearOpMode op, HardwareMap hm, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
         this.lf = hm.get(DcMotor.class, lfName);
         this.rf = hm.get(DcMotor.class, rbName);
         this.lb = hm.get(DcMotor.class, lbName);
         this.rb = hm.get(DcMotor.class, rbName);
         this.otos = hm.get(SparkFunOTOS.class, otosName);
         this.imu = hm.get(IMU.class, imuName);
+        this.op = op;
     }
-
-    boolean init(){
+    void init(){
         lf.setDirection(DcMotor.Direction.FORWARD);
         rf.setDirection(DcMotor.Direction.FORWARD);
         lb.setDirection(DcMotor.Direction.REVERSE);
@@ -52,6 +66,7 @@ public class ScorpChassis {
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
+        imu.resetYaw();
 
         otos.setLinearUnit(DistanceUnit.INCH);
         otos.setAngularUnit(AngleUnit.DEGREES);
@@ -66,7 +81,88 @@ public class ScorpChassis {
         SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
         SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
         otos.getVersionInfo(hwVersion, fwVersion);
+    }
 
-        return true;
+    //High level - Simple
+    void moveTo(double x, double y, double driveSpeed, double accuracy){
+        SparkFunOTOS.Pose2D pos;
+        double posX, posY, dx, dy, h;
+        double distance = 1000;
+        while(Math.abs(distance) > accuracy && op.opModeIsActive()) {
+            pos = otos.getPosition();
+            posX = pos.x; posY = pos.y;
+            posX*=-1; posY*=-1;
+            dx = x - posX;
+            dy = y - posY;
+            distance = Math.sqrt(dx*dx+dy*dy);
+            h = (Math.atan2(dy, dx)*(180/3.1415)-90);
+            h = h < 0 ? h+360 : h;
+            startDriveStraight(driveSpeed, h);
+        }
+        moveRobot(0, 0);
+    }
+
+    //Medium level - Intermediate
+    void driveStraight(double maxDriveSpeed, double distance, double heading) {
+        int lfTarget, rfTarget, lbTarget, rbTarget;
+        double turnSpeed;
+        if (op.opModeIsActive()) {
+            int moveCounts = (int)(distance * COUNTS_PER_INCH);
+            lfTarget = lf.getCurrentPosition() + moveCounts;
+            rfTarget = rf.getCurrentPosition() + moveCounts;
+            lbTarget = lb.getCurrentPosition() + moveCounts;
+            rbTarget = rb.getCurrentPosition() + moveCounts;
+            lf.setTargetPosition(lfTarget);
+            rf.setTargetPosition(rfTarget);
+            lb.setTargetPosition(lbTarget);
+            rb.setTargetPosition(rbTarget);
+
+            moveRobot(Math.abs(maxDriveSpeed), 0);
+
+            while (op.opModeIsActive() && (lf.isBusy() && rf.isBusy())){
+                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+                if (distance < 0){
+                    turnSpeed *= -1.0;
+                }
+                moveRobot(0, turnSpeed);
+            }
+
+            moveRobot(0, 0);
+        }
+
+    }
+    void startDriveStraight(double maxDriveSpeed, double h) {
+        double turnSpeed = getSteeringCorrection(h, P_DRIVE_GAIN);
+        moveRobot(Math.abs(maxDriveSpeed), turnSpeed);
+    }
+    double getHeading() {
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        return orientation.getYaw(AngleUnit.DEGREES);
+    }
+
+    //Low level - Advance
+    double getSteeringCorrection(double desiredHeading, double proportionalGain) {
+        double headingError = desiredHeading - getHeading();
+
+        while (headingError > 180)  headingError -= 360;
+        while (headingError <= -180) headingError += 360;
+
+        return Range.clip(headingError * proportionalGain, -1, 1);
+    }
+    void moveRobot(double drive, double turn) {
+        double leftSpeed  = drive - turn;
+        double rightSpeed = drive + turn;
+
+        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+        if (max > 1.0) {
+            leftSpeed /= max;
+            rightSpeed /= max;
+        }
+
+        lf.setPower(leftSpeed);
+        rf.setPower(rightSpeed);
+        lb.setPower(leftSpeed);
+        rb.setPower(rightSpeed);
+
     }
 }

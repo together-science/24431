@@ -17,14 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class BaseAuto extends LinearOpMode {
-    // Declare OpMode members.
-    private DcMotor         leftFrontDrive   = null;
-    private DcMotor         rightFrontDrive  = null;
-    private DcMotor         leftBackDrive   = null;
-    private DcMotor         rightBackDrive  = null;
-    private IMU             imu         = null; 
-    public SparkFunOTOS     myOtos;
-    private double          headingError  = 0;
+    //private double          headingError  = 0;
 
     private ScorpCannon leftCannon = null;
     private ScorpCannon rightCannon = null;
@@ -75,66 +68,18 @@ public class BaseAuto extends LinearOpMode {
 
     protected void autoInit() {
     }
-
     protected void auto() {
     }
-    
-    
-    protected void testAxes(){
-        while(opModeIsActive()){
-        SparkFunOTOS.Pose2D pos = myOtos.getPosition();
-        telemetry.addData("Heading", pos.h);
-        telemetry.addData("PosX", pos.x);
-        telemetry.addData("PosY", pos.y);
-        // telemetry.update
-        }
-    }
-    
-    /*
-    //double posX;
-    //double posY;
-    //double distance = 0;
-    //double dx;
-    //double dy;
-    //double h;
-    */ //This is moveTo() functions variables defined globally if needed for telemetry
-    
-    protected void moveTo(double x, double y, double driveSpeed, double accuracy){
-        SparkFunOTOS.Pose2D pos;
-        double posX;
-        double posY;
-        double distance = 1000;
-        double dx;
-        double dy;
-        double h;
-        while(Math.abs(distance) > accuracy && opModeIsActive()) {
-            pos = myOtos.getPosition();
-            posX = pos.x;
-            posY = pos.y;
-            posX*=-1; 
-            posY*=-1;
-            dx = x - posX;
-            dy = y - posY;
-            distance = Math.sqrt(dx*dx+dy*dy);
-            h = (Math.atan2(dy, dx)*(180/3.1415)-90);
-            h = h < 0 ? h+360 : h;
-            startDriveStraight(driveSpeed, h);
-        }
-        moveRobot(0, 0);
-    }
-    
+
     @Override
     public void runOpMode() {
         leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
         rightCannon = new ScorpCannon(hardwareMap, "right_cannon_wheel", "right_cannon_trigger");
-        chassis = new ScorpChassis(hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
+        chassis = new ScorpChassis(this, hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
         intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
         sorter = new ScorpSorter(hardwareMap, "sorter_servo");
 
-        if(chassis.init()){
-            telemetry.addLine("Init completed");
-            telemetry.update();
-        }
+        chassis.init();
 
         autoInit();
 
@@ -143,14 +88,8 @@ public class BaseAuto extends LinearOpMode {
             telemetry.update();
         }
 
-        imu.resetYaw();
-
         auto();
-        
-        telemetry.update();
-        telemetry.addData("Path", "Complete");
-        sleep(1000);
-    }
+    } //Perfect
 
     /*
      * ====================================================================================================
