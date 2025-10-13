@@ -159,6 +159,8 @@ public class BaseAuto extends LinearOpMode {
         leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
         rightCannon = new ScorpCannon(hardwareMap, "right_cannon_wheel", "right_cannon_trigger");
         chassis = new ScorpChassis(hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
+        intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
+        sorter = new ScorpSorter(hardwareMap, "sorter_servo");
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
