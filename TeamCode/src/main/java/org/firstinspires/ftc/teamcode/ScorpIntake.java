@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ScorpIntake {
-    private DcMotor left;
-    private DcMotor right;
+    private final DcMotor left;
+    private final DcMotor right;
     private static final double SPEED = 1.0;
 
     ScorpIntake(HardwareMap hm, String leftName, String rightName) {
