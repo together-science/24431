@@ -26,6 +26,9 @@ public class BaseAuto extends LinearOpMode {
     public SparkFunOTOS     myOtos;
     private double          headingError  = 0;
 
+    private ScorpCannon leftCannon = null;
+    private ScorpCannon rightCannon = null;
+
     // These variable are declared here (as class members) so they can be updated in various methods,
     // but still be displayed by sendTelemetry()
     protected double  targetHeading = 0;
@@ -91,7 +94,7 @@ public class BaseAuto extends LinearOpMode {
     //double dx;
     //double dy;
     //double h;
-    */ //This is moveTo() functions variables defined globaly if needed for telemetry
+    */ //This is moveTo() functions variables defined globally if needed for telemetry
     
     protected void moveTo(double x, double y, double driveSpeed, double accuracy){
         SparkFunOTOS.Pose2D pos;
@@ -155,6 +158,10 @@ public class BaseAuto extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
         myOtos = hardwareMap.get(SparkFunOTOS.class, "oscar");
+        leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
+        rightCannon = new ScorpCannon(hardwareMap, "right_cannon_wheel", "right_cannon_trigger");
+
+
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);

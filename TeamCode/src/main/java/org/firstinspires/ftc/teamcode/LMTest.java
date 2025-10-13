@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="A20 Lyncoln 1", group="Robot")
+@Autonomous(name="Z20 Lyncoln 1", group="Robot")
 
-public class A20_Lyncoln_1 extends BaseAuto {
+public class LMTest extends BaseAuto {
 
     protected void auto() {
         sleep(5000);
@@ -20,7 +20,8 @@ public class A20_Lyncoln_1 extends BaseAuto {
         sleep(1000);
         strafe(DRIVE_SPEED_NORMAL,27.0, 90.0);
         driveStraight(DRIVE_SPEED_SLOW, 9.0);
-        /*driveStraight(DRIVE_SPEED_SLOW, 12.0);
+        /*
+        driveStraight(DRIVE_SPEED_SLOW, 12.0);
         turnToHeading(TURN_SPEED, 90);
         sleep(1000);
         driveStraight(DRIVE_SPEED_SLOW, 12.0);
@@ -42,7 +43,8 @@ public class A20_Lyncoln_1 extends BaseAuto {
         turnToHeading(TURN_SPEED, -90);
         sleep(1000);
         driveStraight(DRIVE_SPEED_SLOW, -12.0);
-        turnToHeading(TURN_SPEED, -90);*/
+        turnToHeading(TURN_SPEED, -90);
+        */
           
     }
 }
