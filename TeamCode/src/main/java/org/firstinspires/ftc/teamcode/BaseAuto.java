@@ -17,16 +17,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class BaseAuto extends LinearOpMode {
-    //private double          headingError  = 0;
-
     private ScorpCannon leftCannon = null;
     private ScorpCannon rightCannon = null;
     private ScorpChassis chassis = null;
     private ScorpIntake intake = null;
     private ScorpSorter sorter = null;
 
-    // These variable are declared here (as class members) so they can be updated in various methods,
-    // but still be displayed by sendTelemetry()
+    private double    headingError  = 0;
     protected double  targetHeading = 0;
     protected double  targetX = 0;
     protected double  targetY = 0;
@@ -91,84 +88,6 @@ public class BaseAuto extends LinearOpMode {
         auto();
     } //Perfect
 
-    /*
-     * ====================================================================================================
-     * Driving "Helper" functions are below this line.
-     * These provide the high and low level methods that handle driving straight and turning.
-     * ====================================================================================================
-     */
-
-    // **********  HIGH Level driving functions.  ********************
-
-    /**
-    *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
-    *  Move will stop if either of these conditions occur:
-    *  1) Move gets to the desired position
-    *  2) Driver stops the OpMode running.
-    *
-    * @param maxDriveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
-    * @param distance   Distance (in inches) to move from current position.  Negative distance means move backward.
-    * @param heading      Absolute Heading Angle (in Degrees) relative to last gyro reset.
-    *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-    *                   If a relative angle is required, add/subtract from the current robotHeading.
-    */
-    
-    public void driveStraight(double maxDriveSpeed, double distance) {driveStraight(maxDriveSpeed, distance, getHeading());}
-    public void driveStraight(double maxDriveSpeed, double distance, double heading) {
-        if (opModeIsActive()) {
-            // Determine new target position, and pass to motor controller
-            int moveCounts = (int)(distance * COUNTS_PER_INCH);
-            leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
-            rightFrontTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
-            leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
-            rightBackTarget = rightBackDrive.getCurrentPosition() + moveCounts;
-
-            // Set Target FIRST, then turn on RUN_TO_POSITION
-            leftFrontDrive.setTargetPosition(leftFrontTarget);
-            rightFrontDrive.setTargetPosition(rightFrontTarget);
-            leftBackDrive.setTargetPosition(leftBackTarget);
-            rightBackDrive.setTargetPosition(rightBackTarget);
-
-            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // Set the required driving speed  (must be positive for RUN_TO_POSITION)
-            // Start driving straight, and then enter the control loop
-            moveRobot(Math.abs(maxDriveSpeed), 0);
-
-            // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
-                   (leftFrontDrive.isBusy() && rightFrontDrive.isBusy())) {
-
-                // Determine required steering to keep on heading
-                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
-
-                // if driving in reverse, the motor correction also needs to be reversed
-                if (distance < 0)
-                    turnSpeed *= -1.0;
-
-                // Apply the turning correction to the current driving speed.
-                moveRobot(driveSpeed, turnSpeed);
-
-                // Display drive status for the driver.
-                sendTelemetry(true);
-            }
-
-            // Stop all motion & Turn off RUN_TO_POSITION
-            moveRobot(0, 0);
-            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    
-    }
-    public void startDriveStraight(double maxDriveSpeed, double h) {
-            turnSpeed = getSteeringCorrection(h, P_DRIVE_GAIN);
-            moveRobot(Math.abs(maxDriveSpeed), turnSpeed);
-    }
     public void strafe(double maxDriveSpeed, double distance, double heading) {
         if (opModeIsActive()) {
             
@@ -255,20 +174,6 @@ public class BaseAuto extends LinearOpMode {
     
     }
 
-    /**
-     *  Spin on the central axis to point in a new direction.
-     *  <p>
-     *  Move will stop if either of these conditions occur:
-     *  <p>
-     *  1) Move gets to the heading (angle)
-     *  <p>
-     *  2) Driver stops the OpMode running.
-     *
-     * @param maxTurnSpeed Desired MAX speed of turn. (range 0 to +1.0)
-     * @param heading Absolute Heading Angle (in Degrees) relative to last gyro reset.
-     *              0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *              If a relative angle is required, add/subtract from current heading.
-     */
     public void turnToHeading(double maxTurnSpeed, double heading) {
         //sendTelemetry(true);
         targetHeading = heading;
@@ -295,19 +200,6 @@ public class BaseAuto extends LinearOpMode {
         moveRobot(0, 0);
     }
 
-    /**
-     *  Obtain & hold a heading for a finite amount of time
-     *  <p>
-     *  Move will stop once the requested time has elapsed
-     *  <p>
-     *  This function is useful for giving the robot a moment to stabilize it's heading between movements.
-     *
-     * @param maxTurnSpeed      Maximum differential turn speed (range 0 to +1.0)
-     * @param heading    Absolute Heading Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
-     * @param holdTime   Length of time (in seconds) to hold the specified heading.
-     */
     public void holdHeading(double maxTurnSpeed, double heading, double holdTime) {
 
         ElapsedTime holdTimer = new ElapsedTime();
@@ -449,10 +341,7 @@ public class BaseAuto extends LinearOpMode {
         return new SparkFunOTOS.Pose2D(pos.y, pos.x, pos.h);
     }
 
-   
-/** A simple way to log data to a file */
-
-public class Log {
+public class pmLog {
     private static final String BASE_FOLDER_NAME = "FIRST";
     private Writer fileWriter;
     private String line;
