@@ -1,12 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
-public class Trigger {
+public class ActionButton {
+    ActionButtonInput actionButtonInput;
     private long last = 0;
     private boolean triggered = false;
-
     private static final long DELAY = 200;
 
-    boolean process(boolean keyDown) {
+    ActionButton(ActionButtonInput actionButtonInput) {
+        this.actionButtonInput = actionButtonInput;
+    }
+
+    boolean getStatus() {
+        return process(this.actionButtonInput.getInput());
+    }
+
+    private boolean process(boolean keyDown) {
         if (keyDown) {
             if (triggered) {
                 // was already triggered, don't do it again

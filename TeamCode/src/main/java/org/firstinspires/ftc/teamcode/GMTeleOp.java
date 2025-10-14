@@ -29,14 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.IMU;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -74,11 +68,11 @@ public class GMTeleOp extends LinearOpMode {
         double currentHeading;
         String intakeState = "off";
 
-        Trigger fireLeftTrigger = new Trigger();
-        Trigger fireRightTrigger = new Trigger();
-        Trigger intakeOnTrigger = new Trigger();
-        Trigger intakeOffTrigger = new Trigger();
-        Trigger intakeReverseTrigger = new Trigger();
+        ActionButton fireLeftActionButton = new ActionButton(()->gamepad1.left_bumper);
+        ActionButton fireRightActionButton = new ActionButton(()->gamepad1.right_bumper);
+        ActionButton intakeOnActionButton = new ActionButton(()->gamepad1.dpad_left);
+        ActionButton intakeReverseActionButton = new ActionButton(()->gamepad1.dpad_right);
+        ActionButton intakeOffActionButton = new ActionButton(()->gamepad1.dpad_down);
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -88,11 +82,11 @@ public class GMTeleOp extends LinearOpMode {
             double yaw = gamepad1.right_stick_x;
             boolean faster = gamepad1.right_trigger > 0.1;
             boolean slower = gamepad1.left_trigger > 0.1;
-            boolean fireLeft = fireLeftTrigger.process(gamepad1.left_bumper);
-            boolean fireRight = fireRightTrigger.process(gamepad1.right_bumper);
-            boolean intakeOn = intakeOnTrigger.process(gamepad1.dpad_left);
-            boolean intakeReverse = intakeReverseTrigger.process(gamepad1.dpad_right);
-            boolean intakeOff = intakeOffTrigger.process(gamepad1.dpad_down);
+            boolean fireLeft = fireLeftActionButton.getStatus();
+            boolean fireRight = fireRightActionButton.getStatus();
+            boolean intakeOn = intakeOnActionButton.getStatus();
+            boolean intakeReverse = intakeReverseActionButton.getStatus();
+            boolean intakeOff = intakeOffActionButton.getStatus();
 
             // compute what the intakeState should be
             if (intakeOff) {
