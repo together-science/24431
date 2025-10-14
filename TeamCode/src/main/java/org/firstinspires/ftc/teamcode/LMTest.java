@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 public class LMTest extends BaseAuto {
 
-    protected void auto() { // ssddaaww sawd
+    protected void auto() {
         sleep(5000);
         driveStraight(DRIVE_SPEED_NORMAL, 4.0);    // Drive Forward 3"
         turnToHeading(TURN_SPEED, 180.0);       // Turn  CCW to 180 Degrees
