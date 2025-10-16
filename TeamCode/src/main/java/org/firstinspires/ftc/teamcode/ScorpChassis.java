@@ -330,7 +330,7 @@ public class ScorpChassis implements RobotChassis {
         leftBackPower *= speed;
         rightBackPower *= speed;
 
-        double turn = getSteeringCorrection(heading, turnSpeed/100);
+        double turn = getSteeringCorrection(heading, turnSpeed/50);
 
         strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turn);
     }
