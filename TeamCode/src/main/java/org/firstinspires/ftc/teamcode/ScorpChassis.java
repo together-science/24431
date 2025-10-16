@@ -291,6 +291,7 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startDrive(double speed, double direction, double turnSpeed) {
+
     }
 
     @Override
@@ -326,6 +327,7 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startStrafe(double speed, double direction) {
+        startStrafe(speed, direction, getHeading(), 1);
     }
 
     @Override
