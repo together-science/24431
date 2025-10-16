@@ -5,10 +5,8 @@ package org.firstinspires.ftc.teamcode;
 // this is kind of the answer to the missing multiple inheritance in Java
 
 public interface RobotChassis {
-    // will switch off motors and stop (brake)
-    void stop();
-    // switch off motors and coast
-    void coast();
+    void stop(); // done
+    void coast(); // done
     // will engage motors to drive in direction and turn toward it
     void startDrive(double speed, double direction, double turnSpeed);
     // will engage motors to strafe in direction but hold heading

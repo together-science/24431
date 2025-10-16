@@ -265,14 +265,33 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void stop() {
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        lf.setPower(0);
+        rf.setPower(0);
+        lb.setPower(0);
+        rb.setPower(0);
     }
 
     @Override
     public void coast() {
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        lf.setPower(0);
+        rf.setPower(0);
+        lb.setPower(0);
+        rb.setPower(0);
     }
 
     @Override
     public void startDrive(double speed, double direction, double turnSpeed) {
+
     }
 
     @Override
