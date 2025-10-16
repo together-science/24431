@@ -4,13 +4,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ScorpIntake {
-    private final DcMotor left;
-    private final DcMotor right;
+    private DcMotor left = null;
+    private DcMotor right = null;
     private static final double SPEED = 1.0;
 
     ScorpIntake(HardwareMap hm, String leftName, String rightName) {
-        left = hm.get(DcMotor.class, leftName);
-        right = hm.get(DcMotor.class, rightName);
+        try {
+            left = hm.get(DcMotor.class, leftName);
+            right = hm.get(DcMotor.class, rightName);
+        } catch (Exception ignored) {
+        }
 
         if (left != null && right != null) {
             // no encoder, brake on zero

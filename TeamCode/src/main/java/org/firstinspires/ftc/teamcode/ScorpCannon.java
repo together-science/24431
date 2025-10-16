@@ -4,16 +4,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class ScorpCannon {
-    private final DcMotor wheel;
-    private final Servo trigger;
+    private DcMotor wheel = null;
+    private Servo trigger = null;
     private static final double SPEED = 1.0;
     private static final double POSITION_CHARGED = 0.0;
     private static final double POSITION_TRIGGERED = 1.0;
     private static final long SERVO_DELAY = 200;
 
     ScorpCannon(HardwareMap hm, String wheelName, String triggerName) {
-        this.wheel = hm.get(DcMotor.class, wheelName);
-        this.trigger = hm.get(Servo.class, triggerName);
+        try {
+            this.wheel = hm.get(DcMotor.class, wheelName);
+            this.trigger = hm.get(Servo.class, triggerName);
+        } catch(Exception ignored) {
+        }
 
         if (wheel != null) {
             // no encoder, coast on zero
