@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name="Test", group="Robot")
 
-public class Test extends BaseAuto {
+public class MMStrafeTest extends BaseAuto {
 
     protected void auto() {
         strafe(DRIVE_SPEED_NORMAL,10.0,0);
