@@ -296,8 +296,8 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startStrafe(double speed, double direction, double heading, double turnSpeed) {
-        double axial   = -Math.cos(Math.PI/180*direction);
-        double lateral =  -Math.sin(Math.PI/180*direction);
+        double axial   = Math.cos(Math.PI/180*direction);
+        double lateral = Math.sin(Math.PI/180*direction);
 
         double leftFrontPower  = (axial + lateral);
         double rightFrontPower = (axial - lateral);

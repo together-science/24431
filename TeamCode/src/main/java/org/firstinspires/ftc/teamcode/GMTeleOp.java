@@ -78,7 +78,7 @@ public class GMTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             // gather gamepad info
             double x = gamepad1.left_stick_x;
-            double y = -gamepad1.left_stick_y; // Note: pushing stick forward gives negative value
+            double y = -gamepad1.left_stick_y;
             double yaw = gamepad1.right_stick_x;
             boolean faster = gamepad1.right_trigger > 0.1;
             boolean slower = gamepad1.left_trigger > 0.1;
@@ -113,7 +113,13 @@ public class GMTeleOp extends LinearOpMode {
             double driveSpeed = Math.min(Math.sqrt(x*x + y*y), 1.0)*speedFactor;
 
             // and drive
-            chassis.startStrafe(driveSpeed, direction, desiredHeading, turnSpeed);
+            if (driveSpeed > 0.05) {
+                chassis.startStrafe(driveSpeed, direction, desiredHeading, turnSpeed);
+            } else if (turnSpeed > 0.05) {
+                chassis.startTurn(turnSpeed, desiredHeading);
+            } else {
+                chassis.coast();
+            }
 
             // set the intake
             if (intakeState.equals("on")) {
@@ -134,7 +140,6 @@ public class GMTeleOp extends LinearOpMode {
 
             // Show the elapsed game time
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Status", "Fixed build!");
             telemetry.update();
         }
     }
