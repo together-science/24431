@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -101,6 +103,13 @@ public class ScorpChassis implements RobotChassis {
             startDriveStraight(driveSpeed, h);
         }
         moveRobot(0, 0);
+    }
+    public void testScales(){
+        SparkFunOTOS.Pose2D pos = otos.getPosition();
+        telemetry.addData("X:", pos.x);
+        telemetry.addData("Y:", pos.y);
+        telemetry.addData("H:", pos.h);
+        telemetry.update();
     }
 
     //Medium level - Intermediate
