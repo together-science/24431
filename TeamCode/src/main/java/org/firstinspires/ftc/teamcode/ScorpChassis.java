@@ -34,7 +34,7 @@ public class ScorpChassis implements RobotChassis {
 
     ScorpChassis(LinearOpMode op, HardwareMap hm, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
         this.lf = hm.get(DcMotor.class, lfName);
-        this.rf = hm.get(DcMotor.class, rbName);
+        this.rf = hm.get(DcMotor.class, rfName);
         this.lb = hm.get(DcMotor.class, lbName);
         this.rb = hm.get(DcMotor.class, rbName);
         this.otos = hm.get(SparkFunOTOS.class, otosName);
@@ -257,7 +257,7 @@ public class ScorpChassis implements RobotChassis {
         }
 
         lf.setPower(leftSpeed);
-        lf.setPower(rightSpeed);
+        rf.setPower(rightSpeed);
         lb.setPower(leftBackSpeed);
         rb.setPower(rightBackSpeed);
 
@@ -296,8 +296,8 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startStrafe(double speed, double direction, double heading, double turnSpeed) {
-        double axial   = Math.cos(Math.PI/180*heading);  // Note: pushing stick forward gives negative value
-        double lateral =  -Math.sin(Math.PI/180*heading);
+        double axial   = -Math.cos(Math.PI/180*direction);
+        double lateral =  -Math.sin(Math.PI/180*direction);
 
         double leftFrontPower  = (axial + lateral);
         double rightFrontPower = (axial - lateral);
@@ -320,7 +320,7 @@ public class ScorpChassis implements RobotChassis {
         leftBackPower *= speed;
         rightBackPower *= speed;
 
-        double turn = getSteeringCorrection(heading, turnSpeed/20);
+        double turn = 0; //getSteeringCorrection(heading, turnSpeed/20);
 
         strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turn);
     }

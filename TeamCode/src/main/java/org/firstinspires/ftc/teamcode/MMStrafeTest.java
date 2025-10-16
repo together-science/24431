@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="Test", group="Robot")
+@Autonomous(name="MMStrafeTest", group="Robot")
 
 public class MMStrafeTest extends BaseAuto {
 

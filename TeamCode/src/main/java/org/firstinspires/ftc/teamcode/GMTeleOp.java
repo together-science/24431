@@ -134,6 +134,7 @@ public class GMTeleOp extends LinearOpMode {
 
             // Show the elapsed game time
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Status", "Fixed build!");
             telemetry.update();
         }
     }
