@@ -4,13 +4,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class BaseTele extends LinearOpMode {
     private ScorpCannon leftCannon = null;
     private ScorpCannon rightCannon = null;
-    private ScorpChassis chassis = null;
+    protected ScorpChassis chassis = null;
     private ScorpIntake intake = null;
     private ScorpSorter sorter = null;
 
     protected void teleInit(){
     }
     protected void tele(){
+    }
+
+    boolean IsKeyDown(String Key){
+        if(Key.startsWith("a"))return gamepad1.a;
+        if(Key.startsWith("b"))return gamepad1.b;
+        if(Key.startsWith("x"))return gamepad1.x;
+        if(Key.startsWith("y"))return gamepad1.y;
+        if(Key.startsWith("dpad_down"))return gamepad1.dpad_down;
+        if(Key.startsWith("dpad_up"))return gamepad1.dpad_up;
+        if(Key.startsWith("dpad_left"))return gamepad1.dpad_left;
+        if(Key.startsWith("dpad_right"))return gamepad1.dpad_right;
+        return false;
     }
 
     @Override
