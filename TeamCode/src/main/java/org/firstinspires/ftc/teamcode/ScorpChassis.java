@@ -291,11 +291,37 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startDrive(double speed, double direction, double turnSpeed) {
-
     }
 
     @Override
     public void startStrafe(double speed, double direction, double heading, double turnSpeed) {
+        double axial   = Math.cos(Math.PI/180*heading);  // Note: pushing stick forward gives negative value
+        double lateral =  -Math.sin(Math.PI/180*heading);
+
+        double leftFrontPower  = (axial + lateral);
+        double rightFrontPower = (axial - lateral);
+        double leftBackPower   = (axial - lateral);
+        double rightBackPower  = (axial + lateral);
+
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        leftFrontPower *= speed;
+        rightFrontPower *= speed;
+        leftBackPower *= speed;
+        rightBackPower *= speed;
+
+        double turn = getSteeringCorrection(heading, turnSpeed/20);
+
+        strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turn);
     }
 
     @Override
