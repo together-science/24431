@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -43,8 +44,8 @@ public class ScorpChassis implements RobotChassis {
     }
     void init(){
         lf.setDirection(DcMotor.Direction.FORWARD);
-        rf.setDirection(DcMotor.Direction.FORWARD);
-        lb.setDirection(DcMotor.Direction.REVERSE);
+        rf.setDirection(DcMotor.Direction.REVERSE);
+        lb.setDirection(DcMotor.Direction.FORWARD);
         rb.setDirection(DcMotor.Direction.REVERSE);
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -296,8 +297,8 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startStrafe(double speed, double direction, double heading, double turnSpeed) {
-        double axial   = Math.cos(Math.PI/180*direction);
-        double lateral = Math.sin(Math.PI/180*direction);
+        double axial   = Math.sin(Math.PI/180*direction);
+        double lateral = Math.cos(Math.PI/180*direction);
 
         double leftFrontPower  = (axial + lateral);
         double rightFrontPower = (axial - lateral);
@@ -320,7 +321,7 @@ public class ScorpChassis implements RobotChassis {
         leftBackPower *= speed;
         rightBackPower *= speed;
 
-        double turn = 0; //getSteeringCorrection(heading, turnSpeed/20);
+        double turn = getSteeringCorrection(heading, turnSpeed/100);
 
         strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turn);
     }
@@ -332,6 +333,14 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startTurn(double turnSpeed, double heading) {
+        double leftSpeed = turnSpeed * Math.signum(heading);
+        double  rightSpeed = -turnSpeed * Math.signum(heading);
+        double leftBackSpeed = turnSpeed * Math.signum(heading);
+        double rightBackSpeed = -turnSpeed * Math.signum(heading);
 
+        lf.setPower(leftSpeed);
+        rf.setPower(rightSpeed);
+        lb.setPower(leftBackSpeed);
+        rb.setPower(rightBackSpeed);
     }
 }

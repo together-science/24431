@@ -108,7 +108,7 @@ public class GMTeleOp extends LinearOpMode {
             // compute speeds and directions and headings
             double direction = Math.atan2(y,x)/Math.PI*180;
             currentHeading = chassis.getHeading();
-            double desiredHeading = currentHeading + Math.signum(yaw)*TURN_INCREMENT;
+            double desiredHeading = Math.signum(yaw)*TURN_INCREMENT;
             double turnSpeed = Math.abs(yaw)*speedFactor;
             double driveSpeed = Math.min(Math.sqrt(x*x + y*y), 1.0)*speedFactor;
 
@@ -140,6 +140,9 @@ public class GMTeleOp extends LinearOpMode {
 
             // Show the elapsed game time
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Current heading", "%.2f", currentHeading);
+            telemetry.addData("Desired heading", "%.2f", desiredHeading);
+            telemetry.addData("Delta   heading", "%.2f", desiredHeading-currentHeading);
             telemetry.update();
         }
     }
