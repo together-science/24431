@@ -88,32 +88,34 @@ public class BaseAuto extends LinearOpMode {
         auto();
     } //Perfect
 
+    //I moved all functions to chassis it is now time to delete all ones in base auto
+
     public void strafe(double maxDriveSpeed, double distance, double heading) {
         if (opModeIsActive()) {
-            
+
             double axial   = Math.cos(Math.PI/180*heading);  // Note: pushing stick forward gives negative value
             double lateral =  -Math.sin(Math.PI/180*heading);
-            
+
             telemetry.addData("axial  ", "%5.2f", axial);
             telemetry.addData("lateral", "%5.2f", lateral);
             telemetry.update();
-            
+
             double leftFrontPower  = (axial + lateral);
             double rightFrontPower = (axial - lateral);
             double leftBackPower   = (axial - lateral);
             double rightBackPower  = (axial + lateral);
-            
+
             double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
             max = Math.max(max, Math.abs(leftBackPower));
             max = Math.max(max, Math.abs(rightBackPower));
-            
+
             if (max > 1.0) {
                 leftFrontPower /= max;
                 rightFrontPower /= max;
                 leftBackPower /= max;
                 rightBackPower /= max;
             }
-            
+
             leftFrontPower *= maxDriveSpeed;
             rightFrontPower *= maxDriveSpeed;
             leftBackPower *= maxDriveSpeed;
@@ -125,8 +127,8 @@ public class BaseAuto extends LinearOpMode {
             rightFrontTarget = rightFrontDrive.getCurrentPosition() +  (int)Math.signum(rightFrontPower)*moveCounts;
             leftBackTarget = leftBackDrive.getCurrentPosition() +  (int)Math.signum(leftBackPower)*moveCounts;
             rightBackTarget = rightBackDrive.getCurrentPosition() +  (int)Math.signum(rightBackPower)*moveCounts;
-            
-            
+
+
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
             leftFrontDrive.setTargetPosition(leftFrontTarget);
@@ -138,7 +140,7 @@ public class BaseAuto extends LinearOpMode {
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            
+
             double robotHeading = getHeading();
 
             // Set the required driving speed  (must be positive for RUN_TO_POSITION)
@@ -171,7 +173,7 @@ public class BaseAuto extends LinearOpMode {
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-    
+
     }
 
     public void turnToHeading(double maxTurnSpeed, double heading) {

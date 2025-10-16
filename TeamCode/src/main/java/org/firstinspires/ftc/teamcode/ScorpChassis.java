@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -28,7 +29,6 @@ public class ScorpChassis implements RobotChassis {
     static final double     DRIVE_SPEED_NORMAL      = 0.2;
     static final double     DRIVE_SPEED_SLOW        = 0.1;
     static final double     TURN_SPEED              = 0.5;
-    static final double     HEADING_THRESHOLD       = 1.0;
     static final double     P_TURN_GAIN             = 0.02;
     static final double     P_DRIVE_GAIN            = 0.03;
 
@@ -131,6 +131,83 @@ public class ScorpChassis implements RobotChassis {
         }
 
     }
+    void strafe(double maxDriveSpeed, double distance, double heading) {
+        int lfTarget, rfTarget, lbTarget, rbTarget;
+        double turnSpeed;
+        if (op.opModeIsActive()) {
+
+            double axial   = Math.cos(Math.PI/180*heading);  // Note: pushing stick forward gives negative value
+            double lateral =  -Math.sin(Math.PI/180*heading);
+
+            double leftFrontPower  = (axial + lateral);
+            double rightFrontPower = (axial - lateral);
+            double leftBackPower   = (axial - lateral);
+            double rightBackPower  = (axial + lateral);
+
+            double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+            max = Math.max(max, Math.abs(leftBackPower));
+            max = Math.max(max, Math.abs(rightBackPower));
+
+            if (max > 1.0) {
+                leftFrontPower /= max;
+                rightFrontPower /= max;
+                leftBackPower /= max;
+                rightBackPower /= max;
+            }
+
+            leftFrontPower *= maxDriveSpeed;
+            rightFrontPower *= maxDriveSpeed;
+            leftBackPower *= maxDriveSpeed;
+            rightBackPower *= maxDriveSpeed;
+
+            int moveCounts = (int)(distance * COUNTS_PER_INCH * (1+STRAFE_CORRECTION*Math.abs(lateral)));
+            lfTarget = lf.getCurrentPosition() + (int)Math.signum(leftFrontPower)*moveCounts;
+            rfTarget = rf.getCurrentPosition() +  (int)Math.signum(rightFrontPower)*moveCounts;
+            lbTarget = lb.getCurrentPosition() +  (int)Math.signum(leftBackPower)*moveCounts;
+            rbTarget = rb.getCurrentPosition() +  (int)Math.signum(rightBackPower)*moveCounts;
+
+            lf.setTargetPosition(lfTarget);
+            rf.setTargetPosition(rfTarget);
+            lb.setTargetPosition(lbTarget);
+            rb.setTargetPosition(rbTarget);
+
+            double robotHeading = getHeading();
+
+            strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
+
+            while (op.opModeIsActive() &&
+                    (lf.isBusy() && rf.isBusy())) {
+
+                turnSpeed = getSteeringCorrection(robotHeading, P_DRIVE_GAIN);
+
+                if (distance < 0)turnSpeed*=-1;
+                strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turnSpeed);
+            }
+            moveRobot(0, 0);
+        }
+
+    }
+    void turnToHeading(double maxTurnSpeed, double heading) {
+        double turnSpeed;
+        getSteeringCorrection(heading, P_DRIVE_GAIN);
+        while (op.opModeIsActive()) { // && (Math.abs(headingError) > HEADING_THRESHOLD) <-- Might need to add
+            turnSpeed = getSteeringCorrection(heading, P_TURN_GAIN);
+            turnSpeed = Range.clip(turnSpeed, -maxTurnSpeed, maxTurnSpeed);
+            moveRobot(0, turnSpeed);
+        }
+        moveRobot(0, 0);
+    }
+    void holdHeading(double maxTurnSpeed, double heading, double holdTime) {
+        ElapsedTime holdTimer = new ElapsedTime();
+        holdTimer.reset();
+        double turnSpeed;
+        while (op.opModeIsActive() && (holdTimer.time() < holdTime)) {
+            turnSpeed = getSteeringCorrection(heading, P_TURN_GAIN);
+            turnSpeed = Range.clip(turnSpeed, -maxTurnSpeed, maxTurnSpeed);
+            moveRobot(0, turnSpeed);
+        }
+        moveRobot(0, 0);
+    }
     void startDriveStraight(double maxDriveSpeed, double h) {
         double turnSpeed = getSteeringCorrection(h, P_DRIVE_GAIN);
         moveRobot(Math.abs(maxDriveSpeed), turnSpeed);
@@ -165,6 +242,26 @@ public class ScorpChassis implements RobotChassis {
         rb.setPower(rightSpeed);
 
     }
+    void strafeRobot(double leftSpeed, double rightSpeed, double leftBackSpeed, double rightBackSpeed, double turn) {
+        leftSpeed -= turn;
+        rightSpeed += turn;
+        leftBackSpeed -= turn;
+        rightBackSpeed += turn;
+
+        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+        if (max > 1.0) {
+            leftSpeed /= max;
+            rightSpeed /= max;
+            leftBackSpeed /= max;
+            rightBackSpeed /= max;
+        }
+
+        lf.setPower(leftSpeed);
+        lf.setPower(rightSpeed);
+        lb.setPower(leftBackSpeed);
+        rb.setPower(rightBackSpeed);
+
+    }
 
     @Override
     public void stop() {
@@ -184,7 +281,6 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startStrafe(double speed, double direction) {
-
     }
 
     @Override
