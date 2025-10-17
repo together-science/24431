@@ -85,8 +85,6 @@ public class ScorpChassis implements RobotChassis {
         otos.getVersionInfo(hwVersion, fwVersion);
     }
 
-
-
     //High level - Simple
     void moveTo(double x, double y, double driveSpeed){
         double distance = 1000;
@@ -138,12 +136,10 @@ public class ScorpChassis implements RobotChassis {
             this.op.telemetry.update();
         }
     }
-
     public SparkFunOTOS.Pose2D getPosition() {
         SparkFunOTOS.Pose2D pos = otos.getPosition();
         return new SparkFunOTOS.Pose2D(-pos.x, -pos.y, pos.h);
     }
-
     public String getPositionString(){
         SparkFunOTOS.Pose2D pos = getPosition();
         return "X:"+Math.round(pos.x*100)/100+", Y:"+Math.round(pos.y*100)/100+", H:"+Math.round(pos.h*100)/100;

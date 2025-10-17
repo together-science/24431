@@ -7,6 +7,7 @@ public class BaseAuto extends LinearOpMode {
     protected ScorpChassis chassis = null;
     protected ScorpIntake intake = null;
     protected ScorpSorter sorter = null;
+    protected ScorpCamera camera = null;
 
     protected void autoInit() {
     }
@@ -21,6 +22,7 @@ public class BaseAuto extends LinearOpMode {
         chassis = new ScorpChassis(this, hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
         intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
         sorter = new ScorpSorter(hardwareMap, "sorter_servo");
+        camera = new ScorpCamera(this, hardwareMap, "camera");
 
         chassis.init();
 
