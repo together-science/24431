@@ -16,6 +16,7 @@ public class FirstAuto extends BaseAuto{
     boolean thirdColor;
     boolean green = false;
     boolean purple = true;
+    long SLEEP_TIME = 300;
 
     @Override
     protected void autoInit(){
@@ -41,12 +42,24 @@ public class FirstAuto extends BaseAuto{
     }
 
     void shootInOrder(){
-        if(firstColor) leftCannon.fire();
-        else rightCannon.fire();
-        if(secondColor) leftCannon.fire();
-        else rightCannon.fire();
-        if(thirdColor) leftCannon.fire();
-        else rightCannon.fire();
+        if(firstColor){
+            leftCannon.fire();
+        }else{
+            rightCannon.fire();
+        }
+        sleep(SLEEP_TIME);
+        sorter.sortLeft();
+        if(secondColor){
+            leftCannon.fire();
+        }else{
+            rightCannon.fire();
+        }
+        sleep(SLEEP_TIME);
+        if(thirdColor){
+            leftCannon.fire();
+        }else{
+            rightCannon.fire();
+        }
     }
 }
 
