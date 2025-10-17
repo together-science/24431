@@ -6,28 +6,25 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 This is Matthew's auto, dont change it.
 I know it hardly works, I am working on it possibly.
 Making WORKING code was not an expected requirement.
+How do I have so much to do and at the same time have nothing to do?
 hoursSpent = 1;
  */
 
 @Autonomous(name = "AutoTest-MM", group = "Sensor")
 public class FirstAuto extends BaseAuto{
-    boolean firstColor;
-    boolean secondColor;
-    boolean thirdColor;
-    boolean green = false;
-    boolean purple = true;
+    int green;
     long SLEEP_TIME = 300;
 
     @Override
     protected void autoInit(){
         if(camera.getDetection(21) != null){
-            firstColor = green; secondColor = purple; thirdColor = purple;
+            green = 1;
         }
         if(camera.getDetection(22) != null){
-            firstColor = purple; secondColor = green; thirdColor = purple;
+            green = 2;
         }
         if(camera.getDetection(23) != null){
-            firstColor = purple; secondColor = purple; thirdColor = green;
+            green = 3;
         }
     }
 
@@ -42,23 +39,29 @@ public class FirstAuto extends BaseAuto{
     }
 
     void shootInOrder(){
-        if(firstColor){
+        if(green == 1){
             leftCannon.fire();
-        }else{
+            sleep(SLEEP_TIME);
+            sorter.sortLeft();
+            rightCannon.fire();
+            sleep(SLEEP_TIME);
             rightCannon.fire();
         }
-        sleep(SLEEP_TIME);
-        sorter.sortLeft();
-        if(secondColor){
+        if(green == 2){
+            rightCannon.fire();
+            sleep(SLEEP_TIME);
+            sorter.sortLeft();
             leftCannon.fire();
-        }else{
+            sleep(SLEEP_TIME);
             rightCannon.fire();
         }
-        sleep(SLEEP_TIME);
-        if(thirdColor){
-            leftCannon.fire();
-        }else{
+        if(green == 3){
             rightCannon.fire();
+            sleep(SLEEP_TIME);
+            sorter.sortLeft();
+            rightCannon.fire();
+            sleep(SLEEP_TIME);
+            leftCannon.fire();
         }
     }
 }
