@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -34,6 +31,7 @@ public class ScorpChassis implements RobotChassis {
     static final double     TURN_SPEED              = 0.5;
     static final double     P_TURN_GAIN             = 0.02;
     static final double     P_DRIVE_GAIN            = 0.03;
+    static final double     ACCURACY                = 0.3; // inches accuracy for moveTo()
 
     ScorpChassis(LinearOpMode op, HardwareMap hm, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
         this.lf = hm.get(DcMotor.class, lfName);
@@ -75,7 +73,7 @@ public class ScorpChassis implements RobotChassis {
         otos.setAngularUnit(AngleUnit.DEGREES);
         SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
         otos.setOffset(offset);
-        otos.setLinearScalar(1.0); //This needs updating
+        otos.setLinearScalar(1.0434);
         otos.setAngularScalar(1.0); // So does this
         otos.calibrateImu();
         otos.resetTracking();
@@ -87,29 +85,45 @@ public class ScorpChassis implements RobotChassis {
     }
 
     //High level - Simple
-    void moveTo(double x, double y, double driveSpeed, double accuracy){
+    void moveTo(double x, double y, double driveSpeed){
         SparkFunOTOS.Pose2D pos;
-        double posX, posY, dx, dy, h;
         double distance = 1000;
-        while(Math.abs(distance) > accuracy && op.opModeIsActive()) {
-            pos = otos.getPosition();
-            posX = pos.x; posY = pos.y;
-            posX*=-1; posY*=-1;
-            dx = x - posX;
-            dy = y - posY;
+        while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) {
+            pos = getPosition();
+//            this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
+//            this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
+//            this.op.telemetry.addData("Distance:", "%.4f", distance);
+//            this.op.telemetry.update();
+            double dx = x - pos.x;
+            double dy = y - pos.y;
             distance = Math.sqrt(dx*dx+dy*dy);
-            h = (Math.atan2(dy, dx)*(180/3.1415)-90);
+            if (distance < 5) {
+                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW);
+            } else if (distance < 10) {
+                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_NORMAL);
+            }
+            double h = (Math.atan2(dy, dx)*(180/3.1415)-90);
             h = h < 0 ? h+360 : h;
             startDriveStraight(driveSpeed, h);
         }
-        moveRobot(0, 0);
+        stop();
+        while(op.opModeIsActive()) {
+            pos = getPosition();
+            this.op.telemetry.addData("Target:", "%.2f, %.2f", x, y);
+            this.op.telemetry.addData("Position:", getPositionString());
+            this.op.telemetry.addData("Distance:", "%.2f", distance);
+            this.op.telemetry.update();
+        }
     }
-    public void testScales(){
+
+    public SparkFunOTOS.Pose2D getPosition() {
         SparkFunOTOS.Pose2D pos = otos.getPosition();
-        telemetry.addData("X:", pos.x);
-        telemetry.addData("Y:", pos.y);
-        telemetry.addData("H:", pos.h);
-        telemetry.update();
+        return new SparkFunOTOS.Pose2D(-pos.x, -pos.y, pos.h);
+    }
+
+    public String getPositionString(){
+        SparkFunOTOS.Pose2D pos = getPosition();
+        return "X:"+Math.round(pos.x*100)/100+", Y:"+Math.round(pos.y*100)/100+", H:"+Math.round(pos.h*100)/100;
     }
 
     //Medium level - Intermediate
