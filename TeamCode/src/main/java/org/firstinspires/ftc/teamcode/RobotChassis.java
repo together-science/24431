@@ -16,5 +16,17 @@ public interface RobotChassis {
     // engage motors to turn towards heading, on the spot
     void startTurn(double turnSpeed, double heading);
 
+    double getHeading();
+
+    double normalizeAngle(double angle);
+
+    double headingFromRelativePosition(double x, double y);
+    void turnTo(double turnSpeed, double heading);
+
+    void turnToHeading(double maxTurnSpeed, double heading);
+
+    void strafeDistance(final double maxDriveSpeed, final double distance, final double heading);
+
+
     // still to come: higher-level routines that iterate and wait (driveTo, strafeTo)
 }
