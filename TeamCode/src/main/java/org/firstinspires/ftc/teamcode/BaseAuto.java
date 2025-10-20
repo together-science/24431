@@ -24,8 +24,8 @@ public class BaseAuto extends LinearOpMode {
         intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
         sorter = new ScorpSorter(hardwareMap, "sorter_servo");
         camera = new ScorpCamera(this, hardwareMap, "camera");
-        color = new ScorpColorTestMM(hardwareMap, "sensor_color_not_real");
-
+        // color = new ScorpColorTestMM(hardwareMap, "sensor_color_not_real");
+        // I commented out the init ^^^ because sensor_color_not_real, is not real so when it tires to find it it will run an error.
         chassis.init();
 
         autoInit();
