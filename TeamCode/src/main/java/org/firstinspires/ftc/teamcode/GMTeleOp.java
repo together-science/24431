@@ -50,7 +50,6 @@ public class GMTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         chassis = new ScorpChassis(this, hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
         leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
         rightCannon = new ScorpCannon(hardwareMap, "right_cannon_wheel", "right_cannon_trigger");
@@ -116,7 +115,7 @@ public class GMTeleOp extends LinearOpMode {
             if (driveSpeed > 0.05) {
                 chassis.startStrafe(driveSpeed, direction, desiredHeading, turnSpeed);
             } else if (turnSpeed > 0.05) {
-                chassis.startTurn(turnSpeed, desiredHeading);
+                chassis.startTurn(turnSpeed*-1, desiredHeading); // Possibly fixed rotation
             } else {
                 chassis.coast();
             }
