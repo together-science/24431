@@ -10,8 +10,8 @@ How do I have so much to do and at the same time have nothing to do?
 hoursSpent = 1;
  */
 
-@Autonomous(name = "AutoTest-MM", group = "Sensor")
-public class FirstAuto extends BaseAuto{
+@Autonomous(name = "BasicMoveShoot-MM", group = "Sensor")
+public class BasicMoveShoot extends BaseAuto{
     int green;
     long SLEEP_TIME = 300;
 
