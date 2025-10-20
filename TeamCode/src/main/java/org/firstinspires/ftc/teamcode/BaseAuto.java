@@ -8,6 +8,7 @@ public class BaseAuto extends LinearOpMode {
     protected ScorpIntake intake = null;
     protected ScorpSorter sorter = null;
     protected ScorpCamera camera = null;
+    protected ScorpColorTestMM color = null;
 
     protected void autoInit() {
     }
@@ -23,6 +24,7 @@ public class BaseAuto extends LinearOpMode {
         intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
         sorter = new ScorpSorter(hardwareMap, "sorter_servo");
         camera = new ScorpCamera(this, hardwareMap, "camera");
+        color = new ScorpColorTestMM(hardwareMap, "sensor_color_not_real");
 
         chassis.init();
 
