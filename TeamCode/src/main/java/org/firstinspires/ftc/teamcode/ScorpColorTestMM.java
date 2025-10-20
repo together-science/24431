@@ -33,4 +33,21 @@ public class ScorpColorTestMM{
         }
         return 0; // This is an error and I'm scared. If you get this, run...
     }
+
+    double getPurpleXPos(){
+        // Find a purple ball x, doesn't matter which one
+        return 2; // Subsitute
+    }
+    double getPurpleYPos(){
+        // Find a purple ball's y using the x getPurpleXPos()
+        return 3;
+    }
+    double getGreenXPos(){
+        // Find a green ball x, doesn't matter which one
+        return -3; // Subsitute
+    }
+    double getGreenYPos(){
+        // Find a green ball's y using the x getGreenXPos()
+        return 5;
+    }
 }

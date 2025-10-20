@@ -27,19 +27,14 @@ public class BasicCollect extends BaseAuto{
 
         shootInOrder();
 
-        chassis.moveTo(-6, 3, ScorpChassis.DRIVE_SPEED_NORMAL); // This is us moving to a spike
         intake.on();
-
-        // <Theoretical senario where the code works perfectly> //
-        sorter.hold();
-        // Pretend there was a color check and it was green
+        chassis.moveTo(color.getPurpleXPos(), color.getPurpleYPos(), ScorpChassis.DRIVE_SPEED_FAST);
         sorter.sortLeft();
         sorter.hold();
-        // Pretend there was a color check and it was purple
+        chassis.moveTo(color.getGreenXPos(), color.getGreenYPos(), ScorpChassis.DRIVE_SPEED_FAST);
         sorter.sortRight();
         sorter.hold();
-        // Pretend we grabbed a purple one
-
+        chassis.moveTo(color.getGreenXPos(), color.getGreenYPos(), ScorpChassis.DRIVE_SPEED_FAST);
         intake.off();
 
         shootInOrder();
@@ -49,8 +44,8 @@ public class BasicCollect extends BaseAuto{
         if(green == 1){
             leftCannon.fire();
             sleep(SLEEP_TIME);
-            sorter.sortLeft();
             rightCannon.fire();
+            sorter.sortRight();
             sleep(SLEEP_TIME);
             rightCannon.fire();
         }
@@ -59,13 +54,14 @@ public class BasicCollect extends BaseAuto{
             sleep(SLEEP_TIME);
             sorter.sortLeft();
             leftCannon.fire();
+            sorter.sortRight();
             sleep(SLEEP_TIME);
             rightCannon.fire();
         }
         if(green == 3){
             rightCannon.fire();
+            sorter.sortRight();
             sleep(SLEEP_TIME);
-            sorter.sortLeft();
             rightCannon.fire();
             sleep(SLEEP_TIME);
             leftCannon.fire();
