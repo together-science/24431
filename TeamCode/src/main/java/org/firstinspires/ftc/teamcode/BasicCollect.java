@@ -28,17 +28,21 @@ public class BasicCollect extends BaseAuto{
         shootInOrder();
 
         intake.on();
-        chassis.moveTo(color.getPurpleXPos(), color.getPurpleYPos(), ScorpChassis.DRIVE_SPEED_FAST);
-        sorter.sortLeft();
-        sorter.hold();
-        chassis.moveTo(color.getGreenXPos(), color.getGreenYPos(), ScorpChassis.DRIVE_SPEED_FAST);
-        sorter.sortRight();
-        sorter.hold();
-        chassis.moveTo(color.getGreenXPos(), color.getGreenYPos(), ScorpChassis.DRIVE_SPEED_FAST);
+//        chassis.moveTo(color.getPurpleXPos(), color.getPurpleYPos(), ScorpChassis.DRIVE_SPEED_FAST);
+//        sorter.sortLeft();
+//        sorter.hold();
+//        chassis.moveTo(color.getGreenXPos(), color.getGreenYPos(), ScorpChassis.DRIVE_SPEED_FAST);
+//        sorter.sortRight();
+//        sorter.hold();
+//        chassis.moveTo(color.getGreenXPos(), color.getGreenYPos(), ScorpChassis.DRIVE_SPEED_FAST);
         intake.off();
 
         shootInOrder();
     }
+
+    /*
+    You lost the game
+     */ // Don't look at this if your name is Matthew
 
     void shootInOrder(){
         if(green == 1){

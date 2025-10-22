@@ -8,7 +8,7 @@ public class BaseAuto extends LinearOpMode {
     protected ScorpIntake intake = null;
     protected ScorpSorter sorter = null;
     protected ScorpCamera camera = null;
-    protected ScorpColorTestMM color = null;
+    //protected ScorpColor color = null;
 
     protected void autoInit() {
     }

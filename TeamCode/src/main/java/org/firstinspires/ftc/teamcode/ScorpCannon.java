@@ -50,6 +50,11 @@ public class ScorpCannon {
     }
 
     void fire() {
+        // check if we in fact have a cannon
+        if (this.wheel == null) {
+            return;
+        }
+
         try {
             trigger.setPosition(POSITION_CHARGED);
             Thread.sleep(SERVO_DELAY);
