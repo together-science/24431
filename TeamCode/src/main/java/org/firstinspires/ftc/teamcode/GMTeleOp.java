@@ -114,6 +114,8 @@ public class GMTeleOp extends LinearOpMode {
             // and drive
             if (driveSpeed > 0.05) {
                 chassis.startStrafe(driveSpeed, direction, desiredHeading, turnSpeed);
+                // chassis.testStrafe();
+                // this is a test ^^^ if you would like to test please apply
             } else if (turnSpeed > 0.05) {
                 chassis.startTurn(turnSpeed*-1, desiredHeading);
             } else {

@@ -175,6 +175,16 @@ public class ScorpChassis implements RobotChassis {
 
     }
 
+
+    void testStrafe(){
+        lf.setPower(1.1);
+        lb.setPower(1.1);
+
+        rf.setPower(0.9);
+        rb.setPower(0.9);
+    }
+
+
     @Override
     public void strafeDistance(final double maxDriveSpeed, final double distance, final double heading) {
         int lfTarget, rfTarget, lbTarget, rbTarget;
@@ -392,7 +402,9 @@ public class ScorpChassis implements RobotChassis {
         leftBackPower *= speed;
         rightBackPower *= speed;
 
-        double turn = _getSteeringCorrection(heading, turnSpeed/50);
+        double turn = _getSteeringCorrection(heading, turnSpeed/10);
+
+        //double turn = _getSteeringCorrection(heading, turnSpeed/50); <- Old version ^^^
 
         _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turn);
     }
