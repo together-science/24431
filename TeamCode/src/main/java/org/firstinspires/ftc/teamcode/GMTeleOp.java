@@ -107,17 +107,16 @@ public class GMTeleOp extends LinearOpMode {
             // compute speeds and directions and headings
             double direction = Math.atan2(y,x)/Math.PI*180;
             currentHeading = chassis.getHeading();
-            double desiredHeading = Math.signum(yaw)*TURN_INCREMENT;
-            double turnSpeed = Math.abs(yaw)*speedFactor;
+            double turnSpeed = yaw*speedFactor;
             double driveSpeed = Math.min(Math.sqrt(x*x + y*y), 1.0)*speedFactor;
 
             // and drive
             if (driveSpeed > 0.05) {
-                chassis.startStrafe(driveSpeed, direction, desiredHeading, turnSpeed);
+                chassis.startStrafe(driveSpeed, direction, turnSpeed);
                 // chassis.testStrafe();
                 // this is a test ^^^ if you would like to test please apply
             } else if (turnSpeed > 0.05) {
-                chassis.startTurn(turnSpeed*-1, desiredHeading);
+                chassis.startTurn(turnSpeed*-1);
             } else {
                 chassis.coast();
             }
@@ -142,8 +141,6 @@ public class GMTeleOp extends LinearOpMode {
             // Show the elapsed game time
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Current heading", "%.2f", currentHeading);
-            telemetry.addData("Desired heading", "%.2f", desiredHeading);
-            telemetry.addData("Delta   heading", "%.2f", desiredHeading-currentHeading);
             telemetry.update();
         }
     }

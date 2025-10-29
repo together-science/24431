@@ -29,7 +29,7 @@ public class ScorpChassis implements RobotChassis {
     static final double     DRIVE_SPEED_SLOW        = 0.1;
     static final double     TURN_SPEED              = 0.5;
     static final double     HEADING_THRESHOLD       = 1.0;
-    static final double     P_TURN_GAIN             = 0.02;
+    static final double     P_TURN_GAIN             = 0.50;
     static final double     P_DRIVE_GAIN            = 0.03;
     static final double     ACCURACY                = 0.3; // inches accuracy for moveTo()
     static final boolean    DEBUG                   = true;
@@ -378,14 +378,15 @@ public class ScorpChassis implements RobotChassis {
     }
 
     @Override
-    public void startStrafe(double speed, double direction, double heading, double turnSpeed) {
+    public void startStrafe(double speed, double direction, double turnSpeed) {
         double axial   = Math.sin(Math.PI/180*direction);
         double lateral = Math.cos(Math.PI/180*direction);
+        double turn = turnSpeed*P_TURN_GAIN;
 
-        double leftFrontPower  = (axial + lateral);
-        double rightFrontPower = (axial - lateral);
-        double leftBackPower   = (axial - lateral);
-        double rightBackPower  = (axial + lateral);
+        double leftFrontPower  = (axial + lateral + turn);
+        double rightFrontPower = (axial - lateral - turn);
+        double leftBackPower   = (axial - lateral + turn);
+        double rightBackPower  = (axial + lateral - turn);
 
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
@@ -402,28 +403,35 @@ public class ScorpChassis implements RobotChassis {
         leftBackPower *= speed;
         rightBackPower *= speed;
 
-        double turn = _getSteeringCorrection(heading, turnSpeed/10);
+        // double turn = _getSteeringCorrection(getHeading()+deltaHeading, turnSpeed/10);
 
         //double turn = _getSteeringCorrection(heading, turnSpeed/50); <- Old version ^^^
 
-        _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turn);
+        _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
     }
 
     @Override
     public void startStrafe(double speed, double direction) {
-        startStrafe(speed, direction, getHeading(), 1);
+        startStrafe(speed, direction, 0);
     }
 
     @Override
-    public void startTurn(double turnSpeed, double heading) {
-        double leftSpeed = -turnSpeed * Math.signum(heading);
-        double leftBackSpeed = -turnSpeed * Math.signum(heading);
-        double  rightSpeed = turnSpeed * Math.signum(heading);
-        double rightBackSpeed = turnSpeed * Math.signum(heading);
-
-        lf.setPower(leftSpeed);
-        rf.setPower(rightSpeed);
-        lb.setPower(leftBackSpeed);
-        rb.setPower(rightBackSpeed);
+    public void startTurn(double turnSpeed) {
+        lf.setPower(-turnSpeed);
+        rf.setPower(turnSpeed);
+        lb.setPower(-turnSpeed);
+        rb.setPower(turnSpeed);
     }
 }
+
+/*
+Computer Layout
+
+Tasks:
+SAM Slow Access Memory
+RAM Random Access Memory
+QAM Quick Access Memory
+IFM Internal Function Manager
+Program Counter
+
+ */
