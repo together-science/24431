@@ -12,7 +12,7 @@ public class ScorpCannon {
     private static final double POSITION_CHARGED = 0.0;
     private static final double POSITION_TRIGGERED = 1.0;
     private static final long SERVO_DELAY = 200;
-    private static final long SPINUP_DELAY = 500;
+    private static final long SPINUP_DELAY = 2000;
     private static final long TIMEOUT = 10000;
 
     ScorpCannon(LinearOpMode op, String wheelName, String triggerName) {
@@ -59,7 +59,7 @@ public class ScorpCannon {
 
     void fire() {
         // check if we in fact have a cannon
-        if (this.wheel == null || this.trigger == null) {
+        if (this.wheel == null) {
             return;
         }
 
@@ -67,6 +67,11 @@ public class ScorpCannon {
         if (wheel.getPower() == 0) {
             spinUp();
             op.sleep(SPINUP_DELAY);
+        }
+
+        // check if we in fact have a cannon
+        if (this.trigger == null) {
+            return;
         }
 
         // actuate trigger servo
