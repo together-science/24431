@@ -7,10 +7,13 @@ public class ScorpCannon {
     private CRServo wheel = null;
     private Servo trigger = null;
     private final LinearOpMode op;
+    private long lastFired = 0L;
     private static final double SPEED = 1.0;
     private static final double POSITION_CHARGED = 0.0;
     private static final double POSITION_TRIGGERED = 1.0;
     private static final long SERVO_DELAY = 200;
+    private static final long SPINUP_DELAY = 500;
+    private static final long TIMEOUT = 10000;
 
     ScorpCannon(LinearOpMode op, String wheelName, String triggerName) {
         this.op = op;
@@ -22,8 +25,6 @@ public class ScorpCannon {
         } catch(Exception ignored) {
         }
 
-        if (wheel != null) {
-        }
         if (trigger != null) {
             trigger.setPosition(POSITION_CHARGED);
         }
@@ -36,6 +37,7 @@ public class ScorpCannon {
         }
 
         wheel.setPower(SPEED);
+        lastFired = System.currentTimeMillis();
     }
 
     void spinDown() {
@@ -48,12 +50,26 @@ public class ScorpCannon {
         wheel.setPower(0);
     }
 
+    void spinDownAfterDelay() {
+        long now = System.currentTimeMillis();
+        if (now - lastFired > TIMEOUT) {
+            spinDown();
+        }
+    }
+
     void fire() {
         // check if we in fact have a cannon
         if (this.wheel == null || this.trigger == null) {
             return;
         }
 
+        // if necessary, spin up cannon
+        if (wheel.getPower() == 0) {
+            spinUp();
+            op.sleep(SPINUP_DELAY);
+        }
+
+        // actuate trigger servo
         trigger.setPosition(POSITION_CHARGED);
         op.sleep(SERVO_DELAY);
         trigger.setPosition(POSITION_TRIGGERED);

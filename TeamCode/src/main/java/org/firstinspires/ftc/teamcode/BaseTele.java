@@ -16,7 +16,7 @@ public abstract class BaseTele extends LinearOpMode {
         // not abstract because not required in subclass
     }
     // this method will be implemented by the sub class
-    protected abstract void tele();
+    protected abstract void teleIteration();
 
 //    boolean IsKeyDown(String Key){
 //        if(Key.startsWith("a"))return gamepad1.a;
@@ -29,6 +29,26 @@ public abstract class BaseTele extends LinearOpMode {
 //        if(Key.startsWith("dpad_right"))return gamepad1.dpad_right;
 //        return false;
 //    }
+
+    protected void doRegularTasks() {
+        leftCannon.spinDownAfterDelay();
+        rightCannon.spinDownAfterDelay();
+    }
+
+
+    protected void tele() {
+        // run until the end of the match (driver presses STOP)
+        int iterations = 0;
+        while (opModeIsActive()) {
+            teleIteration();
+            doRegularTasks();
+
+            // add the elapsed game time
+            telemetry.addData("Base", "Run Time:  " + runtime);
+            telemetry.addData("Base", "Iterations: " + (++iterations));
+            telemetry.update();
+        }
+    }
 
     @Override
     public void runOpMode() {
