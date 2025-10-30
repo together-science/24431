@@ -6,18 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class GMTeleOp extends BaseTele {
     @Override
     protected void teleIteration() {
-        // gather gamepad info
-        double x = gamepad1.left_stick_x;
-        double y = -gamepad1.left_stick_y;
-        double yaw = gamepad1.right_stick_x;
-        boolean faster = gamepad1.right_trigger > 0.1;
-        boolean slower = gamepad1.left_trigger > 0.1;
-        boolean fireLeft = fireLeftActionButton.getStatus();
-        boolean fireRight = fireRightActionButton.getStatus();
-        boolean intakeOn = intakeOnActionButton.getStatus();
-        boolean intakeReverse = intakeReverseActionButton.getStatus();
-        boolean intakeOff = intakeOffActionButton.getStatus();
-
         // compute what the intakeState should be
         if (intakeOff) {
             intakeState = "off";
