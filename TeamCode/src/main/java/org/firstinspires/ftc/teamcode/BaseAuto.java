@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class BaseAuto extends LinearOpMode {
+public abstract class BaseAuto extends LinearOpMode {
     protected ScorpCannon leftCannon = null;
     protected ScorpCannon rightCannon = null;
     protected ScorpChassis chassis = null;
@@ -10,11 +10,13 @@ public class BaseAuto extends LinearOpMode {
     protected ScorpCamera camera = null;
     //protected ScorpColor color = null;
 
+    // this method will be implemented by the subclass
     protected void autoInit() {
+        // not abstract because not required in subclass
     }
 
-    protected void auto() {
-    }
+    // this method will be implemented by the subclass
+    protected abstract void auto();
 
     @Override
     public void runOpMode() {
@@ -23,14 +25,14 @@ public class BaseAuto extends LinearOpMode {
         chassis = new ScorpChassis(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
         intake = new ScorpIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
-        camera = null; //new ScorpCamera(this, hardwareMap, "camera");
+        camera = new ScorpCamera(this, "camera");
         // color = new ScorpColorTestMM(hardwareMap, "sensor_color_not_real");
         // I commented out the init ^^^ because sensor_color_not_real, is not real so when it tires to find it it will run an error.
         chassis.init();
 
         autoInit();
 
-        telemetry.addData(">", "Waiting ...");
+        telemetry.addData(">", "Waiting for start ...");
         telemetry.update();
 
         while (opModeInInit()) {

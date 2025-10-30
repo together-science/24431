@@ -1,29 +1,34 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class BaseTele extends LinearOpMode {
-    private ScorpCannon leftCannon = null;
-    private ScorpCannon rightCannon = null;
+public abstract class BaseTele extends LinearOpMode {
+    protected ScorpCannon leftCannon = null;
+    protected ScorpCannon rightCannon = null;
     protected ScorpChassis chassis = null;
-    private ScorpIntake intake = null;
-    private ScorpSorter sorter = null;
+    protected ScorpIntake intake = null;
+    protected ScorpSorter sorter = null;
+    protected ScorpCamera camera = null;
+    protected final ElapsedTime runtime = new ElapsedTime();
 
-    protected void teleInit(){
+    // this method will be implemented by the sub class
+    protected void teleInit() {
+        // not abstract because not required in subclass
     }
-    protected void tele(){
-    }
+    // this method will be implemented by the sub class
+    protected abstract void tele();
 
-    boolean IsKeyDown(String Key){
-        if(Key.startsWith("a"))return gamepad1.a;
-        if(Key.startsWith("b"))return gamepad1.b;
-        if(Key.startsWith("x"))return gamepad1.x;
-        if(Key.startsWith("y"))return gamepad1.y;
-        if(Key.startsWith("dpad_down"))return gamepad1.dpad_down;
-        if(Key.startsWith("dpad_up"))return gamepad1.dpad_up;
-        if(Key.startsWith("dpad_left"))return gamepad1.dpad_left;
-        if(Key.startsWith("dpad_right"))return gamepad1.dpad_right;
-        return false;
-    }
+//    boolean IsKeyDown(String Key){
+//        if(Key.startsWith("a"))return gamepad1.a;
+//        if(Key.startsWith("b"))return gamepad1.b;
+//        if(Key.startsWith("x"))return gamepad1.x;
+//        if(Key.startsWith("y"))return gamepad1.y;
+//        if(Key.startsWith("dpad_down"))return gamepad1.dpad_down;
+//        if(Key.startsWith("dpad_up"))return gamepad1.dpad_up;
+//        if(Key.startsWith("dpad_left"))return gamepad1.dpad_left;
+//        if(Key.startsWith("dpad_right"))return gamepad1.dpad_right;
+//        return false;
+//    }
 
     @Override
     public void runOpMode() {
@@ -32,6 +37,7 @@ public class BaseTele extends LinearOpMode {
         rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger");
         intake = new ScorpIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
+        camera = new ScorpCamera(this, "camera");
 
         chassis.init();
 
@@ -41,6 +47,7 @@ public class BaseTele extends LinearOpMode {
             telemetry.addData(">", "Waiting ...");
             telemetry.update();
         }
+        runtime.reset(); // keeping track of game time
 
         tele();
     }
