@@ -34,17 +34,26 @@ public class ScorpChassis implements RobotChassis {
     static final double     ACCURACY                = 0.3; // inches accuracy for moveTo()
     static final boolean    DEBUG                   = true;
 
-    ScorpChassis(LinearOpMode op, HardwareMap hm, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
-        this.lf = hm.get(DcMotor.class, lfName);
-        this.rf = hm.get(DcMotor.class, rfName);
-        this.lb = hm.get(DcMotor.class, lbName);
-        this.rb = hm.get(DcMotor.class, rbName);
-        this.otos = hm.get(SparkFunOTOS.class, otosName);
-        this.imu = hm.get(IMU.class, imuName);
+    ScorpChassis(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
+        /*
+        this.lf = op.hardwareMap.get(DcMotor.class, lfName);
+        this.rf = op.hardwareMap.get(DcMotor.class, rfName);
+        this.lb = op.hardwareMap.get(DcMotor.class, lbName);
+        this.rb = op.hardwareMap.get(DcMotor.class, rbName);
+        this.otos = op.hardwareMap.get(SparkFunOTOS.class, otosName);
+
+         */
+        this.lf = null;
+        this.rf = null;
+        this.lb = null;
+        this.rb = null;
+        this.otos = null;
+        this.imu = op.hardwareMap.get(IMU.class, imuName);
         this.op = op;
     }
     void init(){
-        lf.setDirection(DcMotor.Direction.FORWARD);
+        return;
+        /* lf.setDirection(DcMotor.Direction.FORWARD);
         rf.setDirection(DcMotor.Direction.REVERSE);
         lb.setDirection(DcMotor.Direction.FORWARD);
         rb.setDirection(DcMotor.Direction.REVERSE);
@@ -61,9 +70,9 @@ public class ScorpChassis implements RobotChassis {
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        /* The next two lines define Hub orientation.
-         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
-         * To Do:  EDIT these two lines to match YOUR mounting configuration. */
+        //The next two lines define Hub orientation.
+        // The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
+        // To Do:  EDIT these two lines to match YOUR mounting configuration.
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
@@ -83,6 +92,7 @@ public class ScorpChassis implements RobotChassis {
         SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
         SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
         otos.getVersionInfo(hwVersion, fwVersion);
+        */
     }
 
     //High level - Simple
@@ -381,13 +391,12 @@ public class ScorpChassis implements RobotChassis {
     public void startStrafe(double speed, double direction, double turnSpeed) {
         double axial   = Math.sin(Math.PI/180*direction);
         double lateral = Math.cos(Math.PI/180*direction);
-        double turn = turnSpeed*P_TURN_GAIN;
+        double turn = turnSpeed*P_TURN_GAIN*3;
 
         double leftFrontPower  = (axial + lateral + turn);
         double rightFrontPower = (axial - lateral - turn);
         double leftBackPower   = (axial - lateral + turn);
         double rightBackPower  = (axial + lateral - turn);
-
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
@@ -417,10 +426,10 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startTurn(double turnSpeed) {
-        lf.setPower(-turnSpeed);
-        rf.setPower(turnSpeed);
-        lb.setPower(-turnSpeed);
-        rb.setPower(turnSpeed);
+        lf.setPower(turnSpeed);
+        lb.setPower(turnSpeed);
+        rf.setPower(-turnSpeed);
+        rb.setPower(-turnSpeed);
     }
 }
 

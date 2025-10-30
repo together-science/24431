@@ -50,11 +50,11 @@ public class GMTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        chassis = new ScorpChassis(this, hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
-        leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
-        rightCannon = new ScorpCannon(hardwareMap, "right_cannon_wheel", "right_cannon_trigger");
-        intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
-        sorter = new ScorpSorter(hardwareMap, "sorter_servo");
+        chassis = new ScorpChassis(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
+        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger");
+        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger");
+        intake = new ScorpIntake(this, "left_intake", "right_intake");
+        sorter = new ScorpSorter(this, "sorter_servo");
 
         chassis.init();
 
@@ -113,14 +113,11 @@ public class GMTeleOp extends LinearOpMode {
             // and drive
             if (driveSpeed > 0.05) {
                 chassis.startStrafe(driveSpeed, direction, turnSpeed);
-                // chassis.testStrafe();
-                // this is a test ^^^ if you would like to test please apply
-            } else if (turnSpeed > 0.05) {
-                chassis.startTurn(turnSpeed*-1);
+            } else if (Math.abs(turnSpeed) > 0.05) {
+                chassis.startTurn(turnSpeed);
             } else {
-                chassis.coast();
+                chassis.stop();
             }
-
             // set the intake
             if (intakeState.equals("on")) {
                 intake.on();
@@ -141,6 +138,7 @@ public class GMTeleOp extends LinearOpMode {
             // Show the elapsed game time
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Current heading", "%.2f", currentHeading);
+            telemetry.addData("turnSpeed", "%.2f", turnSpeed);
             telemetry.update();
         }
     }

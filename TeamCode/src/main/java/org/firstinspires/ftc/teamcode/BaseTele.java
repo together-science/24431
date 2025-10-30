@@ -27,11 +27,11 @@ public class BaseTele extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        chassis = new ScorpChassis(this, hardwareMap, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
-        leftCannon = new ScorpCannon(hardwareMap, "left_cannon_wheel", "left_cannon_trigger");
-        rightCannon = new ScorpCannon(hardwareMap, "right_cannon_wheel", "right_cannon_trigger");
-        intake = new ScorpIntake(hardwareMap, "left_intake", "right_intake");
-        sorter = new ScorpSorter(hardwareMap, "sorter_servo");
+        chassis = new ScorpChassis(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
+        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger");
+        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger");
+        intake = new ScorpIntake(this, "left_intake", "right_intake");
+        sorter = new ScorpSorter(this, "sorter_servo");
 
         chassis.init();
 
