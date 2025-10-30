@@ -4,14 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="GM TeleOp", group="Linear Opmode")
 
 public class GMTeleOp extends BaseTele {
-    ActionButton fireLeftActionButton = new ActionButton(()->gamepad1.left_bumper);
-    ActionButton fireRightActionButton = new ActionButton(()->gamepad1.right_bumper);
-    ActionButton intakeOnActionButton = new ActionButton(()->gamepad1.dpad_left);
-    ActionButton intakeReverseActionButton = new ActionButton(()->gamepad1.dpad_right);
-    ActionButton intakeOffActionButton = new ActionButton(()->gamepad1.dpad_down);
-    double currentHeading;
-    String intakeState = "off";
-
     @Override
     protected void teleIteration() {
         // gather gamepad info

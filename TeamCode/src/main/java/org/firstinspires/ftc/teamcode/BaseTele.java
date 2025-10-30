@@ -11,6 +11,14 @@ public abstract class BaseTele extends LinearOpMode {
     protected ScorpCamera camera = null;
     protected final ElapsedTime runtime = new ElapsedTime();
 
+    protected ActionButton fireLeftActionButton = new ActionButton(()->gamepad1.left_bumper);
+    protected ActionButton fireRightActionButton = new ActionButton(()->gamepad1.right_bumper);
+    protected ActionButton intakeOnActionButton = new ActionButton(()->gamepad1.dpad_left);
+    protected ActionButton intakeReverseActionButton = new ActionButton(()->gamepad1.dpad_right);
+    protected ActionButton intakeOffActionButton = new ActionButton(()->gamepad1.dpad_down);
+    protected double currentHeading;
+    protected String intakeState = "off";
+
     // this method will be implemented by the sub class
     protected void teleInit() {
         // not abstract because not required in subclass
