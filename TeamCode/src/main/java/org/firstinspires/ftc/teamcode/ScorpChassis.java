@@ -29,7 +29,7 @@ public class ScorpChassis implements RobotChassis {
     static final double     DRIVE_SPEED_SLOW        = 0.1;
     static final double     TURN_SPEED              = 0.5;
     static final double     HEADING_THRESHOLD       = 1.0;
-    static final double     P_TURN_GAIN             = 0.50;
+    static final double     P_TURN_GAIN             = 0.10;
     static final double     P_DRIVE_GAIN            = 0.03;
     static final double     ACCURACY                = 0.3; // inches accuracy for moveTo()
     static final boolean    DEBUG                   = true;
@@ -391,7 +391,7 @@ public class ScorpChassis implements RobotChassis {
     public void startStrafe(double speed, double direction, double turnSpeed) {
         double axial   = Math.sin(Math.PI/180*direction);
         double lateral = Math.cos(Math.PI/180*direction);
-        double turn = turnSpeed*P_TURN_GAIN*3;
+        double turn = turnSpeed*P_TURN_GAIN;
 
         double leftFrontPower  = (axial + lateral + turn);
         double rightFrontPower = (axial - lateral - turn);
