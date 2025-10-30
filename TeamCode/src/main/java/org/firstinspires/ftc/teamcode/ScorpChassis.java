@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.content.res.Resources;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,11 +14,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class ScorpChassis implements RobotChassis {
-    private final DcMotor      lf;
-    private final DcMotor      rf;
-    private final DcMotor      lb;
-    private final DcMotor      rb;
-    private final SparkFunOTOS otos;
+    private DcMotor      lf;
+    private DcMotor      rf;
+    private DcMotor      lb;
+    private DcMotor      rb;
+    private SparkFunOTOS otos;
     private final IMU          imu;
     private final LinearOpMode op;
     static final double     COUNTS_PER_MOTOR_REV    = 537.7*(24.0/35.0);
@@ -35,41 +37,40 @@ public class ScorpChassis implements RobotChassis {
     static final boolean    DEBUG                   = true;
 
     ScorpChassis(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
-        /*
-        this.lf = op.hardwareMap.get(DcMotor.class, lfName);
-        this.rf = op.hardwareMap.get(DcMotor.class, rfName);
-        this.lb = op.hardwareMap.get(DcMotor.class, lbName);
-        this.rb = op.hardwareMap.get(DcMotor.class, rbName);
-        this.otos = op.hardwareMap.get(SparkFunOTOS.class, otosName);
 
-         */
-        this.lf = null;
-        this.rf = null;
-        this.lb = null;
-        this.rb = null;
-        this.otos = null;
         this.imu = op.hardwareMap.get(IMU.class, imuName);
         this.op = op;
+
+        try {
+            this.lf = op.hardwareMap.get(DcMotor.class, lfName);
+            this.rf = op.hardwareMap.get(DcMotor.class, rfName);
+            this.lb = op.hardwareMap.get(DcMotor.class, lbName);
+            this.rb = op.hardwareMap.get(DcMotor.class, rbName);
+            this.otos = op.hardwareMap.get(SparkFunOTOS.class, otosName);
+        } catch (Exception ignored) {
+        }
+
+
     }
     void init(){
-        return;
-        /* lf.setDirection(DcMotor.Direction.FORWARD);
-        rf.setDirection(DcMotor.Direction.REVERSE);
-        lb.setDirection(DcMotor.Direction.FORWARD);
-        rb.setDirection(DcMotor.Direction.REVERSE);
-        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        if (lf != null && lb != null && rf != null && rb != null) {
+            lf.setDirection(DcMotor.Direction.FORWARD);
+            rf.setDirection(DcMotor.Direction.REVERSE);
+            lb.setDirection(DcMotor.Direction.FORWARD);
+            rb.setDirection(DcMotor.Direction.REVERSE);
+            lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
         //The next two lines define Hub orientation.
         // The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
         // To Do:  EDIT these two lines to match YOUR mounting configuration.
@@ -79,24 +80,28 @@ public class ScorpChassis implements RobotChassis {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         imu.resetYaw();
 
-        otos.setLinearUnit(DistanceUnit.INCH);
-        otos.setAngularUnit(AngleUnit.DEGREES);
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
-        otos.setOffset(offset);
-        otos.setLinearScalar(1.0434);
-        otos.setAngularScalar(1.0); // So does this
-        otos.calibrateImu();
-        otos.resetTracking();
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
-        otos.setPosition(currentPosition);
-        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
-        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
-        otos.getVersionInfo(hwVersion, fwVersion);
-        */
+        if (otos != null) {
+            otos.setLinearUnit(DistanceUnit.INCH);
+            otos.setAngularUnit(AngleUnit.DEGREES);
+            SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
+            otos.setOffset(offset);
+            otos.setLinearScalar(1.0434);
+            otos.setAngularScalar(1.0); // So does this
+            otos.calibrateImu();
+            otos.resetTracking();
+            SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
+            otos.setPosition(currentPosition);
+            SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
+            SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
+            otos.getVersionInfo(hwVersion, fwVersion);
+        }
     }
 
     //High level - Simple
     void moveTo(double x, double y, double driveSpeed){
+        if (lf == null || lb == null || rf == null || rb == null || otos == null) {
+            return;
+        }
         double distance = 1000;
         double fh = getHeading(); // initial and final heading
         double dx = 0;
@@ -147,41 +152,50 @@ public class ScorpChassis implements RobotChassis {
         }
     }
     public SparkFunOTOS.Pose2D getPosition() {
+        if (otos == null) {
+            return null;
+        }
         SparkFunOTOS.Pose2D pos = otos.getPosition();
         return new SparkFunOTOS.Pose2D(-pos.x, -pos.y, pos.h);
     }
     public String getPositionString(){
+        if (otos == null) {
+            return "unknown";
+        }
         SparkFunOTOS.Pose2D pos = getPosition();
         return "X:"+Math.round(pos.x*100)/100+", Y:"+Math.round(pos.y*100)/100+", H:"+Math.round(pos.h*100)/100;
     }
 
     //Medium level - Intermediate
+    // todo: this won't work, the while loop is for encoders
     void driveStraight(double maxDriveSpeed, double distance, double heading) {
-        int lfTarget, rfTarget, lbTarget, rbTarget;
-        double turnSpeed;
-        if (op.opModeIsActive()) {
-            int moveCounts = (int)(distance * COUNTS_PER_INCH);
-            lfTarget = lf.getCurrentPosition() + moveCounts;
-            rfTarget = rf.getCurrentPosition() + moveCounts;
-            lbTarget = lb.getCurrentPosition() + moveCounts;
-            rbTarget = rb.getCurrentPosition() + moveCounts;
-            lf.setTargetPosition(lfTarget);
-            rf.setTargetPosition(rfTarget);
-            lb.setTargetPosition(lbTarget);
-            rb.setTargetPosition(rbTarget);
-
-            _moveRobot(Math.abs(maxDriveSpeed), 0);
-
-            while (op.opModeIsActive() && (lf.isBusy() && rf.isBusy())){
-                turnSpeed = _getSteeringCorrection(heading, P_DRIVE_GAIN);
-                if (distance < 0){
-                    turnSpeed *= -1.0;
-                }
-                _moveRobot(0, turnSpeed);
-            }
-
-            _moveRobot(0, 0);
-        }
+        throw new UnsupportedOperationException();
+//        int lfTarget, rfTarget, lbTarget, rbTarget;
+//        double turnSpeed;
+//        if (op.opModeIsActive()) {
+//            int moveCounts = (int)(distance * COUNTS_PER_INCH);
+//            lfTarget = lf.getCurrentPosition() + moveCounts;
+//            rfTarget = rf.getCurrentPosition() + moveCounts;
+//            lbTarget = lb.getCurrentPosition() + moveCounts;
+//            rbTarget = rb.getCurrentPosition() + moveCounts;
+//            lf.setTargetPosition(lfTarget);
+//            rf.setTargetPosition(rfTarget);
+//            lb.setTargetPosition(lbTarget);
+//            rb.setTargetPosition(rbTarget);
+//
+//            _moveRobot(Math.abs(maxDriveSpeed), 0);
+//
+//            // todo: fix this
+//            while (op.opModeIsActive() && (lf.isBusy() && rf.isBusy())){
+//                turnSpeed = _getSteeringCorrection(heading, P_DRIVE_GAIN);
+//                if (distance < 0){
+//                    turnSpeed *= -1.0;
+//                }
+//                _moveRobot(0, turnSpeed);
+//            }
+//
+//            _moveRobot(0, 0);
+//        }
 
     }
 
@@ -196,65 +210,70 @@ public class ScorpChassis implements RobotChassis {
 
 
     @Override
+    // todo: this won't work, the while loop is for encoders
     public void strafeDistance(final double maxDriveSpeed, final double distance, final double heading) {
-        int lfTarget, rfTarget, lbTarget, rbTarget;
-        double turnSpeed;
-        if (op.opModeIsActive()) {
-
-            double axial   = Math.cos(Math.PI/180*heading);  // Note: pushing stick forward gives negative value
-            double lateral =  -Math.sin(Math.PI/180*heading);
-
-            double leftFrontPower  = (axial + lateral);
-            double rightFrontPower = (axial - lateral);
-            double leftBackPower   = (axial - lateral);
-            double rightBackPower  = (axial + lateral);
-
-            double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-            max = Math.max(max, Math.abs(leftBackPower));
-            max = Math.max(max, Math.abs(rightBackPower));
-
-            if (max > 1.0) {
-                leftFrontPower /= max;
-                rightFrontPower /= max;
-                leftBackPower /= max;
-                rightBackPower /= max;
-            }
-
-            leftFrontPower *= maxDriveSpeed;
-            rightFrontPower *= maxDriveSpeed;
-            leftBackPower *= maxDriveSpeed;
-            rightBackPower *= maxDriveSpeed;
-
-            int moveCounts = (int)(distance * COUNTS_PER_INCH * (1+STRAFE_CORRECTION*Math.abs(lateral)));
-            lfTarget = lf.getCurrentPosition() + (int)Math.signum(leftFrontPower)*moveCounts;
-            rfTarget = rf.getCurrentPosition() +  (int)Math.signum(rightFrontPower)*moveCounts;
-            lbTarget = lb.getCurrentPosition() +  (int)Math.signum(leftBackPower)*moveCounts;
-            rbTarget = rb.getCurrentPosition() +  (int)Math.signum(rightBackPower)*moveCounts;
-
-            lf.setTargetPosition(lfTarget);
-            rf.setTargetPosition(rfTarget);
-            lb.setTargetPosition(lbTarget);
-            rb.setTargetPosition(rbTarget);
-
-            double robotHeading = getHeading();
-
-            _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
-
-            while (op.opModeIsActive() &&
-                    (lf.isBusy() && rf.isBusy())) {
-
-                turnSpeed = _getSteeringCorrection(robotHeading, P_DRIVE_GAIN);
-
-                if (distance < 0)turnSpeed*=-1;
-                _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turnSpeed);
-            }
-            _moveRobot(0, 0);
-        }
+        throw new UnsupportedOperationException();
+//        int lfTarget, rfTarget, lbTarget, rbTarget;
+//        double turnSpeed;
+//        if (op.opModeIsActive()) {
+//
+//            double axial   = Math.cos(Math.PI/180*heading);  // Note: pushing stick forward gives negative value
+//            double lateral =  -Math.sin(Math.PI/180*heading);
+//
+//            double leftFrontPower  = (axial + lateral);
+//            double rightFrontPower = (axial - lateral);
+//            double leftBackPower   = (axial - lateral);
+//            double rightBackPower  = (axial + lateral);
+//
+//            double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+//            max = Math.max(max, Math.abs(leftBackPower));
+//            max = Math.max(max, Math.abs(rightBackPower));
+//
+//            if (max > 1.0) {
+//                leftFrontPower /= max;
+//                rightFrontPower /= max;
+//                leftBackPower /= max;
+//                rightBackPower /= max;
+//            }
+//
+//            leftFrontPower *= maxDriveSpeed;
+//            rightFrontPower *= maxDriveSpeed;
+//            leftBackPower *= maxDriveSpeed;
+//            rightBackPower *= maxDriveSpeed;
+//
+//            int moveCounts = (int)(distance * COUNTS_PER_INCH * (1+STRAFE_CORRECTION*Math.abs(lateral)));
+//            lfTarget = lf.getCurrentPosition() + (int)Math.signum(leftFrontPower)*moveCounts;
+//            rfTarget = rf.getCurrentPosition() +  (int)Math.signum(rightFrontPower)*moveCounts;
+//            lbTarget = lb.getCurrentPosition() +  (int)Math.signum(leftBackPower)*moveCounts;
+//            rbTarget = rb.getCurrentPosition() +  (int)Math.signum(rightBackPower)*moveCounts;
+//
+//            lf.setTargetPosition(lfTarget);
+//            rf.setTargetPosition(rfTarget);
+//            lb.setTargetPosition(lbTarget);
+//            rb.setTargetPosition(rbTarget);
+//
+//            double robotHeading = getHeading();
+//
+//            _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
+//
+//            while (op.opModeIsActive() &&
+//                    (lf.isBusy() && rf.isBusy())) {
+//
+//                turnSpeed = _getSteeringCorrection(robotHeading, P_DRIVE_GAIN);
+//
+//                if (distance < 0)turnSpeed*=-1;
+//                _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turnSpeed);
+//            }
+//            _moveRobot(0, 0);
+//        }
 
     }
 
     @Override
     public void turnToHeading(double maxTurnSpeed, double heading) {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
         double turnSpeed;
         _getSteeringCorrection(heading, P_DRIVE_GAIN);
         double current = getHeading();
@@ -275,6 +294,9 @@ public class ScorpChassis implements RobotChassis {
     }
 
     private void _startDriveStraight(double maxDriveSpeed, double h) {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
         double turnSpeed = _getSteeringCorrection(h, P_TURN_GAIN);
         _moveRobot(Math.abs(maxDriveSpeed), turnSpeed);
     }
@@ -314,7 +336,7 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void turnTo(double turnSpeed, double heading) {
-
+        throw new UnsupportedOperationException();
     }
 
     private void _moveRobot(double drive, double turn) {
@@ -356,6 +378,9 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void stop() {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -369,6 +394,9 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void coast() {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -382,6 +410,9 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startDrive(double speed, double direction, double turnSpeed) {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
         double turn = _getSteeringCorrection(direction, turnSpeed/50);
 
         _strafeRobot(speed, speed, speed, speed, turn);
@@ -389,6 +420,9 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startStrafe(double speed, double direction, double turnSpeed) {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
         double axial   = Math.sin(Math.PI/180*direction);
         double lateral = Math.cos(Math.PI/180*direction);
         double turn = turnSpeed*P_TURN_GAIN;
@@ -426,6 +460,9 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public void startTurn(double turnSpeed) {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
         lf.setPower(turnSpeed);
         lb.setPower(turnSpeed);
         rf.setPower(-turnSpeed);
@@ -433,14 +470,3 @@ public class ScorpChassis implements RobotChassis {
     }
 }
 
-/*
-Computer Layout
-
-Tasks:
-SAM Slow Access Memory
-RAM Random Access Memory
-QAM Quick Access Memory
-IFM Internal Function Manager
-Program Counter
-
- */

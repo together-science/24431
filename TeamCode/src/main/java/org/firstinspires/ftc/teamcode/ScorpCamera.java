@@ -15,12 +15,18 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ScorpCamera {
-    private final VisionPortal visionPortal;               // Used to manage the video source.
-    private final AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
+    private VisionPortal visionPortal = null;               // Used to manage the video source.
+    private AprilTagProcessor aprilTag = null;              // Used for managing the AprilTag detection process.
     private final LinearOpMode op;
+    private WebcamName cam = null;
 
-    ScorpCamera(LinearOpMode op, HardwareMap hm, String cameraName) {
+    ScorpCamera(LinearOpMode op, String cameraName) {
         this.op = op;
+        try {
+            this.cam = op.hardwareMap.get(WebcamName.class, cameraName);
+        } catch (Exception ignored) {
+            return;
+        }
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder().build();
 
@@ -35,7 +41,7 @@ public class ScorpCamera {
 
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
-                .setCamera(hm.get(WebcamName.class, cameraName))
+                .setCamera(cam)
                 .addProcessor(aprilTag)
                 .build();
     }
@@ -44,6 +50,9 @@ public class ScorpCamera {
     // can we see the desired tag? if so, return detection
     //
     AprilTagDetection getDetection(final int desiredTagId) {
+        if (this.cam == null) {
+            return null;
+        }
         // Step through the list of detected tags and look for a matching tag
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentDetections) {
@@ -63,6 +72,9 @@ public class ScorpCamera {
      This can only be called AFTER calling initAprilTag(), and only works for Webcams;
     */
     private void setManualExposure(int exposureMS, int gain) {
+        if (this.cam == null) {
+            return;
+        }
         // Wait for the camera to be open, then use the controls
 
         if (visionPortal == null) {
