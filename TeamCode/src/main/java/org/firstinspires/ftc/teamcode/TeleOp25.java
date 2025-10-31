@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="GM TeleOp", group="Linear Opmode")
+@TeleOp(name="TeleOp25", group="Linear Opmode")
 
-public class GMTeleOp extends BaseTele {
+public class TeleOp25 extends BaseTele25 {
     @Override
     protected void teleIteration() {
         // compute what the intakeState should be
