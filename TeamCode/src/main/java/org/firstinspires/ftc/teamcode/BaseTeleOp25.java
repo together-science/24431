@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-public abstract class BaseTele25 extends BaseTele {
+public abstract class BaseTeleOp25 extends BaseTeleOp {
     protected ScorpCannon leftCannon = null;
     protected ScorpCannon rightCannon = null;
     protected ScorpIntake intake = null;

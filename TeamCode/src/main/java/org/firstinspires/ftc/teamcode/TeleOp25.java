@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="TeleOp25", group="Linear Opmode")
 
-public class TeleOp25 extends BaseTele25 {
+public class TeleOp25 extends BaseTeleOp25 {
     @Override
     protected void teleIteration() {
         // compute what the intakeState should be

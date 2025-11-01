@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public abstract class BaseTele extends LinearOpMode {
+public abstract class BaseTeleOp extends LinearOpMode {
     protected ScorpChassis chassis = null;
     protected final ElapsedTime runtime = new ElapsedTime();
 
