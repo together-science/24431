@@ -17,15 +17,15 @@ public class BasicMoveShoot extends BaseAuto{
 
     @Override
     protected void autoInit(){
-        if(camera.getDetection(21) != null){
-            green = 1;
-        }
-        if(camera.getDetection(22) != null){
-            green = 2;
-        }
-        if(camera.getDetection(23) != null){
-            green = 3;
-        }
+//        if(camera.getDetection(21) != null){
+//            green = 1;
+//        }
+//        if(camera.getDetection(22) != null){
+//            green = 2;
+//        }
+//        if(camera.getDetection(23) != null){
+//            green = 3;
+//        }
     }
 
     @Override
@@ -39,30 +39,30 @@ public class BasicMoveShoot extends BaseAuto{
     }
 
     void shootInOrder(){
-        if(green == 1){
-            leftCannon.fire();
-            sleep(SLEEP_TIME);
-            sorter.sortLeft();
-            rightCannon.fire();
-            sleep(SLEEP_TIME);
-            rightCannon.fire();
-        }
-        if(green == 2){
-            rightCannon.fire();
-            sleep(SLEEP_TIME);
-            sorter.sortLeft();
-            leftCannon.fire();
-            sleep(SLEEP_TIME);
-            rightCannon.fire();
-        }
-        if(green == 3){
-            rightCannon.fire();
-            sleep(SLEEP_TIME);
-            sorter.sortLeft();
-            rightCannon.fire();
-            sleep(SLEEP_TIME);
-            leftCannon.fire();
-        }
+//        if(green == 1){
+//            leftCannon.fire();
+//            sleep(SLEEP_TIME);
+//            sorter.sortLeft();
+//            rightCannon.fire();
+//            sleep(SLEEP_TIME);
+//            rightCannon.fire();
+//        }
+//        if(green == 2){
+//            rightCannon.fire();
+//            sleep(SLEEP_TIME);
+//            sorter.sortLeft();
+//            leftCannon.fire();
+//            sleep(SLEEP_TIME);
+//            rightCannon.fire();
+//        }
+//        if(green == 3){
+//            rightCannon.fire();
+//            sleep(SLEEP_TIME);
+//            sorter.sortLeft();
+//            rightCannon.fire();
+//            sleep(SLEEP_TIME);
+//            leftCannon.fire();
+//        }
     }
 }
 

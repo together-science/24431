@@ -8,7 +8,7 @@ public class ScorpCannon {
     private Servo trigger = null;
     private final LinearOpMode op;
     private long lastFired = 0L;
-    private static final double SPEED = 1.0;
+    private static final double SPEED = -0.75;
     private static final double POSITION_CHARGED = 0.0;
     private static final double POSITION_TRIGGERED = 1.0;
     private static final long SERVO_DELAY = 200;

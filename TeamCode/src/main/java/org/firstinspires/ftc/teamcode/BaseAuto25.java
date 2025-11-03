@@ -13,7 +13,7 @@ public abstract class BaseAuto25 extends BaseAuto {
         super.autoInit();
         leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger");
         rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger");
-        intake = new ScorpIntake(this, "left_intake", "right_intake");
+        intake = new ScorpMotorIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
         camera = new ScorpCamera(this, "camera");
         // color = new ScorpColorTestMM(hardwareMap, "sensor_color_not_real");
