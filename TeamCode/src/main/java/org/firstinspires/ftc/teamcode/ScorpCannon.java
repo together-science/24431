@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -9,16 +10,16 @@ public class ScorpCannon {
     private Servo trigger = null;
     private final LinearOpMode op;
     private long lastFired = 0L;
-    private double speed = 0.75;
+    private double power = 0.75;
     private static final double POSITION_CHARGED = 0.0;
     private static final double POSITION_TRIGGERED = 1.0;
     private static final long SERVO_DELAY = 200;
     private static final long SPINUP_DELAY = 2000;
     private static final long TIMEOUT = 10000;
 
-    ScorpCannon(LinearOpMode op, String wheelName, String triggerName, double speed) {
+    ScorpCannon(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
         this.op = op;
-        this.speed = speed;
+        this.power = power;
         try {
             this.wheel = op.hardwareMap.get(CRServo.class, wheelName);
             op.telemetry.addLine("found wheel");
@@ -28,7 +29,7 @@ public class ScorpCannon {
         }
 
         if (wheel != null) {
-            wheel.setDirection(DcMotorSimple.Direction.REVERSE);
+            wheel.setDirection(direction);
         }
 
         if (trigger != null) {
@@ -42,7 +43,7 @@ public class ScorpCannon {
             return;
         }
 
-        wheel.setPower(speed);
+        wheel.setPower(power);
         lastFired = System.currentTimeMillis();
     }
 
@@ -70,7 +71,7 @@ public class ScorpCannon {
         }
 
         // increase by 5%
-        speed = Math.min(speed+0.05, 1.0);
+        power = Math.min(power +0.05, 1.0);
 
         if (Math.abs(wheel.getPower()) > 0) {
             // spinning, adjust to new speed
@@ -85,12 +86,20 @@ public class ScorpCannon {
         }
 
         // decrease by 5%
-        speed = Math.max(speed-0.05, 0.05);
+        power = Math.max(power -0.05, 0.05);
 
         if (Math.abs(wheel.getPower()) > 0) {
             // spinning, adjust to new speed
             spinUp();
         }
+    }
+
+    double getPower() {
+        // check if we in fact have a cannon
+        if (this.wheel == null) {
+            return 0.0;
+        }
+        return power;
     }
 
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 public abstract class BaseAuto25 extends BaseAuto {
     protected ScorpCannon leftCannon = null;
     protected ScorpCannon rightCannon = null;
@@ -11,8 +13,8 @@ public abstract class BaseAuto25 extends BaseAuto {
     // this method will be implemented by the subclass
     protected void autoInit() {
         super.autoInit();
-        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger", 0.75);
-        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger", 0.75);
+        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger", 0.75, DcMotorSimple.Direction.REVERSE);
+        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger", 0.75, DcMotorSimple.Direction.FORWARD);
         intake = new ScorpMotorIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
         camera = new ScorpCamera(this, "camera");
