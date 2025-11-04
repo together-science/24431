@@ -7,11 +7,15 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
     protected ScorpSorter sorter = null;
     protected ScorpCamera camera = null;
 
-    boolean fireLeft = false;
-    boolean fireRight = false;
-    boolean intakeOn = false;
-    boolean intakeReverse = false;
-    boolean intakeOff = false;
+    protected boolean fireLeft = false;
+    protected boolean fireRight = false;
+    protected boolean intakeOn = false;
+    protected boolean intakeReverse = false;
+    protected boolean intakeOff = false;
+    protected boolean leftCannonMorePower = false;
+    protected boolean leftCannonLessPower = false;
+    protected boolean rightCannonMorePower = false;
+    protected boolean rightCannonLessPower = false;
     protected String intakeState = "off";
 
     protected ActionButton fireLeftActionButton = new ActionButton(() -> gamepad1.left_bumper);
@@ -19,11 +23,15 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
     protected ActionButton intakeOnActionButton = new ActionButton(() -> gamepad1.dpad_left);
     protected ActionButton intakeReverseActionButton = new ActionButton(() -> gamepad1.dpad_right);
     protected ActionButton intakeOffActionButton = new ActionButton(() -> gamepad1.dpad_down);
+    protected ActionButton leftMorePowerActionButton = new ActionButton(() -> gamepad1.y);
+    protected ActionButton leftLessPowerActionButton = new ActionButton(() -> gamepad1.x);
+    protected ActionButton rightMorePowerActionButton = new ActionButton(() -> gamepad1.b && !gamepad1.start);
+    protected ActionButton rightLessPowerActionButton = new ActionButton(() -> gamepad1.a && !gamepad1.start);
 
     protected void teleInit() {
         super.teleInit();
-        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger");
-        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger");
+        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger", 0.75);
+        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger", 0.75);
         intake = new ScorpMotorIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
         camera = new ScorpCamera(this, "camera");

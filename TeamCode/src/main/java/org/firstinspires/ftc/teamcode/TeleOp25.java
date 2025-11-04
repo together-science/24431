@@ -23,6 +23,18 @@ public class TeleOp25 extends BaseTeleOp25 {
             speedFactor = 0.2; // todo: tune this
         }
 
+        // adjust cannon wheel speed
+        if (leftCannonMorePower) {
+            leftCannon.morePower();
+        } else if (leftCannonLessPower) {
+            leftCannon.lessPower();
+        }
+        if (rightCannonMorePower) {
+            rightCannon.morePower();
+        } else if (rightCannonLessPower) {
+            rightCannon.lessPower();
+        }
+
         // compute speeds and directions and headings
         double direction = Math.atan2(y,x)/Math.PI*180;
         currentHeading = chassis.getHeading();

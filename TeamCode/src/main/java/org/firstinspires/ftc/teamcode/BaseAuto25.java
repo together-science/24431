@@ -11,8 +11,8 @@ public abstract class BaseAuto25 extends BaseAuto {
     // this method will be implemented by the subclass
     protected void autoInit() {
         super.autoInit();
-        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger");
-        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger");
+        leftCannon = new ScorpCannon(this, "left_cannon_wheel", "left_cannon_trigger", 0.75);
+        rightCannon = new ScorpCannon(this, "right_cannon_wheel", "right_cannon_trigger", 0.75);
         intake = new ScorpMotorIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
         camera = new ScorpCamera(this, "camera");
