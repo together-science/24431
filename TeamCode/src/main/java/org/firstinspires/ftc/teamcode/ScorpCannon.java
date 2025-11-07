@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -10,12 +9,13 @@ public class ScorpCannon {
     private Servo trigger = null;
     private final LinearOpMode op;
     private long lastFired = 0L;
-    private double power = 0.75;
+    private double power;
+    private boolean spinDown = false;
     private static final double POSITION_CHARGED = 0.0;
     private static final double POSITION_TRIGGERED = 1.0;
     private static final long SERVO_DELAY = 500;
     private static final long SPINUP_DELAY = 2000;
-    private static final long TIMEOUT = 10000;
+    private static final long TIMEOUT = 3000;
 
     ScorpCannon(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
         this.op = op;
@@ -47,6 +47,15 @@ public class ScorpCannon {
         lastFired = System.currentTimeMillis();
     }
 
+    void cannonIntake(){
+        if(this.wheel == null){
+            return;
+        }
+        spinDown = true;
+        wheel.setPower(-0.40);
+        lastFired = System.currentTimeMillis();
+    }
+
     void spinDown() {
         // check if we in fact have a cannon
         if (this.wheel == null) {
@@ -55,11 +64,15 @@ public class ScorpCannon {
 
         // spin down the wheel ...
         wheel.setPower(0);
+        spinDown = false;
     }
 
     void spinDownAfterDelay() {
+        if(!spinDown){
+            return;
+        }
         long now = System.currentTimeMillis();
-        if (now - lastFired > TIMEOUT) {
+        if (now - lastFired > TIMEOUT && !spinDown) {
             spinDown();
         }
     }
@@ -108,6 +121,7 @@ public class ScorpCannon {
         if (this.wheel == null) {
             return;
         }
+        spinDown = true;
 
         // if necessary, spin up cannon
         if (wheel.getPower() == 0) {

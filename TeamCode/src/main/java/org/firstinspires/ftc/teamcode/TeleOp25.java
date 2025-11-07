@@ -9,8 +9,12 @@ public class TeleOp25 extends BaseTeleOp25 {
         // compute what the intakeState should be
         if (intakeOff) {
             intakeState = "off";
+            leftCannon.spinDown();
+            rightCannon.spinDown();
         } else if (intakeOn) {
             intakeState = "on";
+            leftCannon.cannonIntake();
+            rightCannon.cannonIntake();
         } else if (intakeReverse) {
             intakeState = "reverse";
         }
