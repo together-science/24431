@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class ScorpCannon {
-    private CRServo wheel = null;
+public abstract class ScorpCannon {
     private Servo trigger = null;
     private final LinearOpMode op;
     private long lastFired = 0L;
@@ -17,19 +14,14 @@ public class ScorpCannon {
     private static final long SPINUP_DELAY = 2000;
     private static final long TIMEOUT = 3000;
 
-    ScorpCannon(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
+    ScorpCannon(LinearOpMode op, String triggerName, double power) {
         this.op = op;
         this.power = power;
         try {
-            this.wheel = op.hardwareMap.get(CRServo.class, wheelName);
             op.telemetry.addLine("found wheel");
             this.trigger = op.hardwareMap.get(Servo.class, triggerName);
             op.telemetry.addLine("found trigger");
         } catch(Exception ignored) {
-        }
-
-        if (wheel != null) {
-            wheel.setDirection(direction);
         }
 
         if (trigger != null) {
@@ -37,33 +29,38 @@ public class ScorpCannon {
         }
     }
 
+    abstract protected void setPower(double power);
+
+    abstract protected boolean noWheel();
+
     void spinUp() {
         // check if we in fact have a cannon
-        if (this.wheel == null) {
+        if (this.noWheel()) {
             return;
         }
 
-        wheel.setPower(power);
+        setPower(power);
         lastFired = System.currentTimeMillis();
     }
 
     void cannonIntake(){
-        if(this.wheel == null){
+        if(noWheel()){
             return;
         }
         spinDown = true;
-        wheel.setPower(-0.40);
+        setPower(-0.40);
         lastFired = System.currentTimeMillis();
     }
 
     void spinDown() {
         // check if we in fact have a cannon
-        if (this.wheel == null) {
+        if (this.noWheel()) {
             return;
         }
 
         // spin down the wheel ...
-        wheel.setPower(0);
+        setPower(0);
+        setPower(0);
         spinDown = false;
     }
 
@@ -79,14 +76,14 @@ public class ScorpCannon {
 
     void morePower() {
         // check if we in fact have a cannon
-        if (this.wheel == null) {
+        if (this.noWheel()) {
             return;
         }
 
         // increase by 5%
         power = Math.min(power +0.05, 1.0);
 
-        if (Math.abs(wheel.getPower()) > 0) {
+        if (Math.abs(getPower()) > 0) {
             // spinning, adjust to new speed
             spinUp();
         }
@@ -94,37 +91,31 @@ public class ScorpCannon {
 
     void lessPower() {
         // check if we in fact have a cannon
-        if (this.wheel == null) {
+        if (this.noWheel()) {
             return;
         }
 
         // decrease by 5%
         power = Math.max(power -0.05, 0.05);
 
-        if (Math.abs(wheel.getPower()) > 0) {
+        if (Math.abs(getPower()) > 0) {
             // spinning, adjust to new speed
             spinUp();
         }
     }
 
-    double getPower() {
-        // check if we in fact have a cannon
-        if (this.wheel == null) {
-            return 0.0;
-        }
-        return power;
-    }
+    abstract protected double getPower();
 
 
     void fire() {
         // check if we in fact have a cannon
-        if (this.wheel == null) {
+        if (this.noWheel()) {
             return;
         }
         spinDown = true;
 
         // if necessary, spin up cannon
-        if (wheel.getPower() == 0) {
+        if (getPower() == 0) {
             spinUp();
             op.sleep(SPINUP_DELAY);
         }
