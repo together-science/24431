@@ -1,6 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.mm;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.BaseAuto;
+import org.firstinspires.ftc.teamcode.ScorpChassis;
 
 /*
 This is Matthew's auto, dont change it.
@@ -11,7 +14,7 @@ hoursSpent = 1;
  */
 
 @Autonomous(name = "BasicMoveShoot-MM", group = "Sensor")
-public class BasicMoveShoot extends BaseAuto{
+public class BasicMoveShoot extends BaseAuto {
     int green;
     long SLEEP_TIME = 300;
 

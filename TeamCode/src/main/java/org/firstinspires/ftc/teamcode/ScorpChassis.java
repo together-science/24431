@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.content.res.Resources;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -23,12 +21,12 @@ public class ScorpChassis implements RobotChassis {
     static final double     COUNTS_PER_MOTOR_REV    = 537.7*(24.0/35.0);
     static final double     DRIVE_GEAR_REDUCTION    = 1.0;
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     STRAFE_CORRECTION       = 1.0;
+    // static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
+    // static final double     STRAFE_CORRECTION       = 1.0;
     static final double     DRIVE_SPEED_FAST        = 0.4;
     static final double     DRIVE_SPEED_NORMAL      = 0.2;
     static final double     DRIVE_SPEED_SLOW        = 0.1;
-    static final double     TURN_SPEED              = 0.5;
+    // static final double     TURN_SPEED              = 0.5;
     static final double     HEADING_THRESHOLD       = 1.0;
     static final double     P_TURN_GAIN             = 0.50;
     static final double     P_DRIVE_GAIN            = 0.03;
@@ -97,7 +95,7 @@ public class ScorpChassis implements RobotChassis {
     }
 
     //High level - Simple
-    void moveTo(double x, double y, double driveSpeed){
+    public void moveTo(double x, double y, double driveSpeed){
         if (lf == null || lb == null || rf == null || rb == null || otos == null) {
             return;
         }
@@ -106,7 +104,7 @@ public class ScorpChassis implements RobotChassis {
         double dx = 0;
         double dy = 0;
         double h = 0;
-        SparkFunOTOS.Pose2D pos = null;
+        SparkFunOTOS.Pose2D pos = new SparkFunOTOS.Pose2D();
 
         while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) {
             pos = getPosition();

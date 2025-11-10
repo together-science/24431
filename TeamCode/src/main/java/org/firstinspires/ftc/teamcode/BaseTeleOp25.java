@@ -20,15 +20,15 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
     protected boolean rightCannonLessPower = false;
     protected String intakeState = "off";
 
-    protected ActionButton fireLeftActionButton = new ActionButton(() -> gamepad1.left_bumper);
-    protected ActionButton fireRightActionButton = new ActionButton(() -> gamepad1.right_bumper);
-    protected ActionButton intakeOnActionButton = new ActionButton(() -> gamepad1.dpad_left);
-    protected ActionButton intakeReverseActionButton = new ActionButton(() -> gamepad1.dpad_right);
-    protected ActionButton intakeOffActionButton = new ActionButton(() -> gamepad1.dpad_down);
-    protected ActionButton leftMorePowerActionButton = new ActionButton(() -> gamepad1.y);
-    protected ActionButton leftLessPowerActionButton = new ActionButton(() -> gamepad1.x);
-    protected ActionButton rightMorePowerActionButton = new ActionButton(() -> gamepad1.b && !gamepad1.start);
-    protected ActionButton rightLessPowerActionButton = new ActionButton(() -> gamepad1.a && !gamepad1.start);
+    protected UtilActionButton fireLeftActionButton = new UtilActionButton(() -> gamepad1.left_bumper);
+    protected UtilActionButton fireRightActionButton = new UtilActionButton(() -> gamepad1.right_bumper);
+    protected UtilActionButton intakeOnActionButton = new UtilActionButton(() -> gamepad1.dpad_left);
+    protected UtilActionButton intakeReverseActionButton = new UtilActionButton(() -> gamepad1.dpad_right);
+    protected UtilActionButton intakeOffActionButton = new UtilActionButton(() -> gamepad1.dpad_down);
+    protected UtilActionButton leftMorePowerActionButton = new UtilActionButton(() -> gamepad1.y);
+    protected UtilActionButton leftLessPowerActionButton = new UtilActionButton(() -> gamepad1.x);
+    protected UtilActionButton rightMorePowerActionButton = new UtilActionButton(() -> gamepad1.b && !gamepad1.start);
+    protected UtilActionButton rightLessPowerActionButton = new UtilActionButton(() -> gamepad1.a && !gamepad1.start);
 
     protected void teleInit() {
         super.teleInit();

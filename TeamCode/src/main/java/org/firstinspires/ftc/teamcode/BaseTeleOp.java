@@ -13,8 +13,8 @@ public abstract class BaseTeleOp extends LinearOpMode {
     boolean faster = false;
     boolean slower = false;
 
-    protected ThresholdButton fasterButton = new ThresholdButton(() -> gamepad1.right_trigger, 0.1);
-    protected ThresholdButton slowerButton = new ThresholdButton(() -> gamepad1.left_trigger, 0.1);
+    protected UtilThresholdButton fasterButton = new UtilThresholdButton(() -> gamepad1.right_trigger, 0.1);
+    protected UtilThresholdButton slowerButton = new UtilThresholdButton(() -> gamepad1.left_trigger, 0.1);
     protected double currentHeading;
 
     protected void teleInit() {

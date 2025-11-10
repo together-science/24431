@@ -1,9 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.mm;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.BaseAuto;
+import org.firstinspires.ftc.teamcode.ScorpChassis;
+
 @Autonomous(name = "BasicCollect-MM", group = "Sensor")
-public class BasicCollect extends BaseAuto{
+public class BasicCollect extends BaseAuto {
     int green;
     long SLEEP_TIME = 300;
 
