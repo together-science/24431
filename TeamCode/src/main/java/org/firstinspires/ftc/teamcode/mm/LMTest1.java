@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.mm;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import org.firstinspires.ftc.teamcode.BaseAuto;
 
-@Autonomous(name="Z20 Lyncoln 1", group="Robot")
+//@Autonomous(name="Z20 Lyncoln 1", group="Robot")
 
-public class LMTest extends BaseAuto {
+public class LMTest1 extends BaseAuto {
 
     protected void auto() {
 //        sleep(5000);

@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.mm;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import org.firstinspires.ftc.teamcode.BaseAuto;
-import org.firstinspires.ftc.teamcode.ScorpChassis;
 
-@Autonomous(name = "BasicCollect-MM", group = "Sensor")
-public class BasicCollect extends BaseAuto {
+//@Autonomous(name = "BasicCollect-MM", group = "Sensor")
+public class BasicCollect1 extends BaseAuto {
     int green;
     long SLEEP_TIME = 300;
 
@@ -25,7 +22,7 @@ public class BasicCollect extends BaseAuto {
 
     @Override
     protected void auto(){
-        chassis.moveTo(0, 12, ScorpChassis.DRIVE_SPEED_FAST);
+        /*chassis.moveTo(0, 12, ScorpChassis.DRIVE_SPEED_FAST);
         chassis.turnToHeading(ScorpChassis.TURN_SPEED, 45);
 
         shootInOrder();
@@ -41,6 +38,8 @@ public class BasicCollect extends BaseAuto {
 //        intake.off();
 
         shootInOrder();
+
+        */
     }
 
     /*

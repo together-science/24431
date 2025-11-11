@@ -7,7 +7,7 @@ import java.io.Writer;
 
 /** A simple way to log data to a file */
 
-public class Log {
+public class Log1 {
     private static final String BASE_FOLDER_NAME = "FIRST";
     private Writer fileWriter;
     private String line;
@@ -17,7 +17,7 @@ public class Log {
     //private String fileName ="data";
 
        
-    Log(String fileName,boolean logTime){
+    Log1(String fileName, boolean logTime){
     //   if (logTime) startTime = System.nanoTime();
     //   this.logTime = logTime;
        //String directoryPath = Environment.getExternalStorageDirectory().getPath()+"/"+BASE_FOLDER_NAME;
