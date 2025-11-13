@@ -52,15 +52,23 @@ public abstract class ScorpCannon {
         spinDown = true;
     }
 
-    void cannonIntake(){
+    void cannonIntake(boolean stayOn){
         if(noWheel()){
             return;
         }
         //op.telemetry.addLine("intake "+triggerName);
         //op.telemetry.update();
-        spinDown = true;
         setPower(-0.20);
+
+        if (stayOn) {
+            return;
+        }
+        spinDown = true;
         lastFired = System.currentTimeMillis();
+    }
+
+    void cannonIntake() {
+        cannonIntake(false);
     }
 
     void spinDown() {

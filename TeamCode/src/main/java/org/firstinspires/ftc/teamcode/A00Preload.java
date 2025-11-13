@@ -10,13 +10,15 @@ hoursSpent = 1;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "A00 Blue Goal", group="Robot")
-public class A00BlueGoal extends BaseAuto25 {
+@Autonomous(name = "A00 Preload", group="Robot")
+public class A00Preload extends BaseAuto25 {
     @Override
     protected void auto(){
-        chassis.moveTo(0, 12, ScorpChassis.DRIVE_SPEED_NORMAL);
+        leftCannon.cannonIntake(true);
+        rightCannon.cannonIntake(true);
         sleep(10000);
-        chassis.turnToHeading(ScorpChassis.DRIVE_SPEED_NORMAL, 45); // Left 45
+        leftCannon.spinDown();
+        rightCannon.spinDown();
         // chassis.
     }
 }
