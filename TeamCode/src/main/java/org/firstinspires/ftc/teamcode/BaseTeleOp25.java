@@ -37,14 +37,13 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
         intake = new ScorpMotorIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
         camera = new ScorpCamera(this, "camera");
-
         chassis.init();
     }
 
     protected void doRegularTasks() {
         super.doRegularTasks();
-        leftCannon.spinDownAfterDelay();
-        rightCannon.spinDownAfterDelay();
+        leftCannon.spinDownAndReleaseAfterDelay();
+        rightCannon.spinDownAndReleaseAfterDelay();
     }
 
     protected void readGamepad() {
@@ -54,5 +53,15 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
         intakeOn = intakeOnActionButton.getStatus();
         intakeReverse = intakeReverseActionButton.getStatus();
         intakeOff = intakeOffActionButton.getStatus();
+        leftCannonMorePower = leftMorePowerActionButton.getStatus();
+        leftCannonLessPower = leftLessPowerActionButton.getStatus();
+        rightCannonMorePower = rightMorePowerActionButton.getStatus();
+        rightCannonLessPower = rightLessPowerActionButton.getStatus();
+    }
+
+    protected void tele() {
+        leftCannon.reset();
+        rightCannon.reset();
+        super.tele();
     }
 }

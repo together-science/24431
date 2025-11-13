@@ -47,7 +47,7 @@ public class TeleOp25 extends BaseTeleOp25 {
 
         // and drive
         if (driveSpeed > 0.05) {
-            chassis.startStrafe(driveSpeed, direction, turnSpeed);
+            chassis.startStrafe(driveSpeed, direction, turnSpeed*50);
         } else if (Math.abs(turnSpeed) > 0.05) {
             chassis.startTurn(turnSpeed);
         } else {
@@ -64,7 +64,11 @@ public class TeleOp25 extends BaseTeleOp25 {
 
         // fire the cannons!
         if (fireLeft) {
+            telemetry.addLine("Before calling fire");
+            telemetry.update();
             leftCannon.fire();
+            telemetry.addLine("After calling fire");
+            telemetry.update();
         }
         if (fireRight) {
             rightCannon.fire();
@@ -73,7 +77,9 @@ public class TeleOp25 extends BaseTeleOp25 {
         // add the elapsed game time
         telemetry.addData("Current heading", "%.2f", currentHeading);
         telemetry.addData("turnSpeed", "%.2f", turnSpeed);
-        telemetry.addData("Left cannon", "%.2f", leftCannon.getPower());
-        telemetry.addData("Right cannon", "%.2f", rightCannon.getPower());
+        telemetry.addData("Left cannon", "%.2f of %.2f",
+                leftCannon.getPower(), leftCannon.getPowerLevel());
+        telemetry.addData("Right cannon", "%.2f of %.2f", rightCannon.getPower(),
+                rightCannon.getPowerLevel());
     }
 }

@@ -7,10 +7,9 @@ public class ScorpCannonMotorPort extends ScorpCannon {
     private DcMotor wheel = null;
 
     ScorpCannonMotorPort(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
-        super(op, triggerName, power);
+        super(op, triggerName, power, direction);
         try {
             this.wheel = op.hardwareMap.get(DcMotor.class, wheelName);
-            op.telemetry.addLine("found wheel");
         } catch(Exception ignored) {
         }
 

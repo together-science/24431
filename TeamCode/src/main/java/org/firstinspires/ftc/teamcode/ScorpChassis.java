@@ -27,10 +27,10 @@ public class ScorpChassis implements RobotChassis {
     static final double     DRIVE_SPEED_NORMAL      = 0.2;
     static final double     DRIVE_SPEED_SLOW        = 0.1;
     // static final double     TURN_SPEED              = 0.5;
-    static final double     HEADING_THRESHOLD       = 1.0;
-    static final double     P_TURN_GAIN             = 0.50;
+    static final double     HEADING_THRESHOLD       = 2.0;
+    static final double     P_TURN_GAIN             = 0.05;
     static final double     P_DRIVE_GAIN            = 0.03;
-    static final double     ACCURACY                = 0.3; // inches accuracy for moveTo()
+    static final double     ACCURACY                = 2.0; // inches accuracy for moveTo()
     static final boolean    DEBUG                   = true;
 
     ScorpChassis(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
@@ -46,8 +46,6 @@ public class ScorpChassis implements RobotChassis {
             this.otos = op.hardwareMap.get(SparkFunOTOS.class, otosName);
         } catch (Exception ignored) {
         }
-
-
     }
     void init(){
         if (lf != null && lb != null && rf != null && rb != null) {
@@ -72,7 +70,7 @@ public class ScorpChassis implements RobotChassis {
         // The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
         // To Do:  EDIT these two lines to match YOUR mounting configuration.
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         imu.resetYaw();
@@ -99,22 +97,20 @@ public class ScorpChassis implements RobotChassis {
         if (lf == null || lb == null || rf == null || rb == null || otos == null) {
             return;
         }
-        double distance = 1000;
         double fh = getHeading(); // initial and final heading
-        double dx = 0;
-        double dy = 0;
+        SparkFunOTOS.Pose2D pos = getPosition();
+        double dx = x - pos.x;
+        double dy = y - pos.y;
+        double distance = Math.sqrt(dx*dx+dy*dy);
         double h = 0;
-        SparkFunOTOS.Pose2D pos = new SparkFunOTOS.Pose2D();
 
+        turnToHeading(DRIVE_SPEED_SLOW, headingFromRelativePosition(dx, dy));
         while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) {
-            pos = getPosition();
-
-            dx = x - pos.x;
-            dy = y - pos.y;
-            distance = Math.sqrt(dx*dx+dy*dy);
-
             // lower driveSpeed as we get closer, and return to desired heading
-            if (distance < 5) {
+            if (distance < 3) {
+                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW/2);
+                h = fh;
+            } else if (distance < 5) {
                 driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW);
                 h = fh;
             } else if (distance < 10) {
@@ -123,23 +119,30 @@ public class ScorpChassis implements RobotChassis {
             } else {
                 // try to face the target
                 h = headingFromRelativePosition(dx, dy);
-                h = normalizeAngle(h);
-            }
-
-
-            if (ScorpChassis.DEBUG) {
-                this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
-                this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
-                this.op.telemetry.addData("Delta:", "%.4f, %.4f", dx, dy);
-                this.op.telemetry.addData("Desired heading:", "%.4f", h);
-                this.op.telemetry.addData("Current heading:", "%.4f", pos.h);
-                this.op.telemetry.update();
             }
 
             _startDriveStraight(driveSpeed, h);
+
+            if (ScorpChassis.DEBUG) {
+                this.op.telemetry.addLine("moveTo");
+                this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
+                this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
+                this.op.telemetry.addData("Delta:", "%.4f, %.4f", dx, dy);
+                this.op.telemetry.addData("Distance:", "%.4f",distance);
+                this.op.telemetry.addData("Desired heading:", "%.4f", h);
+                this.op.telemetry.addData("Current heading:", "%.4f", pos.h);
+                this.op.telemetry.addData("DriveSpeed:", "%.4f", driveSpeed);
+                this.op.telemetry.update();
+            }
+
+            pos = getPosition();
+            dx = x - pos.x;
+            dy = y - pos.y;
+            distance = Math.sqrt(dx*dx+dy*dy);
         }
         stop();
-        while (ScorpChassis.DEBUG && op.opModeIsActive()) {
+        if (ScorpChassis.DEBUG ) {
+            this.op.telemetry.addLine("moveTo finished");
             this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
             this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
             this.op.telemetry.addData("Delta:", "%.4f, %.4f", dx, dy);
@@ -286,6 +289,12 @@ public class ScorpChassis implements RobotChassis {
             _moveRobot(0, turnSpeed);
             current = getHeading();
             headingError = heading - current;
+
+            this.op.telemetry.addLine("turnToHeading");
+            this.op.telemetry.addData("turnSpeed:", "%.4f", turnSpeed);
+            this.op.telemetry.addData("Current heading:", "%.4f", current);
+            this.op.telemetry.addData("Heading error:", "%.4f", headingError);
+            this.op.telemetry.update();
         }
         stop();
     }
@@ -295,7 +304,23 @@ public class ScorpChassis implements RobotChassis {
             return;
         }
         double turnSpeed = _getSteeringCorrection(h, P_TURN_GAIN);
+        if (ScorpChassis.DEBUG) {
+            this.op.telemetry.addData("sds maxDriveSpeed:", "%.4f", maxDriveSpeed);
+            this.op.telemetry.addData("sds turnSpeed: ", "%.4f", turnSpeed);
+        }
         _moveRobot(Math.abs(maxDriveSpeed), turnSpeed);
+    }
+
+    private void _startDriveStraightOrBack(double maxDriveSpeed, double h) {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
+        double turnSpeed = _getSteeringCorrection(h, P_TURN_GAIN);
+        if (ScorpChassis.DEBUG) {
+            this.op.telemetry.addData("sds maxDriveSpeed:", "%.4f", maxDriveSpeed);
+            this.op.telemetry.addData("sds turnSpeed: ", "%.4f", turnSpeed);
+        }
+        _moveRobot(maxDriveSpeed, turnSpeed);
     }
 
     public double getHeading() {
@@ -314,7 +339,7 @@ public class ScorpChassis implements RobotChassis {
 
         headingError = normalizeAngle(headingError);
 
-         return Range.clip(headingError * proportionalGain, -1, 1);
+         return Range.clip(headingError * proportionalGain, -0.3, 0.3);
     }
 
     @Override
@@ -327,7 +352,7 @@ public class ScorpChassis implements RobotChassis {
 
     @Override
     public double headingFromRelativePosition(double x, double y) {
-        double h = Math.atan2(x, y)*(180/Math.PI)-90;
+        double h = Math.atan2(y, x)*(180/Math.PI)-90;
         return normalizeAngle(h);
     }
 
@@ -420,6 +445,9 @@ public class ScorpChassis implements RobotChassis {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
+        //op.telemetry.addData("sp", "%.2f", speed);
+        //op.telemetry.addData("dr", "%.2f", direction);
+        //op.telemetry.addData("ts", "%.2f", turnSpeed);
         double axial   = Math.sin(Math.PI/180*direction);
         double lateral = Math.cos(Math.PI/180*direction);
         double turn = turnSpeed*P_TURN_GAIN;
@@ -442,6 +470,11 @@ public class ScorpChassis implements RobotChassis {
         rightFrontPower *= speed;
         leftBackPower *= speed;
         rightBackPower *= speed;
+
+        op.telemetry.addData("LF", "%.2f", leftFrontPower);
+        op.telemetry.addData("RF", "%.2f", rightFrontPower);
+        op.telemetry.addData("LB", "%.2f", leftBackPower);
+        op.telemetry.addData("RB", "%.2f", rightBackPower);
 
         // double turn = _getSteeringCorrection(getHeading()+deltaHeading, turnSpeed/10);
 

@@ -7,7 +7,7 @@ public class ScorpCannonServoPort extends ScorpCannon {
     private CRServo wheel = null;
 
     ScorpCannonServoPort(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
-        super(op, triggerName, power);
+        super(op, triggerName, power, direction);
         try {
             this.wheel = op.hardwareMap.get(CRServo.class, wheelName);
             op.telemetry.addLine("found wheel");

@@ -14,8 +14,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class A00BlueGoal extends BaseAuto25 {
     @Override
     protected void auto(){
-        chassis.moveTo(0, 8*12, ScorpChassis.DRIVE_SPEED_FAST);
-        chassis.turnToHeading(ScorpChassis.DRIVE_SPEED_NORMAL, -45); // Left 45
+        chassis.moveTo(0, 12, ScorpChassis.DRIVE_SPEED_NORMAL);
+        sleep(10000);
+        chassis.turnToHeading(ScorpChassis.DRIVE_SPEED_NORMAL, 45); // Left 45
         // chassis.
     }
 }
