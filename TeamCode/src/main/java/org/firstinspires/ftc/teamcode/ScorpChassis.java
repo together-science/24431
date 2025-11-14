@@ -151,6 +151,59 @@ public class ScorpChassis implements RobotChassis {
             this.op.telemetry.update();
         }
     }
+
+    //High level - Simple
+    public void strafeTo(double x, double y, double driveSpeed, double heading){
+        if (lf == null || lb == null || rf == null || rb == null || otos == null) {
+            return;
+        }
+        SparkFunOTOS.Pose2D pos = getPosition();
+        double dx = x - pos.x;
+        double dy = y - pos.y;
+        double distance = Math.sqrt(dx*dx+dy*dy);
+        double direction  = headingFromRelativePosition(dx, dy);
+
+        while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) {
+            // lower driveSpeed as we get closer, and return to desired heading
+            if (distance < 3) {
+                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW/2);
+            } else if (distance < 5) {
+                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW);
+            } else if (distance < 10) {
+                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_NORMAL);
+            }
+
+            startStrafe(driveSpeed, direction);
+
+            if (ScorpChassis.DEBUG) {
+                this.op.telemetry.addLine("strafeTo");
+                this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
+                this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
+                this.op.telemetry.addData("Delta:", "%.4f, %.4f", dx, dy);
+                this.op.telemetry.addData("Distance:", "%.4f",distance);
+                this.op.telemetry.addData("Current heading:", "%.4f", pos.h);
+                this.op.telemetry.addData("DriveSpeed:", "%.4f", driveSpeed);
+                this.op.telemetry.update();
+            }
+
+            pos = getPosition();
+            dx = x - pos.x;
+            dy = y - pos.y;
+            distance = Math.sqrt(dx*dx+dy*dy);
+            direction  = headingFromRelativePosition(dx, dy);
+        }
+        stop();
+        turnToHeading(DRIVE_SPEED_SLOW, heading);
+        if (ScorpChassis.DEBUG ) {
+            this.op.telemetry.addLine("strafeTo finished");
+            this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
+            this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
+            this.op.telemetry.addData("Delta:", "%.4f, %.4f", dx, dy);
+            this.op.telemetry.addData("Current heading:", "%.4f", pos.h);
+            this.op.telemetry.update();
+        }
+    }
+
     public SparkFunOTOS.Pose2D getPosition() {
         if (otos == null) {
             return null;
