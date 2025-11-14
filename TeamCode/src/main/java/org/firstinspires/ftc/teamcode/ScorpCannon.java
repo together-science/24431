@@ -35,6 +35,10 @@ public abstract class ScorpCannon {
 
     abstract protected void setPower(double power);
 
+    void setPowerLevel(double power){
+        this.power = power;
+    }
+
     abstract protected boolean noWheel();
 
     void reset() {
@@ -58,7 +62,7 @@ public abstract class ScorpCannon {
         }
         //op.telemetry.addLine("intake "+triggerName);
         //op.telemetry.update();
-        setPower(-0.20);
+        setPower(-0.30);
 
         if (stayOn) {
             return;
