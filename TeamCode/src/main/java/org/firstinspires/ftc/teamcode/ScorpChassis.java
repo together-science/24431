@@ -152,6 +152,10 @@ public class ScorpChassis implements RobotChassis {
         }
     }
 
+
+    public void strafeTo(double x, double y, double driveSpeed){
+        strafeTo(x, y, driveSpeed, getHeading());
+    }
     //High level - Simple
     public void strafeTo(double x, double y, double driveSpeed, double heading){
         if (lf == null || lb == null || rf == null || rb == null || otos == null) {
