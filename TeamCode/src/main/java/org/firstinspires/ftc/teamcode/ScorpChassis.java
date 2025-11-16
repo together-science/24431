@@ -161,13 +161,13 @@ public class ScorpChassis implements RobotChassis {
         if (lf == null || lb == null || rf == null || rb == null || otos == null) {
             return;
         }
-        SparkFunOTOS.Pose2D pos = getPosition();
-        double dx = x - pos.x;
-        double dy = y - pos.y;
-        double distance = Math.sqrt(dx*dx+dy*dy);
-        double direction  = headingFromRelativePosition(dx, dy);
+        SparkFunOTOS.Pose2D pos = getPosition(); // Get the robots starting position
+        double dx = x - pos.x; // Subtract the target x by starting x
+        double dy = y - pos.y; // Subtract target y by starting y
+        double distance = Math.sqrt(dx*dx+dy*dy); // Calculate the starting distance between target
+        double direction  = headingFromRelativePosition(dx, dy); // gets a direction towards target
 
-        while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) {
+        while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) { // runs unless we are within two inches of target or the program has deactivated
             // lower driveSpeed as we get closer, and return to desired heading
             if (distance < 3) {
                 driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW/2);
@@ -177,33 +177,35 @@ public class ScorpChassis implements RobotChassis {
                 driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_NORMAL);
             }
 
-            startStrafe(driveSpeed, direction);
+            startStrafe(driveSpeed, direction); // Provides direction and speed so we start moving
 
+            // Telemetry
             if (ScorpChassis.DEBUG) {
                 this.op.telemetry.addLine("strafeTo");
                 this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
                 this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
                 this.op.telemetry.addData("Delta:", "%.4f, %.4f", dx, dy);
                 this.op.telemetry.addData("Distance:", "%.4f",distance);
-                this.op.telemetry.addData("Current heading:", "%.4f", pos.h);
+                this.op.telemetry.addData("Direction:", "%.4f", direction);
                 this.op.telemetry.addData("DriveSpeed:", "%.4f", driveSpeed);
                 this.op.telemetry.update();
             }
 
-            pos = getPosition();
-            dx = x - pos.x;
-            dy = y - pos.y;
-            distance = Math.sqrt(dx*dx+dy*dy);
-            direction  = headingFromRelativePosition(dx, dy);
+            pos = getPosition(); // Gets new position
+            dx = x - pos.x; // Gets new dx
+            dy = y - pos.y; // Gets new dy
+            distance = Math.sqrt(dx*dx+dy*dy); // Gets new distance
+            direction  = headingFromRelativePosition(dx, dy); // Gets new direction
         }
-        stop();
-        turnToHeading(DRIVE_SPEED_SLOW, heading);
+        stop(); // Stops all movement when we are within two inches of target
+        turnToHeading(DRIVE_SPEED_SLOW, heading); // Turns to the desired end heading
+        // Telemetry
         if (ScorpChassis.DEBUG ) {
             this.op.telemetry.addLine("strafeTo finished");
             this.op.telemetry.addData("Target:", "%.4f, %.4f", x, y);
             this.op.telemetry.addData("Position:", "%.4f, %.4f", pos.x, pos.y);
             this.op.telemetry.addData("Delta:", "%.4f, %.4f", dx, dy);
-            this.op.telemetry.addData("Current heading:", "%.4f", pos.h);
+            this.op.telemetry.addData("Direction:", "%.4f", direction);
             this.op.telemetry.update();
         }
     }

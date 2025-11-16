@@ -6,5 +6,6 @@ public class Blue00 extends temp00 {
     @Override
     protected void auto(){
         super.run(true);
+        super.auto();
     }
 }

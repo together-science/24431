@@ -3,20 +3,20 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public abstract class ScorpCannon {
-    private Servo trigger = null;
-    private final LinearOpMode op;
-    private long lastFired = 0L;
-    private double power;
-    private boolean spinDown = false;
-    private static final double POSITION_CHARGED = 0.0;
-    private static final double POSITION_TRIGGERED = 1.0;
+public abstract class ScorpCannonMT {
     private static final long SERVO_DELAY = 500;
     private static final long SPINUP_DELAY = 2000;
-    private static final long TIMEOUT = 3000;
-    private final String triggerName;
+    private static final long SPINDOWN_AFTER_DELAY = 2000;
+    private static final long SPINUP_AFTER_INTAKE_DELAY = 6000;
 
-    ScorpCannon(LinearOpMode op, String triggerName, double power, DcMotorSimple.Direction direction) {
+    private Servo trigger = null;
+    private final LinearOpMode op;
+    private double power;
+    private final String triggerName;
+    private Thread spinDownThread = null;
+    private Thread spinUpThread = null;
+
+    ScorpCannonMT(LinearOpMode op, String triggerName, double power, DcMotorSimple.Direction direction) {
         this.op = op;
         this.power = power;
         this.triggerName = triggerName;
@@ -53,7 +53,6 @@ public abstract class ScorpCannon {
         }
 
         setPower(power);
-        spinDown = true;
     }
 
     void cannonIntake(boolean stayOn){
@@ -64,15 +63,9 @@ public abstract class ScorpCannon {
         //op.telemetry.update();
         setPower(-0.30);
 
-        if (stayOn) {
-            return;
+        if (!stayOn) {
+            spinUpAfterDelay();
         }
-        spinDown = true;
-        lastFired = System.currentTimeMillis();
-    }
-
-    void cannonIntake() {
-        cannonIntake(false);
     }
 
     void cannonIntakeEmergencyPower() {
@@ -84,6 +77,9 @@ public abstract class ScorpCannon {
         setPower(0.0);
     }
 
+    void cannonIntake() {
+        cannonIntake(false);
+    }
 
     void spinDown() {
         // check if we in fact have a cannon
@@ -93,25 +89,39 @@ public abstract class ScorpCannon {
 
         // spin down the wheel ...
         setPower(0);
-        spinDown = false;
     }
 
-    void spinDownAndReleaseAfterDelay() {
-        long now = System.currentTimeMillis();
-        if(spinDown) {
-            if (now - lastFired > TIMEOUT) {
-                spinDown();
-            }
+    void spinDownAfterDelay() {
+        if (spinDownThread != null) {
+            spinDownThread.interrupt();
         }
+        spinDownThread = new Thread(()->{
+            try {
+                Thread.sleep(SPINDOWN_AFTER_DELAY);
+            } catch (InterruptedException e) {
+                return;
+            }
+            spinDown();
+            spinDownThread = null;
+        });
+        spinDownThread.start();
+    }
 
-        if (now - lastFired > SERVO_DELAY) {
-            // if statement is here in case we ever have different values
-            if (triggerName.equals("right_cannon_trigger")) {
-                trigger.setPosition(0.0);
-            } else {
-                trigger.setPosition(0.0);
-            }
+    void spinUpAfterDelay() {
+        // the intake is on. after intake delay, spin up cannon for fire
+        if (spinUpThread != null) {
+            spinUpThread.interrupt();
         }
+        spinUpThread = new Thread(()->{
+            try {
+                Thread.sleep(SPINUP_AFTER_INTAKE_DELAY);
+            } catch (InterruptedException e) {
+                return;
+            }
+            spinUp();
+            spinUpThread = null;
+        });
+        spinUpThread.start();
     }
 
     void morePower() {
@@ -150,27 +160,22 @@ public abstract class ScorpCannon {
 
     abstract protected double getPower();
 
-
     void fire() {
-        //op.telemetry.addLine("Fire method "+triggerName);
-        //op.telemetry.update();
         // if necessary, spin up cannon
         if (!noWheel() && getPower() == 0) {
-            spinUp();
-            //op.telemetry.addLine("Fire method waiting for spinUp noWheel = "+noWheel());
-            //op.telemetry.update();
-            op.sleep(SPINUP_DELAY);
+            // in that case, the whole thing happens in a new thread
+            new Thread(()->{
+                spinUp();
+                op.sleep(SPINUP_DELAY);
+                fire();
+            }).start();
+            return;
         }
 
         // check if we in fact have a cannon
         if (this.trigger == null) {
-            //op.telemetry.addLine("No trigger");
-            //op.telemetry.update();
             return;
         }
-
-        //op.telemetry.addLine("Firing trigger "+triggerName);
-        //op.telemetry.update();
 
         // determine servo fire position
         double firePosition;
@@ -181,21 +186,17 @@ public abstract class ScorpCannon {
         } else {
             firePosition = 0.5;
             restPosition = 0.0;
-        }
+        };
 
 
         // actuate trigger servo
         trigger.setPosition(restPosition);
         trigger.setPosition(firePosition);
-//        op.telemetry.addLine("Servo to fire");
-//        op.telemetry.update();
 
-        //op.sleep(SERVO_DELAY);
-        //trigger.setPosition(restPosition);
-//        op.telemetry.addLine("Servo to rest");
-//        op.telemetry.update();
-
-        lastFired = System.currentTimeMillis();
-        spinDown = true;
+        new Thread(()->{
+            op.sleep(SERVO_DELAY);
+            trigger.setPosition(restPosition);
+            spinDownAfterDelay();
+        }).start();
     }
 }

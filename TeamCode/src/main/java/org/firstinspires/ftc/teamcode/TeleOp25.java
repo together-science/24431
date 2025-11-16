@@ -8,15 +8,16 @@ public class TeleOp25 extends BaseTeleOp25 {
     protected void teleIteration() {
         // compute what the intakeState should be
         if (intakeOff) {
-            intakeState = "off";
             leftCannon.spinDown();
             rightCannon.spinDown();
         } else if (intakeOn) {
-            intakeState = "on";
+            intake.on();
             leftCannon.cannonIntake();
             rightCannon.cannonIntake();
         } else if (intakeReverse) {
-            intakeState = "reverse";
+            intake.reverse();
+        } else if (intakeEmergency) {
+            leftCannon.cannonIntakeEmergencyPower();
         }
 
         // compute faster/slower
@@ -52,14 +53,6 @@ public class TeleOp25 extends BaseTeleOp25 {
             chassis.startTurn(turnSpeed);
         } else {
             chassis.stop();
-        }
-        // set the intake
-        if (intakeState.equals("on")) {
-            intake.on();
-        } else if (intakeState.equals("reverse")) {
-            intake.reverse();
-        } if (intakeState.equals("off")) {
-            intake.off();
         }
 
         // fire the cannons!
