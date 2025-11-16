@@ -7,7 +7,8 @@ public abstract class ScorpCannonMT {
     private static final long SERVO_DELAY = 500;
     private static final long SPINUP_DELAY = 2000;
     private static final long SPINDOWN_AFTER_DELAY = 2000;
-    private static final long SPINUP_AFTER_INTAKE_DELAY = 6000;
+    private static final long INTAKE_DURATION = 6000;
+    private static final long SPINUP_AFTER_INTAKE_DELAY = 1000;
 
     private Servo trigger = null;
     private final LinearOpMode op;
@@ -113,6 +114,12 @@ public abstract class ScorpCannonMT {
             spinUpThread.interrupt();
         }
         spinUpThread = new Thread(()->{
+            try {
+                Thread.sleep(INTAKE_DURATION);
+            } catch (InterruptedException e) {
+                return;
+            }
+            spinDown();
             try {
                 Thread.sleep(SPINUP_AFTER_INTAKE_DELAY);
             } catch (InterruptedException e) {
