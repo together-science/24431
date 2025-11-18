@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,26 +10,25 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class ScorpChassis implements RobotChassis {
-    private DcMotor      lf;
-    private DcMotor      rf;
-    private DcMotor      lb;
-    private DcMotor      rb;
-    private SparkFunOTOS otos;
+    private       DcMotor      lf;
+    private       DcMotor      rf;
+    private       DcMotor      lb;
+    private       DcMotor      rb;
+    private       SparkFunOTOS otos;
     private final IMU          imu;
     private final LinearOpMode op;
     static final double     COUNTS_PER_MOTOR_REV    = 537.7*(24.0/35.0);
     static final double     DRIVE_GEAR_REDUCTION    = 1.0;
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
-    // static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
-    // static final double     STRAFE_CORRECTION       = 1.0;
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     STRAFE_CORRECTION       = 1.0;
     static final double     DRIVE_SPEED_FAST        = 0.4;
     static final double     DRIVE_SPEED_NORMAL      = 0.2;
     static final double     DRIVE_SPEED_SLOW        = 0.1;
-    // static final double     TURN_SPEED              = 0.5;
     static final double     HEADING_THRESHOLD       = 2.0;
     static final double     P_TURN_GAIN             = 0.05;
     static final double     P_DRIVE_GAIN            = 0.03;
-    static final double     ACCURACY                = 2.0; // inches accuracy for moveTo()
+    static final double     ACCURACY                = 2.0;
     static final boolean    DEBUG                   = true;
 
     ScorpChassis(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
@@ -66,15 +64,16 @@ public class ScorpChassis implements RobotChassis {
             lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        //The next two lines define Hub orientation.
-        // The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
-        // To Do:  EDIT these two lines to match YOUR mounting configuration.
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
-        imu.resetYaw();
-
+        if(imu != null) {
+            //The next two lines define Hub orientation.
+            // The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
+            // To Do:  EDIT these two lines to match YOUR mounting configuration.
+            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+            RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
+            RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+            imu.initialize(new IMU.Parameters(orientationOnRobot));
+            imu.resetYaw();
+        }
         if (otos != null) {
             otos.setLinearUnit(DistanceUnit.INCH);
             otos.setAngularUnit(AngleUnit.DEGREES);

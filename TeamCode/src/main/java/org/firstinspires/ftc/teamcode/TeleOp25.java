@@ -69,6 +69,8 @@ public class TeleOp25 extends BaseTeleOp25 {
 
         // add the elapsed game time
         telemetry.addData("Current heading", "%.2f", currentHeading);
+        telemetry.addData("x position:", chassis.getPosition().x);
+        telemetry.addData("y position:", chassis.getPosition().y);
         telemetry.addData("turnSpeed", "%.2f", turnSpeed);
         telemetry.addData("Left cannon", "%.2f of %.2f",
                 leftCannon.getPower(), leftCannon.getPowerLevel());

@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public abstract class BaseAuto25 extends BaseAuto {
+
     protected ScorpCannon leftCannon = null;
     protected ScorpCannon rightCannon = null;
     protected ScorpIntake intake = null;
     protected ScorpSorter sorter = null;
     protected ScorpCamera camera = null;
-    //protected ScorpColor color = null;
-
     protected void autoInit() {
         super.autoInit();
         leftCannon = new ScorpCannonMotorPort(this, "left_cannon_wheel", "left_cannon_trigger", 1.0, DcMotorSimple.Direction.FORWARD);
@@ -17,7 +16,5 @@ public abstract class BaseAuto25 extends BaseAuto {
         intake = new ScorpMotorIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
         camera = new ScorpCamera(this, "camera");
-        // color = new ScorpColorTestMM(hardwareMap, "sensor_color_not_real");
-        // I commented out the init ^^^ because sensor_color_not_real, is not real so when it tires to find it it will run an error.
     }
 }
