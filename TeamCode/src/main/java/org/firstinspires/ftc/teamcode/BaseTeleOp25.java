@@ -33,8 +33,10 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
 
     protected void teleInit() {
         super.teleInit();
-        leftCannon = new ScorpCannonMotorPort(this, "left_cannon_wheel", "left_cannon_trigger", 1.0, DcMotorSimple.Direction.FORWARD);
-        rightCannon = new ScorpCannonMotorPort(this, "right_cannon_wheel", "right_cannon_trigger", 0.75, DcMotorSimple.Direction.REVERSE);
+        leftCannon = new ScorpCannonMotorPort(this, "left_cannon_wheel",
+                "left_cannon_trigger", 0.8, DcMotorSimple.Direction.FORWARD);
+        rightCannon = new ScorpCannonMotorPort(this, "right_cannon_wheel",
+                "right_cannon_trigger", 0.75, DcMotorSimple.Direction.REVERSE);
         intake = new ScorpMotorIntake(this, "left_intake", "right_intake");
         sorter = new ScorpSorter(this, "sorter_servo");
         camera = new ScorpCamera(this, "camera");

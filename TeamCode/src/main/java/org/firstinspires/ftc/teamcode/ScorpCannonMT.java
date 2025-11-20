@@ -62,7 +62,7 @@ public abstract class ScorpCannonMT {
         if(noWheel()){
             return;
         }
-        setPower(-0.90);
+        setPower(-1.0);
         op.sleep(1000);
         setPower(0.0);
     }
