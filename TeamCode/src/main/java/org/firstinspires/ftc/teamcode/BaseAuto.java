@@ -7,6 +7,9 @@ public abstract class BaseAuto extends LinearOpMode {
         chassis = new ScorpChassis(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
         chassis.init();
     }
+
+    protected void autoStart() {
+    }
     protected abstract void auto();
 
     @Override
@@ -17,7 +20,7 @@ public abstract class BaseAuto extends LinearOpMode {
         telemetry.update();
 
         while (opModeInInit()) sleep(50);
-
+        autoStart();
         auto();
     }
 }

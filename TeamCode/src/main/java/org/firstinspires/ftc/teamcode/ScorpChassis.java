@@ -22,9 +22,9 @@ public class ScorpChassis implements RobotChassis {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     STRAFE_CORRECTION       = 1.0;
-    static final double     DRIVE_SPEED_FAST        = 0.4;
-    static final double     DRIVE_SPEED_NORMAL      = 0.2;
-    static final double     DRIVE_SPEED_SLOW        = 0.1;
+    public static final double     DRIVE_SPEED_FAST        = 0.4;
+    public static final double     DRIVE_SPEED_NORMAL      = 0.3;
+    public static final double     DRIVE_SPEED_SLOW        = 0.2;
     static final double     HEADING_THRESHOLD       = 2.0;
     static final double     P_TURN_GAIN             = 0.05;
     static final double     P_DRIVE_GAIN            = 0.03;
@@ -160,6 +160,7 @@ public class ScorpChassis implements RobotChassis {
         if (lf == null || lb == null || rf == null || rb == null || otos == null) {
             return;
         }
+        heading = normalizeAngle(heading);
         SparkFunOTOS.Pose2D pos = getPosition(); // Get the robots starting position
         double dx = x - pos.x; // Subtract the target x by starting x
         double dy = y - pos.y; // Subtract target y by starting y
@@ -169,14 +170,15 @@ public class ScorpChassis implements RobotChassis {
         while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) { // runs unless we are within two inches of target or the program has deactivated
             // lower driveSpeed as we get closer, and return to desired heading
             if (distance < 3) {
-                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW/2);
-            } else if (distance < 5) {
                 driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW);
+            } else if (distance < 5) {
+                driveSpeed = Math.min(driveSpeed,ScorpChassis.DRIVE_SPEED_NORMAL);
             } else if (distance < 10) {
-                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_NORMAL);
+                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_FAST);
             }
 
-            startStrafe(driveSpeed, direction); // Provides direction and speed so we start moving
+            // Provides direction and speed so we start moving, heading to keep
+            startStrafeAbsolute(driveSpeed, direction, heading);
 
             // Telemetry
             if (ScorpChassis.DEBUG) {
@@ -197,7 +199,7 @@ public class ScorpChassis implements RobotChassis {
             direction  = headingFromRelativePosition(dx, dy); // Gets new direction
         }
         stop(); // Stops all movement when we are within two inches of target
-        turnToHeading(DRIVE_SPEED_SLOW, heading); // Turns to the desired end heading
+        // turnToHeading(DRIVE_SPEED_SLOW, heading); // Turns to the desired end heading
         // Telemetry
         if (ScorpChassis.DEBUG ) {
             this.op.telemetry.addLine("strafeTo finished");
@@ -332,16 +334,17 @@ public class ScorpChassis implements RobotChassis {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
+        heading = normalizeAngle(heading);
         double turnSpeed;
         _getSteeringCorrection(heading, P_DRIVE_GAIN);
         double current = getHeading();
-        double headingError = heading - current;
+        double headingError = normalizeAngle(heading - current);
         while (op.opModeIsActive() && (Math.abs(headingError) > HEADING_THRESHOLD)) {
             turnSpeed = _getSteeringCorrection(heading, P_TURN_GAIN);
             turnSpeed = Range.clip(turnSpeed, -maxTurnSpeed, maxTurnSpeed);
-            if (headingError < 5) {
+            if (Math.abs(headingError) < 5) {
                 turnSpeed = Range.clip(turnSpeed, -0.1, 0.1);
-            } else if (headingError < 15) {
+            } else if (Math.abs(headingError) < 15) {
                 turnSpeed = Range.clip(turnSpeed, -0.3, 0.3);
             }
             _moveRobot(0, turnSpeed);
@@ -391,13 +394,13 @@ public class ScorpChassis implements RobotChassis {
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 
-    //Low level - Advance
+    //Low level - Advanced
     private double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
-        double headingError = desiredHeading - getHeading();
+        double headingError = getHeading() - desiredHeading;
 
         headingError = normalizeAngle(headingError);
 
-         return Range.clip(headingError * proportionalGain, -0.3, 0.3);
+         return Range.clip(-headingError * proportionalGain, -0.3, 0.3);
     }
 
     @Override
@@ -435,6 +438,7 @@ public class ScorpChassis implements RobotChassis {
         rb.setPower(rightSpeed);
 
     }
+
     private void _strafeRobot(double leftSpeed, double rightSpeed, double leftBackSpeed, double rightBackSpeed, double turn) {
         leftSpeed -= turn;
         rightSpeed += turn;
@@ -498,22 +502,60 @@ public class ScorpChassis implements RobotChassis {
         _strafeRobot(speed, speed, speed, speed, turn);
     }
 
-    @Override
-    public void startStrafe(double speed, double direction, double turnSpeed) {
+    public void startStrafeAbsolute(double speed, double direction, double heading) {
+        if (lf == null || lb == null || rf == null || rb == null ) {
+            return;
+        }
+        double axial   = Math.cos(Math.PI/180*(direction-heading));
+        double lateral = Math.sin(Math.PI/180*(direction-heading));
+        double turn = _getSteeringCorrection(heading, P_TURN_GAIN);
+        op.telemetry.addData("hd", "%.2f", getHeading());
+        op.telemetry.addData("dh", "%.2f", heading);
+        op.telemetry.addData("ax", "%.2f", axial);
+        op.telemetry.addData("lt", "%.2f", lateral);
+        op.telemetry.addData("tn", "%.2f", turn);
+
+        double leftFrontPower  = (axial - lateral - turn);
+        double rightFrontPower = (axial + lateral + turn);
+        double leftBackPower   = (axial + lateral - turn);
+        double rightBackPower  = (axial - lateral + turn);
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        leftFrontPower *= speed;
+        rightFrontPower *= speed;
+        leftBackPower *= speed;
+        rightBackPower *= speed;
+
+        op.telemetry.addData("LF", "%.2f", leftFrontPower);
+        op.telemetry.addData("RF", "%.2f", rightFrontPower);
+        op.telemetry.addData("LB", "%.2f", leftBackPower);
+        op.telemetry.addData("RB", "%.2f", rightBackPower);
+
+        _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
+    }
+
+    public void startStrafe(double speed, double direction, double turn) {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
         //op.telemetry.addData("sp", "%.2f", speed);
         //op.telemetry.addData("dr", "%.2f", direction);
         //op.telemetry.addData("ts", "%.2f", turnSpeed);
-        double axial   = Math.sin(Math.PI/180*direction);
-        double lateral = Math.cos(Math.PI/180*direction);
-        double turn = turnSpeed*P_TURN_GAIN;
+        double axial   = Math.cos(Math.PI/180*(direction));
+        double lateral = Math.sin(Math.PI/180*(direction));
 
-        double leftFrontPower  = (axial + lateral + turn);
-        double rightFrontPower = (axial - lateral - turn);
-        double leftBackPower   = (axial - lateral + turn);
-        double rightBackPower  = (axial + lateral - turn);
+        double leftFrontPower  = (axial - lateral + turn);
+        double rightFrontPower = (axial + lateral - turn);
+        double leftBackPower   = (axial + lateral + turn);
+        double rightBackPower  = (axial - lateral - turn);
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
@@ -540,6 +582,8 @@ public class ScorpChassis implements RobotChassis {
 
         _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
     }
+
+
 
     @Override
     public void startStrafe(double speed, double direction) {

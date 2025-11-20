@@ -2,24 +2,29 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 public class temp00 extends BaseAuto25 {
-    double turn, xStart, xEnd, yStart, yEnd;
+    double turn, turn2, xStart, xEnd, yStart, yEnd;
     long sleep;
 
     @Override
     protected void auto(){
-        chassis.strafeTo(xStart, yStart, ScorpChassis.DRIVE_SPEED_NORMAL);
+        leftCannon.spinUp();
+        rightCannon.spinUp();
+        chassis.strafeTo(xStart, yStart, ScorpChassis.DRIVE_SPEED_FAST);
         chassis.turnToHeading(ScorpChassis.DRIVE_SPEED_NORMAL, turn);
+        leftCannon.fire();
+        sleep(sleep);
         rightCannon.fire();
         sleep(sleep);
-        leftCannon.fire();
-        chassis.strafeTo(xEnd, yEnd, ScorpChassis.DRIVE_SPEED_NORMAL);
+        chassis.turnToHeading(ScorpChassis.DRIVE_SPEED_NORMAL, turn2);
+        chassis.strafeTo(0, 0, ScorpChassis.DRIVE_SPEED_FAST);
     }
     void run(boolean blue){
-        xStart = blue ? 12 : -12;
-        yStart = 48;
+        xStart = 0;
+        yStart = 72;
         xEnd = 0;
         yEnd = 12;
         turn = blue ? 45 : 315;
-        sleep = 500;
+        turn2 = blue ? -90 : 90;
+        sleep = 1000;
     }
 }

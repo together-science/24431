@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public abstract class BaseTeleOp25 extends BaseTeleOp {
-    protected ScorpCannon leftCannon = null;
-    protected ScorpCannon rightCannon = null;
+    protected ScorpCannonMT leftCannon = null;
+    protected ScorpCannonMT rightCannon = null;
     protected ScorpIntake intake = null;
     protected ScorpSorter sorter = null;
     protected ScorpCamera camera = null;
@@ -43,8 +43,8 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
 
     protected void doRegularTasks() {
         super.doRegularTasks();
-        leftCannon.spinDownAndReleaseAfterDelay();
-        rightCannon.spinDownAndReleaseAfterDelay();
+        //leftCannon.spinDownAndReleaseAfterDelay();
+        //rightCannon.spinDownAndReleaseAfterDelay();
     }
 
     protected void readGamepad() {

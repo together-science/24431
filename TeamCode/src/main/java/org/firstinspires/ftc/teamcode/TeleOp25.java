@@ -18,6 +18,7 @@ public class TeleOp25 extends BaseTeleOp25 {
             intake.reverse();
         } else if (intakeEmergency) {
             leftCannon.cannonIntakeEmergencyPower();
+            rightCannon.cannonIntakeEmergencyPower();
         }
 
         // compute faster/slower
@@ -41,15 +42,18 @@ public class TeleOp25 extends BaseTeleOp25 {
         }
 
         // compute speeds and directions and headings
-        double direction = Math.atan2(y,x)/Math.PI*180;
+        double direction = chassis.headingFromRelativePosition(x, y);
         currentHeading = chassis.getHeading();
+        double turnInput = Math.abs(yaw);
+        double turnWhileStrafingSpeed = yaw*speedFactor*2;
         double turnSpeed = yaw*speedFactor;
-        double driveSpeed = Math.min(Math.sqrt(x*x + y*y), 1.0)*speedFactor;
+        double driveInput = Math.sqrt(x*x + y*y);
+        double driveSpeed = Math.min(driveInput, 1.0)*speedFactor;
 
         // and drive
-        if (driveSpeed > 0.05) {
-            chassis.startStrafe(driveSpeed, direction, turnSpeed*50);
-        } else if (Math.abs(turnSpeed) > 0.05) {
+        if (driveInput > 0.05) {
+            chassis.startStrafe(driveSpeed, direction, turnWhileStrafingSpeed);
+        } else if (turnInput > 0.05) {
             chassis.startTurn(turnSpeed);
         } else {
             chassis.stop();
@@ -71,6 +75,7 @@ public class TeleOp25 extends BaseTeleOp25 {
         telemetry.addData("Current heading", "%.2f", currentHeading);
         telemetry.addData("x position:", chassis.getPosition().x);
         telemetry.addData("y position:", chassis.getPosition().y);
+        telemetry.addData("yaw", "%.2f", yaw);
         telemetry.addData("turnSpeed", "%.2f", turnSpeed);
         telemetry.addData("Left cannon", "%.2f of %.2f",
                 leftCannon.getPower(), leftCannon.getPowerLevel());

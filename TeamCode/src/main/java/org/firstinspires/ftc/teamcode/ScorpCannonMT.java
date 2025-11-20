@@ -36,11 +36,11 @@ public abstract class ScorpCannonMT {
         this.power = power;
     }
     abstract protected boolean noWheel();
-    void reset() {
+    public void reset() {
         this.trigger.setPosition(0.0);
         setPower(0);
     }
-    void spinUp() {
+    public void spinUp() {
         if (this.noWheel()) {
             return;
         }
@@ -62,7 +62,7 @@ public abstract class ScorpCannonMT {
         if(noWheel()){
             return;
         }
-        setPower(-0.60);
+        setPower(-0.90);
         op.sleep(1000);
         setPower(0.0);
     }
@@ -124,7 +124,9 @@ public abstract class ScorpCannonMT {
         return power;
     }
     abstract protected double getPower();
-    void fire() {
+
+
+    public void fire() {
         if (!noWheel() && getPower() == 0) {
             new Thread(()->{
                 spinUp();
