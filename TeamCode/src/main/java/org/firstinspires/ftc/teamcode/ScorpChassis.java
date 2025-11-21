@@ -169,12 +169,10 @@ public class ScorpChassis implements RobotChassis {
 
         while(Math.abs(distance) > ScorpChassis.ACCURACY && op.opModeIsActive()) { // runs unless we are within two inches of target or the program has deactivated
             // lower driveSpeed as we get closer, and return to desired heading
-            if (distance < 3) {
+            if (distance < 5) {
                 driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_SLOW);
-            } else if (distance < 5) {
+            } else if (distance < 20) {
                 driveSpeed = Math.min(driveSpeed,ScorpChassis.DRIVE_SPEED_NORMAL);
-            } else if (distance < 10) {
-                driveSpeed = Math.min(driveSpeed, ScorpChassis.DRIVE_SPEED_FAST);
             }
 
             // Provides direction and speed so we start moving, heading to keep

@@ -16,17 +16,24 @@ public class GMAprilTag extends BaseAuto25 {
     protected void auto(){
         List<Integer> tags = Arrays.asList(21,22,23);
         AprilTagDetection tag;
+        int id = 0;
 
         tag = camera.getDetection(tags);
+        if (tag != null) {
+            id = tag.id;
+        }
         leftCannon.spinUp();
         rightCannon.spinUp();
-        chassis.strafeTo(0, 72, ScorpChassis.DRIVE_SPEED_FAST);
+        chassis.strafeTo(0, 62, ScorpChassis.DRIVE_SPEED_FAST);
         if (tag == null) {
             // look again
             tag = camera.getDetection(tags);
+            if (tag != null) {
+                id = tag.id;
+            }
         }
         chassis.turnToHeading(ScorpChassis.DRIVE_SPEED_NORMAL, 45);
-
+        fire(id);
         chassis.turnToHeading(ScorpChassis.DRIVE_SPEED_NORMAL, 0);
         chassis.strafeTo(0, 0, ScorpChassis.DRIVE_SPEED_FAST);
     }

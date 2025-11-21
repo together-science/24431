@@ -4,7 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public abstract class BaseAuto extends LinearOpMode {
     protected ScorpChassis chassis = null;
     protected void autoInit(){
-        chassis = new ScorpChassis(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
+        chassis = new ScorpChassis(this,
+                "left_front_drive",
+                "right_front_drive",
+                "left_back_drive",
+                "right_back_drive",
+                "oscar",
+                "imu");
         chassis.init();
     }
 
