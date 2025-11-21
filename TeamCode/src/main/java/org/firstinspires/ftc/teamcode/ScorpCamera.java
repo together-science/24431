@@ -44,9 +44,9 @@ public class ScorpCamera {
     }
 
     //
-    // can we see the desired tag? if so, return detection
+    // can we see one of the desired tags? if so, return detection
     //
-    AprilTagDetection getDetection(final int desiredTagId) {
+    public AprilTagDetection getDetection(final List<Integer> desiredTagIds) {
         if (this.cam == null) {
             return null;
         }
@@ -56,7 +56,7 @@ public class ScorpCamera {
             // Look to see if we have size info on this tag.
             if (detection.metadata != null) {
                 //  Check to see if we want to track towards this tag.
-                if (detection.id == desiredTagId) {
+                if (desiredTagIds.contains(detection.id)) {
                     return detection;
                 }
             }

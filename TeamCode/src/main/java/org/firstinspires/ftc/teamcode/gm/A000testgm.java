@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.BaseAuto25;
 import org.firstinspires.ftc.teamcode.ScorpChassis;
 
-@Autonomous(name = "A000 Test GM", group="Robot")
+// @Autonomous(name = "A000 Test GM", group="Robot")
 public class A000testgm extends BaseAuto25 {
     @Override
     protected void auto(){
