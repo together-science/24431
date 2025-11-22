@@ -75,11 +75,21 @@ public class mmScorpChassis {
             otos.getVersionInfo(hwVersion, fwVersion);
         }
     }
+    void stop(){
+        leftFrontWheel.setPower(0);
+        rightFrontWheel.setPower(0);
+        leftBackWheel.setPower(0);
+        rightBackWheel.setPower(0);
+    }
+    void setPowerAllWheels(){
+
+    }
     void testDrive(){
         leftFrontWheel.setPower(0.5);
         rightFrontWheel.setPower(0.5);
+        leftBackWheel.setPower(0.5);
+        rightBackWheel.setPower(0.5);
         op.sleep(2000);
-        leftFrontWheel.setPower(0);
-        rightFrontWheel.setPower(0);
+        stop();
     }
 }

@@ -8,5 +8,6 @@ public class mmTestAuto extends mmBaseAuto {
     @Override
     protected void auto(){
         chassis.testDrive();
+        sleep(2000);
     }
 }

@@ -79,7 +79,7 @@ public class ScorpChassis implements RobotChassis {
             otos.setAngularUnit(AngleUnit.DEGREES);
             SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
             otos.setOffset(offset);
-            otos.setLinearScalar(1.0434);
+            otos.setLinearScalar(1.0);
             otos.setAngularScalar(1.0); // So does this
             otos.calibrateImu();
             otos.resetTracking();
@@ -89,6 +89,19 @@ public class ScorpChassis implements RobotChassis {
             SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
             otos.getVersionInfo(hwVersion, fwVersion);
         }
+    }
+
+    void patheticStartStraight(){
+        lf.setPower(0.25);
+        rf.setPower(0.25);
+        lb.setPower(0.25);
+        rb.setPower(0.25);
+    }
+    void patheticEndStraight(){
+        lf.setPower(0);
+        rf.setPower(0);
+        lb.setPower(0);
+        rb.setPower(0);
     }
 
     //High level - Simple
@@ -214,7 +227,7 @@ public class ScorpChassis implements RobotChassis {
             return null;
         }
         SparkFunOTOS.Pose2D pos = otos.getPosition();
-        return new SparkFunOTOS.Pose2D(-pos.x, -pos.y, pos.h);
+        return new SparkFunOTOS.Pose2D(-pos.x*1.35, -pos.y*0.85                                                                                                      , pos.h);
     }
     public String getPositionString(){
         if (otos == null) {

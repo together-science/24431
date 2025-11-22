@@ -26,7 +26,10 @@ public abstract class BaseAuto extends LinearOpMode {
         telemetry.update();
 
         while (opModeInInit()) sleep(50);
-        autoStart();
-        auto();
+        //try {
+            autoStart();
+            auto();
+        //} catch (Exception ignored){
+        //}
     }
 }

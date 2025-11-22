@@ -46,6 +46,12 @@ public class ScorpCamera {
     //
     // can we see one of the desired tags? if so, return detection
     //
+    public void off(){
+        visionPortal.stopStreaming();
+    }
+    public void on(){
+        visionPortal.resumeStreaming();
+    }
     public AprilTagDetection getDetection(final List<Integer> desiredTagIds) {
         if (this.cam == null) {
             return null;

@@ -8,6 +8,7 @@ public class diagnostics extends BaseAuto25 {
     protected void auto(){
         SparkFunOTOS.Pose2D pos;
         while(opModeIsActive()){
+            camera.off();
             pos = chassis.getPosition();
             telemetry.addData("x position:", pos.x);
             telemetry.addData("y position:", pos.y);
