@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.decode.BaseAutoDecode;
-import org.firstinspires.ftc.teamcode.chassis.Position;
+import org.firstinspires.ftc.teamcode.util.Position;
 
 @Autonomous(name = "diagnostics", group = "robot")
 public class Diagnostics extends BaseAutoDecode {

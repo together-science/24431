@@ -1,4 +1,7 @@
 package org.firstinspires.ftc.teamcode.chassis;
+import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePosition;
+import static org.firstinspires.ftc.teamcode.util.Position.normalizeAngle;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -6,8 +9,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.util.Position;
 
-public abstract class ScorpChassisBase {
+public class ScorpChassisBase extends ScorpChassis {
     private DcMotor lf = null;
     private DcMotor rf = null;
     private DcMotor lb = null;
@@ -15,14 +19,10 @@ public abstract class ScorpChassisBase {
     private IMU imu = null;
     private LinearOpMode op = null;
 
-    public static final double DRIVE_SPEED_FAST = 0.4;
-    public static final double DRIVE_SPEED_NORMAL = 0.3;
-    public static final double DRIVE_SPEED_SLOW = 0.2;
-    static final double HEADING_THRESHOLD = 2.0;
-    static final double P_TURN_GAIN = 0.05;
-    static final double P_DRIVE_GAIN = 0.03;
-    static final double ACCURACY = 2.0;
-    static final boolean DEBUG = true;
+    @Override
+    public Position getPosition() {
+        return new Position(0,0,getHeading());
+    }
 
     public ScorpChassisBase(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String imuName) {
         try {
@@ -65,20 +65,7 @@ public abstract class ScorpChassisBase {
             imu.resetYaw();
         }
     }
-    public void patheticStartStraight(){
-        lf.setPower(0.25);
-        rf.setPower(0.25);
-        lb.setPower(0.25);
-        rb.setPower(0.25);
-    }
-    public void patheticEndStraight(){
-        lf.setPower(0);
-        rf.setPower(0);
-        lb.setPower(0);
-        rb.setPower(0);
-    }
     //void moveTo(double x, double y, double driveSpeed);
-    abstract Position getPosition();
     public void strafeTo(double x, double y, double driveSpeed){
         strafeTo(x, y, driveSpeed, getHeading());
     }
@@ -176,10 +163,18 @@ public abstract class ScorpChassisBase {
         }
         _moveRobot(maxDriveSpeed, turnSpeed);
     }
+
+    // can be overriden by subclass
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
+
+    public String getPositionString() {
+        Position p = getPosition();
+        return "h: "+p.h+", x: "+p.x+", y:"+p.y;
+    }
+
     private double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
         double headingError = getHeading() - desiredHeading;
 
@@ -187,16 +182,7 @@ public abstract class ScorpChassisBase {
 
          return Range.clip(-headingError * proportionalGain, -0.3, 0.3);
     }
-    public double normalizeAngle(double angle) {
-        while (angle > 180)  angle -= 360;
-        while (angle <= -180) angle += 360;
 
-        return angle;
-    }
-    public double headingFromRelativePosition(double x, double y) {
-        double h = Math.atan2(y, x)*(180/Math.PI)-90;
-        return normalizeAngle(h);
-    }
     public void turnTo(double turnSpeed, double heading) {
         throw new UnsupportedOperationException();
     }

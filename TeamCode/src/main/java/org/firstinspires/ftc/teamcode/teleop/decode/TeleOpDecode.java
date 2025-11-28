@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.teleop.decode;
+import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePosition;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="TeleOp25", group="Linear Opmode")
+@TeleOp(name="TeleOpDecode", group="Linear Opmode")
 
-public class TeleOp25 extends BaseTeleOp25 {
+public class TeleOpDecode extends BaseTeleOpDecode {
     @Override
     protected void teleIteration() {
         // compute what the intakeState should be
@@ -42,7 +44,7 @@ public class TeleOp25 extends BaseTeleOp25 {
         }
 
         // compute speeds and directions and headings
-        double direction = chassis.headingFromRelativePosition(x, y);
+        double direction = headingFromRelativePosition(x, y);
         currentHeading = chassis.getHeading();
         double turnInput = Math.abs(yaw);
         double turnWhileStrafingSpeed = yaw*speedFactor*2;

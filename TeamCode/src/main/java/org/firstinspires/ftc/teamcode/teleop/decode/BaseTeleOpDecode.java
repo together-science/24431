@@ -1,14 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleop.decode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.devices.decode.DecodeDevices;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpCamera;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannonMotorPort;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpMotorIntake;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpSorter;
-import org.firstinspires.ftc.teamcode.util.UtilActionButton;
+import org.firstinspires.ftc.teamcode.util.ActionButton;
 import org.firstinspires.ftc.teamcode.teleop.BaseTeleOp;
 
-public abstract class BaseTeleOp25 extends BaseTeleOp {
+public abstract class BaseTeleOpDecode extends BaseTeleOp {
     protected DecodeDevices devices = null;
 
     protected boolean fireLeft = false;
@@ -22,16 +17,16 @@ public abstract class BaseTeleOp25 extends BaseTeleOp {
     protected boolean rightCannonMorePower = false;
     protected boolean rightCannonLessPower = false;
 
-    protected UtilActionButton fireLeftActionButton = new UtilActionButton(() -> gamepad1.left_bumper);
-    protected UtilActionButton fireRightActionButton = new UtilActionButton(() -> gamepad1.right_bumper);
-    protected UtilActionButton intakeOnActionButton = new UtilActionButton(() -> gamepad1.dpad_left);
-    protected UtilActionButton intakeReverseActionButton = new UtilActionButton(() -> gamepad1.dpad_right);
-    protected UtilActionButton intakeOffActionButton = new UtilActionButton(() -> gamepad1.dpad_down);
-    protected UtilActionButton intakeEmergencyActionButton = new UtilActionButton(() -> gamepad1.dpad_up);
-    protected UtilActionButton leftMorePowerActionButton = new UtilActionButton(() -> gamepad1.y);
-    protected UtilActionButton leftLessPowerActionButton = new UtilActionButton(() -> gamepad1.x);
-    protected UtilActionButton rightMorePowerActionButton = new UtilActionButton(() -> gamepad1.b && !gamepad1.start);
-    protected UtilActionButton rightLessPowerActionButton = new UtilActionButton(() -> gamepad1.a && !gamepad1.start);
+    protected ActionButton fireLeftActionButton = new ActionButton(() -> gamepad1.left_bumper);
+    protected ActionButton fireRightActionButton = new ActionButton(() -> gamepad1.right_bumper);
+    protected ActionButton intakeOnActionButton = new ActionButton(() -> gamepad1.dpad_left);
+    protected ActionButton intakeReverseActionButton = new ActionButton(() -> gamepad1.dpad_right);
+    protected ActionButton intakeOffActionButton = new ActionButton(() -> gamepad1.dpad_down);
+    protected ActionButton intakeEmergencyActionButton = new ActionButton(() -> gamepad1.dpad_up);
+    protected ActionButton leftMorePowerActionButton = new ActionButton(() -> gamepad1.y);
+    protected ActionButton leftLessPowerActionButton = new ActionButton(() -> gamepad1.x);
+    protected ActionButton rightMorePowerActionButton = new ActionButton(() -> gamepad1.b && !gamepad1.start);
+    protected ActionButton rightLessPowerActionButton = new ActionButton(() -> gamepad1.a && !gamepad1.start);
 
     protected void teleInit() {
         super.teleInit();

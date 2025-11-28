@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.util;
 
-public interface UtilActionButtonInput {
+public interface ActionButtonInput {
     boolean getInput();
 }

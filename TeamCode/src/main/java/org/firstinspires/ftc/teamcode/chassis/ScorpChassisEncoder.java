@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.chassis;
 
-public class ScorpChassisEncoder {
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+public class ScorpChassisEncoder extends ScorpChassisBase {
+    public ScorpChassisEncoder(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String imuName) {
+        super(op, lfName, rfName, lbName, rbName, imuName);
+    }
 }
 // This stuff is important for the encoder
 //

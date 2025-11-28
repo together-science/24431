@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.util;
 
-public class UtilActionButton {
-    UtilActionButtonInput actionButtonInput;
+public class ActionButton {
+    ActionButtonInput actionButtonInput;
     private long last = 0;
     private boolean triggered = false;
     private static final long DELAY = 200;
 
-    public UtilActionButton(UtilActionButtonInput actionButtonInput) {
+    public ActionButton(ActionButtonInput actionButtonInput) {
         this.actionButtonInput = actionButtonInput;
     }
 

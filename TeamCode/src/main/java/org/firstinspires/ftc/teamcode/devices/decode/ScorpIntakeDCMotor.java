@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.devices.decode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class ScorpMotorIntake {
+public class ScorpIntakeDCMotor {
     private DcMotor left = null;
     private DcMotor right = null;
     private static final double SPEED = 1.0;
     private final LinearOpMode op;
 
-    ScorpMotorIntake(LinearOpMode op, String leftName, String rightName) {
+    ScorpIntakeDCMotor(LinearOpMode op, String leftName, String rightName) {
         this.op = op;
         try {
             left = op.hardwareMap.get(DcMotor.class, leftName);

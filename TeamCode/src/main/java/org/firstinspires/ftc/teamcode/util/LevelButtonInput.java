@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.util;
 
-public interface UtilLevelButtonInput {
+public interface LevelButtonInput {
     double getInput();
 }

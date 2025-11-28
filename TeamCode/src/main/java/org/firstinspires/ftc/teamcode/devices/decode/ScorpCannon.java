@@ -4,17 +4,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class ScorpCannon {
+    private static final long SERVO_DELAY = 500;
+    private static final long SPINUP_DELAY = 2500;
+    private static final long SPINDOWN_AFTER_DELAY = 2000;
+    private static final long SPINUP_AFTER_INTAKE_DELAY = 6000;
     private Servo trigger = null;
     private final LinearOpMode op;
-    private long lastFired = 0L;
     private double power;
-    private boolean spinDown = false;
-    private static final double POSITION_CHARGED = 0.0;
-    private static final double POSITION_TRIGGERED = 1.0;
-    private static final long SERVO_DELAY = 500;
-    private static final long SPINUP_DELAY = 2000;
-    private static final long TIMEOUT = 3000;
     private final String triggerName;
+    private Thread spinDownThread = null;
+    private Thread spinUpThread = null;
 
     ScorpCannon(LinearOpMode op, String triggerName, double power, DcMotorSimple.Direction direction) {
         this.op = op;
@@ -22,7 +21,7 @@ public abstract class ScorpCannon {
         this.triggerName = triggerName;
         try {
             this.trigger = op.hardwareMap.get(Servo.class, triggerName);
-            op.telemetry.addLine("found trigger "+triggerName);
+            op.telemetry.addLine("found trigger " + triggerName);
         } catch(Exception ignored) {
         }
 
@@ -32,170 +31,129 @@ public abstract class ScorpCannon {
             trigger.setDirection(Servo.Direction.REVERSE);
         }
     }
-
     abstract protected void setPower(double power);
-
     void setPowerLevel(double power){
         this.power = power;
     }
-
     abstract protected boolean noWheel();
-
-    void reset() {
+    public void reset() {
         this.trigger.setPosition(0.0);
         setPower(0);
     }
-
-    void spinUp() {
-        // check if we in fact have a cannon
+    public void spinUp() {
         if (this.noWheel()) {
             return;
         }
-
         setPower(power);
-        spinDown = true;
     }
-
-    void cannonIntake(boolean stayOn){
-        if(noWheel()){
-            return;
-        }
-        //op.telemetry.addLine("intake "+triggerName);
-        //op.telemetry.update();
-        setPower(-0.30);
-
-        if (stayOn) {
-            return;
-        }
-        spinDown = true;
-        lastFired = System.currentTimeMillis();
-    }
-
-    void cannonIntake() {
+    public void cannonIntake() {
         cannonIntake(false);
     }
-
-    void cannonIntakeEmergencyPower() {
+    public void cannonIntake(boolean stayOn){
         if(noWheel()){
             return;
         }
-        setPower(-0.50);
+        setPower(-0.30);
+        if (!stayOn) {
+            spinUpAfterDelay();
+        }
+    }
+    public void cannonIntakeEmergencyPower() {
+        if(noWheel()){
+            return;
+        }
+        setPower(1.0);
+        op.sleep(1000);
+        setPower(-1.0);
         op.sleep(1000);
         setPower(0.0);
     }
-
-
-    void spinDown() {
-        // check if we in fact have a cannon
+    public void spinDown() {
         if (this.noWheel()) {
             return;
         }
-
-        // spin down the wheel ...
         setPower(0);
-        spinDown = false;
     }
-
-    void spinDownAndReleaseAfterDelay() {
-        long now = System.currentTimeMillis();
-        if(spinDown) {
-            if (now - lastFired > TIMEOUT) {
-                spinDown();
-            }
+    void spinDownAfterDelay() {
+        if (spinDownThread != null) {
+            spinDownThread.interrupt();
         }
-
-        if (now - lastFired > SERVO_DELAY) {
-            // if statement is here in case we ever have different values
-            if (triggerName.equals("right_cannon_trigger")) {
-                trigger.setPosition(0.0);
-            } else {
-                trigger.setPosition(0.0);
+        spinDownThread = new Thread(()->{
+            try {
+                Thread.sleep(SPINDOWN_AFTER_DELAY);
+            } catch (InterruptedException e) {
+                return;
             }
-        }
+            spinDown();
+            spinDownThread = null;
+        });
+        spinDownThread.start();
     }
-
-    void morePower() {
-        // check if we in fact have a cannon
-        if (this.noWheel()) {
-            return;
+    void spinUpAfterDelay() {
+        if (spinUpThread != null) {
+            spinUpThread.interrupt();
         }
-
-        // increase by 5%
-        power = Math.min(power +0.05, 1.0);
-
-        if (Math.abs(getPower()) > 0) {
-            // spinning, adjust to new speed
+        spinUpThread = new Thread(()->{
+            try {
+                Thread.sleep(SPINUP_AFTER_INTAKE_DELAY);
+            } catch (InterruptedException e) {
+                return;
+            }
             spinUp();
-        }
+            spinUpThread = null;
+        });
+        spinUpThread.start();
     }
-
-    void lessPower() {
-        // check if we in fact have a cannon
+    public void morePower() {
         if (this.noWheel()) {
             return;
         }
-
-        // decrease by 5%
+        power = Math.min(power + 0.05, 1.0);
+        if (Math.abs(getPower()) > 0) {
+            spinUp(); // Ask drivers if they would like cannon to start when they change power
+        }
+    }
+    public void lessPower() {
+        if (this.noWheel()) {
+            return;
+        }
         power = Math.max(power -0.05, 0.05);
-
         if (Math.abs(getPower()) > 0) {
-            // spinning, adjust to new speed
-            spinUp();
+            spinUp(); // Ask drivers if they would like cannon to start when they change power
         }
     }
-
-    double getPowerLevel() {
+    public double getPowerLevel() {
         return power;
     }
+    public abstract double getPower();
 
-    abstract protected double getPower();
 
-
-    void fire() {
-        //op.telemetry.addLine("Fire method "+triggerName);
-        //op.telemetry.update();
-        // if necessary, spin up cannon
+    public void fire() {
         if (!noWheel() && getPower() == 0) {
-            spinUp();
-            //op.telemetry.addLine("Fire method waiting for spinUp noWheel = "+noWheel());
-            //op.telemetry.update();
-            op.sleep(SPINUP_DELAY);
-        }
-
-        // check if we in fact have a cannon
-        if (this.trigger == null) {
-            //op.telemetry.addLine("No trigger");
-            //op.telemetry.update();
+            new Thread(()->{
+                spinUp();
+                op.sleep(SPINUP_DELAY);
+                fire();
+            }).start();
             return;
         }
-
-        //op.telemetry.addLine("Firing trigger "+triggerName);
-        //op.telemetry.update();
-
-        // determine servo fire position
+        if (this.trigger == null) {
+            return;
+        }
         double firePosition;
         double restPosition;
         if (triggerName.equals("right_cannon_trigger")) {
-            firePosition = 0.4;
-            restPosition = 0.0;
+            firePosition = 0.5;
         } else {
             firePosition = 0.5;
-            restPosition = 0.0;
         }
-
-
-        // actuate trigger servo
+        restPosition = 0.0;
         trigger.setPosition(restPosition);
         trigger.setPosition(firePosition);
-//        op.telemetry.addLine("Servo to fire");
-//        op.telemetry.update();
-
-        //op.sleep(SERVO_DELAY);
-        //trigger.setPosition(restPosition);
-//        op.telemetry.addLine("Servo to rest");
-//        op.telemetry.update();
-
-        lastFired = System.currentTimeMillis();
-        spinDown = true;
+        new Thread(()->{
+            op.sleep(SERVO_DELAY);
+            trigger.setPosition(restPosition);
+            spinDownAfterDelay();
+        }).start();
     }
 }

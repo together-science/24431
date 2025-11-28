@@ -27,7 +27,7 @@ public class ScorpCannonServoPort extends ScorpCannon {
         return wheel == null;
     }
 
-    protected double getPower() {
+    public double getPower() {
         // check if we in fact have a cannon
         if (this.noWheel()) {
             return 0.0;

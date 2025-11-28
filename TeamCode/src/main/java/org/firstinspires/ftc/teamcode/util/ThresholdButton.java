@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.util;
 
-public class UtilThresholdButton {
-    UtilLevelButtonInput levelButtonInput;
+public class ThresholdButton {
+    LevelButtonInput levelButtonInput;
     double threshold;
 
-    public UtilThresholdButton(UtilLevelButtonInput levelButtonInput, double threshold) {
+    public ThresholdButton(LevelButtonInput levelButtonInput, double threshold) {
         this.levelButtonInput = levelButtonInput;
         this.threshold = threshold;
     }

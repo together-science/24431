@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.auto.decode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.devices.decode.DecodeDevices;
 import org.firstinspires.ftc.teamcode.auto.BaseAuto;
 
@@ -9,6 +8,7 @@ public abstract class BaseAutoDecode extends BaseAuto {
 
     @Override
     protected void autoInit() {
+        super.autoInit();
         devices = new DecodeDevices(this);
     }
 

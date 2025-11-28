@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class ScorpCannonMotorPort extends ScorpCannonMT {
+public class ScorpCannonMotorPort extends ScorpCannon {
     private DcMotor wheel = null;
 
     ScorpCannonMotorPort(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {

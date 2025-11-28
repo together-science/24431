@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.chassis.ScorpChassisOtos;
-import org.firstinspires.ftc.teamcode.util.UtilThresholdButton;
+import org.firstinspires.ftc.teamcode.chassis.ScorpChassis;
+import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
+import org.firstinspires.ftc.teamcode.util.ThresholdButton;
 
 public abstract class BaseTeleOp extends LinearOpMode {
-    public ScorpChassisOtos chassis = null;
+    public ScorpChassis chassis = null;
     public final ElapsedTime runtime = new ElapsedTime();
 
     public double x = 0;
@@ -16,12 +17,12 @@ public abstract class BaseTeleOp extends LinearOpMode {
     public boolean faster = false;
     public boolean slower = false;
 
-    public UtilThresholdButton fasterButton = new UtilThresholdButton(() -> gamepad1.right_trigger, 0.1);
-    public UtilThresholdButton slowerButton = new UtilThresholdButton(() -> gamepad1.left_trigger, 0.1);
+    public ThresholdButton fasterButton = new ThresholdButton(() -> gamepad1.right_trigger, 0.1);
+    public ThresholdButton slowerButton = new ThresholdButton(() -> gamepad1.left_trigger, 0.1);
     public double currentHeading;
 
     protected void teleInit() {
-        chassis = new ScorpChassisOtos(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "oscar", "imu");
+        chassis = new ScorpChassisBase(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "imu");
         chassis.init();
     }
 
