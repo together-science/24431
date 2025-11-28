@@ -103,7 +103,7 @@ public class ScorpCamera {
                 exposureControl.setMode(ExposureControl.Mode.Manual);
                 op.sleep(50);
             }
-            exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+            exposureControl.setExposure(exposureMS, TimeUnit.MILLISECONDS);
             op.sleep(20);
             GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(gain);
