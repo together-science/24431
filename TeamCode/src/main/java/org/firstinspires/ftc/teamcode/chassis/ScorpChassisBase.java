@@ -12,12 +12,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.Position;
 
 public class ScorpChassisBase extends ScorpChassis {
-    private DcMotor lf = null;
-    private DcMotor rf = null;
-    private DcMotor lb = null;
-    private DcMotor rb = null;
-    private IMU imu = null;
-    private LinearOpMode op = null;
+    protected DcMotor lf = null;
+    protected DcMotor rf = null;
+    protected DcMotor lb = null;
+    protected DcMotor rb = null;
+    protected IMU imu = null;
+    protected LinearOpMode op = null;
 
     @Override
     public Position getPosition() {
@@ -175,7 +175,7 @@ public class ScorpChassisBase extends ScorpChassis {
         return "h: "+p.h+", x: "+p.x+", y:"+p.y;
     }
 
-    private double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
+    double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
         double headingError = getHeading() - desiredHeading;
 
         headingError = normalizeAngle(headingError);
@@ -187,7 +187,7 @@ public class ScorpChassisBase extends ScorpChassis {
         throw new UnsupportedOperationException();
     }
 
-    private void _moveRobot(double drive, double turn) {
+    void _moveRobot(double drive, double turn) {
         double leftSpeed  = drive - turn;
         double rightSpeed = drive + turn;
 
@@ -204,7 +204,7 @@ public class ScorpChassisBase extends ScorpChassis {
 
     }
 
-    private void _strafeRobot(double leftSpeed, double rightSpeed, double leftBackSpeed, double rightBackSpeed, double turn) {
+    void _strafeRobot(double leftSpeed, double rightSpeed, double leftBackSpeed, double rightBackSpeed, double turn) {
         leftSpeed -= turn;
         rightSpeed += turn;
         leftBackSpeed -= turn;

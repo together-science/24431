@@ -21,7 +21,7 @@ public abstract class ScorpCannon {
         this.triggerName = triggerName;
         try {
             this.trigger = op.hardwareMap.get(Servo.class, triggerName);
-            op.telemetry.addLine("found trigger " + triggerName);
+            // op.telemetry.addLine("found trigger " + triggerName);
         } catch(Exception ignored) {
         }
 
