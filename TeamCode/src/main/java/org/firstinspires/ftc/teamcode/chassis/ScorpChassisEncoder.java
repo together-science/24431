@@ -4,12 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class ScorpChassisEncoder extends ScorpChassisBase {
-    static final double     COUNTS_PER_MOTOR_REV    = 537.7*(24.0/35.0);
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0;
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0;
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     STRAFE_CORRECTION       = 1.0;
-
+    private static final double     COUNTS_PER_MOTOR_REV    = 537.7*(24.0/35.0);
+    private static final double     DRIVE_GEAR_REDUCTION    = 1.0;
+    private static final double     WHEEL_DIAMETER_INCHES   = 4.0;
+    private static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * 3.1415);
+    private static final double     STRAFE_CORRECTION       = 1.0;
 
     public ScorpChassisEncoder(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String imuName) {
         super(op, lfName, rfName, lbName, rbName, imuName);
@@ -25,6 +24,7 @@ public class ScorpChassisEncoder extends ScorpChassisBase {
     }
 
     // target movement
+    @Override
     public void strafeTo(double x, double y, double driveSpeed, double heading) {
         int lfTarget, rfTarget, lbTarget, rbTarget;
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

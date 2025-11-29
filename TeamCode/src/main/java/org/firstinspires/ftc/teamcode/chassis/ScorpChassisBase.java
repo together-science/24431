@@ -175,7 +175,7 @@ public class ScorpChassisBase extends ScorpChassis {
         return "h: "+p.h+", x: "+p.x+", y:"+p.y;
     }
 
-    double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
+    protected double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
         double headingError = getHeading() - desiredHeading;
 
         headingError = normalizeAngle(headingError);
@@ -187,7 +187,7 @@ public class ScorpChassisBase extends ScorpChassis {
         throw new UnsupportedOperationException();
     }
 
-    void _moveRobot(double drive, double turn) {
+    protected void _moveRobot(double drive, double turn) {
         double leftSpeed  = drive - turn;
         double rightSpeed = drive + turn;
 
@@ -204,7 +204,7 @@ public class ScorpChassisBase extends ScorpChassis {
 
     }
 
-    void _strafeRobot(double leftSpeed, double rightSpeed, double leftBackSpeed, double rightBackSpeed, double turn) {
+    protected void _strafeRobot(double leftSpeed, double rightSpeed, double leftBackSpeed, double rightBackSpeed, double turn) {
         leftSpeed -= turn;
         rightSpeed += turn;
         leftBackSpeed -= turn;
