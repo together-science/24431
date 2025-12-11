@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.util.Position;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 
-public class ScorpChassisPinpoint extends ScorpChassisBase {
+public class ScorpChassisPinpoint extends ScorpChassisOdometry {
     private GoBildaPinpointDriver pinpoint;
 
     public ScorpChassisPinpoint(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String pinpointName, String imuName) {
@@ -17,6 +17,7 @@ public class ScorpChassisPinpoint extends ScorpChassisBase {
             this.pinpoint = op.hardwareMap.get(GoBildaPinpointDriver.class, pinpointName);
         }
         catch (Exception ignored) {
+            op.telemetry.addLine("don pinpoint device not found");
         }
     }
     public void init(){
@@ -33,7 +34,7 @@ public class ScorpChassisPinpoint extends ScorpChassisBase {
              *  Forward of center is a positive number, backwards is a negative number.
              */
             pinpoint.setOffsets(-84.0, -168.0, DistanceUnit.MM); //these are tuned for 3110-0002-0001 Product Insight #1
-
+                                        //-84       -168
             /*
              * Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
              * the goBILDA_SWINGARM_POD, or the goBILDA_4_BAR_POD.
@@ -48,8 +49,7 @@ public class ScorpChassisPinpoint extends ScorpChassisBase {
              * increase when you move the robot forward. And the Y (strafe) pod should increase when
              * you move the robot to the left.
              */
-            pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
-                    GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
             /*
              * Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
@@ -68,10 +68,15 @@ public class ScorpChassisPinpoint extends ScorpChassisBase {
 
     public Position getPosition() {
         if (pinpoint == null) {
-            return null;
+            Position p = new Position();
+            p.x = -1;
+            p.y = -1;
+            p.h = 1000;
+            return p;
         }
+        pinpoint.update();
         Pose2D pos = pinpoint.getPosition();
-        Position p = new Position();
+       Position p = new Position();
         p.x = -pos.getX(DistanceUnit.INCH);
         p.y = -pos.getY(DistanceUnit.INCH);
         p.h = pos.getHeading(AngleUnit.DEGREES);

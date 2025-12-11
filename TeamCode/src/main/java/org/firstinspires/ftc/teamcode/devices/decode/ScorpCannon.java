@@ -25,10 +25,12 @@ public abstract class ScorpCannon {
         } catch(Exception ignored) {
         }
 
-        if (direction == DcMotorSimple.Direction.REVERSE) {
-            trigger.setDirection(Servo.Direction.FORWARD);
-        } else {
-            trigger.setDirection(Servo.Direction.REVERSE);
+        if (trigger != null) {
+            if (direction == DcMotorSimple.Direction.REVERSE) {
+                trigger.setDirection(Servo.Direction.FORWARD);
+            } else {
+                trigger.setDirection(Servo.Direction.REVERSE);
+            }
         }
     }
     abstract protected void setPower(double power);
@@ -37,8 +39,10 @@ public abstract class ScorpCannon {
     }
     abstract protected boolean noWheel();
     public void reset() {
-        this.trigger.setPosition(0.0);
-        setPower(0);
+        if(trigger != null) {
+            this.trigger.setPosition(0.0);
+            setPower(0);
+        }
     }
     public void spinUp() {
         if (this.noWheel()) {
@@ -148,11 +152,15 @@ public abstract class ScorpCannon {
             firePosition = 0.5;
         }
         restPosition = 0.0;
-        trigger.setPosition(restPosition);
-        trigger.setPosition(firePosition);
+        if(trigger != null) {
+            trigger.setPosition(restPosition);
+            trigger.setPosition(firePosition);
+        }
         new Thread(()->{
             op.sleep(SERVO_DELAY);
-            trigger.setPosition(restPosition);
+            if(trigger != null) {
+                trigger.setPosition(restPosition);
+            }
             spinDownAfterDelay();
         }).start();
     }

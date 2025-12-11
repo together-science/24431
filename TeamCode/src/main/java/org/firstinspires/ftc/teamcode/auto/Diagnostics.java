@@ -14,7 +14,7 @@ public class Diagnostics extends BaseAutoDecode {
             pos = chassis.getPosition();
             telemetry.addData("x position:", pos.x);
             telemetry.addData("y position:", pos.y);
-            telemetry.addData("otos heading:", pos.h);
+            telemetry.addData("heading:", pos.h);
             telemetry.update();
         }
     }

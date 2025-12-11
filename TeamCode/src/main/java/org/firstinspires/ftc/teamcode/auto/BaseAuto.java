@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode.auto;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.chassis.ScorpChassisOtos;
+import org.firstinspires.ftc.teamcode.chassis.ScorpChassisPinpoint;
 
 public abstract class BaseAuto extends LinearOpMode {
-    protected ScorpChassisOtos chassis = null;
+    protected ScorpChassisPinpoint chassis = null;
     protected void autoInit(){
-        chassis = new ScorpChassisOtos(this,
+        chassis = new ScorpChassisPinpoint(this,
                 "left_front_drive",
                 "right_front_drive",
                 "left_back_drive",
                 "right_back_drive",
-                "oscar",
+                "don",
                 "imu");
         chassis.init();
     }

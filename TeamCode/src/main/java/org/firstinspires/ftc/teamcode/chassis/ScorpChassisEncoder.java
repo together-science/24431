@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.chassis;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class ScorpChassisEncoder extends ScorpChassisBase {
+public class ScorpChassisEncoder extends ScorpChassisOdometry {
     private static final double     COUNTS_PER_MOTOR_REV    = 537.7*(24.0/35.0);
     private static final double     DRIVE_GEAR_REDUCTION    = 1.0;
     private static final double     WHEEL_DIAMETER_INCHES   = 4.0;

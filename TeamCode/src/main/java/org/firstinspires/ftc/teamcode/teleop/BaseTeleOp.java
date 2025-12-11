@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.chassis.ScorpChassis;
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
+import org.firstinspires.ftc.teamcode.chassis.ScorpChassisOdometry;
 import org.firstinspires.ftc.teamcode.util.ThresholdButton;
 
 public abstract class BaseTeleOp extends LinearOpMode {
-    public ScorpChassis chassis = null;
+    public ScorpChassisBase chassis = null;
     public final ElapsedTime runtime = new ElapsedTime();
 
     public double x = 0;
@@ -22,7 +22,7 @@ public abstract class BaseTeleOp extends LinearOpMode {
     public double currentHeading;
 
     protected void teleInit() {
-        chassis = new ScorpChassisBase(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "imu");
+        chassis = new ScorpChassisOdometry(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "imu");
         chassis.init();
     }
 

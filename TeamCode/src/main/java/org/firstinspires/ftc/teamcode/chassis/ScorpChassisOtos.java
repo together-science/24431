@@ -5,7 +5,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.util.Position;
 
-public class ScorpChassisOtos extends ScorpChassisBase {
+public class ScorpChassisOtos extends ScorpChassisOdometry {
     private SparkFunOTOS otos;
 
     public ScorpChassisOtos(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String otosName, String imuName) {
