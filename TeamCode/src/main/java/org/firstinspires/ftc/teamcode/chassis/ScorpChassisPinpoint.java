@@ -78,7 +78,7 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
         Pose2D pos = pinpoint.getPosition();
        Position p = new Position();
         p.x = -pos.getX(DistanceUnit.INCH);
-        p.y = -pos.getY(DistanceUnit.INCH);
+        p.y = pos.getY(DistanceUnit.INCH);
         p.h = pos.getHeading(AngleUnit.DEGREES);
         return p;
     }

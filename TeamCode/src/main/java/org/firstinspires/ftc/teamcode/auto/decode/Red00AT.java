@@ -14,23 +14,23 @@ public class Red00AT extends BaseAutoDecode {
         List<Integer> tags = Arrays.asList(21,22,23);
         AprilTagDetection tag;
         int id = 0;
-        tag = devices.camera.getDetection(tags);
+        tag = chassis.camera.getDetection(tags);
         if (tag != null) {
             id = tag.id;
         }
-        devices.camera.off();
+        chassis.camera.off();
         devices.leftCannon.spinUp();
         devices.rightCannon.spinUp();
         chassis.strafeTo(0, 62, ScorpChassisOtos.DRIVE_SPEED_FAST);
-        devices.camera.on();
+        chassis.camera.on();
         if (tag == null) {
             // look again
-            tag = devices.camera.getDetection(tags);
+            tag = chassis.camera.getDetection(tags);
             if (tag != null) {
                 id = tag.id;
             }
         }
-        devices.camera.off();
+        chassis.camera.off();
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, -45);
         fire(id);
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 0);

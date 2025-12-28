@@ -11,15 +11,15 @@ import java.util.List;
 public class Red01AT extends BaseAutoDecode {
     @Override
     protected void auto(){
-        devices.camera.off();
+        chassis.camera.off();
         chassis.strafeTo(0, -45, ScorpChassisOtos.DRIVE_SPEED_FAST);
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 45);
-        devices.camera.on();
+        chassis.camera.on();
         sleep(500);
         List<Integer> tags = Arrays.asList(21,22,23);
         AprilTagDetection tag;
         int id = 0;
-        tag = devices.camera.getDetection(tags);
+        tag = chassis.camera.getDetection(tags);
         if (tag != null) {
             id = tag.id;
         }
@@ -28,12 +28,12 @@ public class Red01AT extends BaseAutoDecode {
         devices.rightCannon.spinUp();
         if (tag == null) {
             // look again
-            tag = devices.camera.getDetection(tags);
+            tag = chassis.camera.getDetection(tags);
             if (tag != null) {
                 id = tag.id;
             }
         }
-        devices.camera.on();
+        chassis.camera.on();
         sleep(500);
         chassis.turnToHeading(0.5, 0);
         fire(id);

@@ -10,6 +10,10 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.Position;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ScorpChassisOdometry extends ScorpChassisBase {
     protected DcMotor lf = null;
@@ -18,6 +22,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     protected DcMotor rb = null;
     protected IMU imu = null;
     protected LinearOpMode op = null;
+    public ScorpCamera camera;
 
     @Override
     public Position getPosition() {
@@ -32,6 +37,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             this.rb = op.hardwareMap.get(DcMotor.class, rbName);
             this.imu = op.hardwareMap.get(IMU.class, imuName);
             this.op = op;
+            this.camera = new ScorpCamera(op, "Webcam 1");
         } catch (Exception ignored) {
         }
     }
@@ -63,6 +69,22 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
             imu.initialize(new IMU.Parameters(orientationOnRobot));
             imu.resetYaw();
+        }
+    }
+    public void autoAim(){
+//        List<Integer> tags = Arrays.asList(24, 25);
+//        AprilTagDetection tag;
+//        int id = 0;
+//        tag = camera.getDetection(tags);
+//        if (tag != null) {
+//            id = tag.id;
+//        }
+
+        List<Integer> tags = Arrays.asList(24, 20); // red - 24, blue - 20
+        AprilTagDetection tag;
+        tag = camera.getDetection(tags);
+        if(tag != null){
+
         }
     }
     //void moveTo(double x, double y, double driveSpeed);
@@ -179,6 +201,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         double headingError = getHeading() - desiredHeading;
 
         headingError = normalizeAngle(headingError);
+        op.telemetry.addData("he", "%.2f", headingError);
 
          return Range.clip(-headingError * proportionalGain, -0.3, 0.3);
     }
@@ -267,6 +290,10 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         _strafeRobot(speed, speed, speed, speed, turn);
     }
 
+    public void startStrafeAbsolute(double speed, double direction) {
+        this.startStrafeAbsolute(speed, direction, this.getHeading());
+    }
+
     public void startStrafeAbsolute(double speed, double direction, double heading) {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
@@ -307,20 +334,35 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
     }
 
+    @Override
     public void startStrafe(double speed, double direction, double turn) {
+        startStrafe(speed, direction, turn, getHeading());
+    }
+
+    @Override
+    public void startStrafe(double speed, double direction) {
+        startStrafe(speed, direction, 0);
+    }
+
+    @Override
+    public void startStrafe(double speed, double direction, double turn, double heading) {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
-        //op.telemetry.addData("sp", "%.2f", speed);
-        //op.telemetry.addData("dr", "%.2f", direction);
-        //op.telemetry.addData("ts", "%.2f", turnSpeed);
+        op.telemetry.addData("sp", "%.2f", speed);
+        op.telemetry.addData("dr", "%.2f", direction);
+        op.telemetry.addData("ts", "%.2f", turn);
         double axial   = Math.cos(Math.PI/180*(direction));
         double lateral = Math.sin(Math.PI/180*(direction));
+        if (turn == 0) {
+            turn = _getSteeringCorrection(heading, P_TURN_GAIN);
+        }
+        op.telemetry.addData("tn", "%.2f", turn);
 
-        double leftFrontPower  = (axial - lateral + turn);
-        double rightFrontPower = (axial + lateral - turn);
-        double leftBackPower   = (axial + lateral + turn);
-        double rightBackPower  = (axial - lateral - turn);
+        double leftFrontPower  = (axial - lateral - turn);
+        double rightFrontPower = (axial + lateral + turn);
+        double leftBackPower   = (axial + lateral - turn);
+        double rightBackPower  = (axial - lateral + turn);
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
@@ -348,22 +390,14 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
     }
 
-
-
-
-    public void startStrafe(double speed, double direction) {
-        startStrafe(speed, direction, 0);
-    }
-
-
     public void startTurn(double turnSpeed) {
         if (lf == null || lb == null || rf == null || rb == null) {
             return;
         }
-        lf.setPower(turnSpeed);
-        lb.setPower(turnSpeed);
-        rf.setPower(-turnSpeed);
-        rb.setPower(-turnSpeed);
+        lf.setPower(-turnSpeed);
+        lb.setPower(-turnSpeed);
+        rf.setPower(+turnSpeed);
+        rb.setPower(+turnSpeed);
     }
 }
 

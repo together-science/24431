@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.devices.decode;
+package org.firstinspires.ftc.teamcode.chassis;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -17,7 +17,7 @@ public class ScorpCamera {
     private final LinearOpMode op;
     private WebcamName cam = null;
 
-    ScorpCamera(LinearOpMode op, String cameraName) {
+    public ScorpCamera(LinearOpMode op, String cameraName) {
         this.op = op;
         try {
             this.cam = op.hardwareMap.get(WebcamName.class, cameraName);

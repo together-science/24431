@@ -10,7 +10,7 @@ public class Diagnostics extends BaseAutoDecode {
     protected void auto(){
         Position pos;
         while(opModeIsActive()){
-            devices.camera.off();
+            chassis.camera.off();
             pos = chassis.getPosition();
             telemetry.addData("x position:", pos.x);
             telemetry.addData("y position:", pos.y);

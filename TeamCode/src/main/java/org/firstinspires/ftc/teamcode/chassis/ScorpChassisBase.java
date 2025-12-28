@@ -29,7 +29,9 @@ public abstract class ScorpChassisBase {
 
     // differential movement
     public abstract void startDrive(double speed, double direction, double turnSpeed);
+    public abstract void startStrafeAbsolute(double speed, double direction);
     public abstract void startStrafeAbsolute(double speed, double direction, double heading);
+    public abstract void startStrafe(double speed, double direction, double turn, double heading);
     public abstract void startStrafe(double speed, double direction, double turn);
     public abstract void startStrafe(double speed, double direction);
     public abstract void startTurn(double turnSpeed);

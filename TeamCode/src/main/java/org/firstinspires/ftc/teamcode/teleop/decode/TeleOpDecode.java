@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="TeleOpDecode", group="Linear Opmode")
 
 public class TeleOpDecode extends BaseTeleOpDecode {
+    double heading = 0;
     @Override
     protected void teleIteration() {
         // compute what the intakeState should be
@@ -47,18 +48,25 @@ public class TeleOpDecode extends BaseTeleOpDecode {
         double direction = headingFromRelativePosition(x, y);
         currentHeading = chassis.getHeading();
         double turnInput = Math.abs(yaw);
-        double turnWhileStrafingSpeed = yaw*speedFactor*2;
+        double turnWhileStrafingSpeed = yaw*speedFactor*10;
         double turnSpeed = yaw*speedFactor;
         double driveInput = Math.sqrt(x*x + y*y);
         double driveSpeed = Math.min(driveInput, 1.0)*speedFactor;
 
         // and drive
         if (driveInput > 0.05) {
-            chassis.startStrafe(driveSpeed, direction, turnWhileStrafingSpeed);
+            if (turnInput > 0.05) {
+                chassis.startStrafe(driveSpeed, direction, turnWhileStrafingSpeed, chassis.getHeading());
+                heading = chassis.getHeading();
+            } else {
+                chassis.startStrafe(driveSpeed, direction, 0, heading);
+            }
         } else if (turnInput > 0.05) {
             chassis.startTurn(turnSpeed);
+            heading = chassis.getHeading();
         } else {
             chassis.stop();
+            heading = chassis.getHeading();
         }
 
         // fire the cannons!

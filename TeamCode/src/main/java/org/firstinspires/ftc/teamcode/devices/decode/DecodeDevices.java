@@ -7,7 +7,7 @@ public class DecodeDevices {
     public ScorpCannon rightCannon;
     public ScorpIntakeDCMotor intake;
     public ScorpSorter sorter;
-    public ScorpCamera camera;
+    //public ScorpCamera camera;
 
     public DecodeDevices(LinearOpMode op) {
         leftCannon = new ScorpCannonMotorPort(op, "left_cannon_wheel",
@@ -16,6 +16,6 @@ public class DecodeDevices {
                 "right_cannon_trigger", 0.88, DcMotorSimple.Direction.REVERSE);
         intake = new ScorpIntakeDCMotor(op, "left_intake", "right_intake");
         sorter = new ScorpSorter(op, "sorter_servo");
-        camera = new ScorpCamera(op, "Webcam 1");
+        //camera = new ScorpCamera(op, "Webcam 1");
     }
 }
