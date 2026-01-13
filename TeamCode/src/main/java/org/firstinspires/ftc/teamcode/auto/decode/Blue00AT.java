@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.decode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisOtos;
 import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannon;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -19,11 +20,12 @@ public class Blue00AT extends BaseAutoDecode {
             id = tag.id;
         }
         sleep(500);
-        chassis.camera.off();
+
+//        chassis.camera.off();
         devices.leftCannon.spinUp();
         devices.rightCannon.spinUp();
-        chassis.strafeTo(0, 62, ScorpChassisOtos.DRIVE_SPEED_FAST);
-        chassis.camera.on();
+        chassis.strafeTo(0, 74, ScorpChassisOtos.DRIVE_SPEED_FAST);
+//        chassis.camera.on();
         if (tag == null) {
             // look again
             tag = chassis.camera.getDetection(tags);
@@ -31,12 +33,12 @@ public class Blue00AT extends BaseAutoDecode {
                 id = tag.id;
             }
         }
-        chassis.camera.off();
-        chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 45);
+//        chassis.camera.off();
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 45);
         fire(id);
-        chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 0);
-        chassis.strafeTo(0, 15, ScorpChassisOtos.DRIVE_SPEED_FAST);
-        chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, -100);
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 0);
+        chassis.strafeTo(0, 15, ScorpChassisBase.DRIVE_SPEED_FAST);
+        chassis.turnToHeading(ScorpChassisBase .DRIVE_SPEED_NORMAL, -100);
     }
 
 

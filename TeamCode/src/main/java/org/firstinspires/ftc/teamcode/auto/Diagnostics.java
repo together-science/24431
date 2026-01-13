@@ -19,3 +19,11 @@ public class Diagnostics extends BaseAutoDecode {
         }
     }
 }
+
+//Diagnostics
+//|
+//-- BaseAutoDecode
+//|
+//-- BaseAuto
+//   |
+//   -- ScorpChassisPinpoint (This is the origin of getpos)

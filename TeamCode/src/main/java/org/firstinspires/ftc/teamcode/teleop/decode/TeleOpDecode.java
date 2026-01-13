@@ -65,7 +65,7 @@ public class TeleOpDecode extends BaseTeleOpDecode {
             chassis.startTurn(turnSpeed);
             heading = chassis.getHeading();
         } else {
-            chassis.stop();
+            chassis.stopDrive();
             heading = chassis.getHeading();
         }
 

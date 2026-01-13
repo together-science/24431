@@ -33,7 +33,7 @@ public class ScorpChassisEncoder extends ScorpChassisOdometry {
         rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         if (!op.opModeIsActive()) {
-            stop();
+            stopDrive();
             return;
         }
         double distance = Math.sqrt(x*x + y*y);
@@ -79,7 +79,7 @@ public class ScorpChassisEncoder extends ScorpChassisOdometry {
             double turnSpeed = _getSteeringCorrection(heading, P_DRIVE_GAIN);
             _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, turnSpeed);
         }
-        stop();
+        stopDrive();
     }
 }
 

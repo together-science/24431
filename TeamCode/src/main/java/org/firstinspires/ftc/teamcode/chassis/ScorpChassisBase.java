@@ -19,7 +19,7 @@ public abstract class ScorpChassisBase {
     public abstract String getPositionString();
 
     // basic movement
-    public abstract void stop();
+    public abstract void stopDrive();
     public abstract void coast();
 
     // target movement

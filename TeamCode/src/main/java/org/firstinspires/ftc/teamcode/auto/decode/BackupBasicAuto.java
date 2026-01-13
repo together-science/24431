@@ -9,6 +9,6 @@ public class BackupBasicAuto extends BaseAutoDecode {
     protected void auto(){
         chassis.startStrafe(ScorpChassisOdometry.DRIVE_SPEED_NORMAL, 0);
         sleep(1500);
-        chassis.stop();
+        chassis.stopDrive();
     }
 }

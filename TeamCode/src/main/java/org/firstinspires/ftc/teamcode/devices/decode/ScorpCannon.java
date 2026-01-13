@@ -133,6 +133,9 @@ public abstract class ScorpCannon {
 
 
     public void fire() {
+        if (this.trigger == null || this.noWheel()) {
+            return;
+        }
         if (!noWheel() && getPower() == 0) {
             new Thread(()->{
                 spinUp();
@@ -141,9 +144,7 @@ public abstract class ScorpCannon {
             }).start();
             return;
         }
-        if (this.trigger == null) {
-            return;
-        }
+
         double firePosition;
         double restPosition;
         if (triggerName.equals("right_cannon_trigger")) {

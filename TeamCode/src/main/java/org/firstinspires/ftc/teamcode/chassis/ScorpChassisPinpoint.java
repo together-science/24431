@@ -6,6 +6,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.util.Position;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 
 
 public class ScorpChassisPinpoint extends ScorpChassisOdometry {
@@ -63,20 +65,25 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
 
             // Set the location of the robot - this should be the place you are starting the robot from
             pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0));
+        } else{
+            op.telemetry.addLine("NULL PINPOINT ODMY");
+            op.telemetry.update();
+            op.sleep(10000);
         }
     }
 
     public Position getPosition() {
+        //
+        pinpoint.update();
         if (pinpoint == null) {
             Position p = new Position();
-            p.x = -1;
-            p.y = -1;
-            p.h = 1000;
+            p.x = 0;
+            p.y = 0;
+            p.h = 361;
             return p;
         }
-        pinpoint.update();
         Pose2D pos = pinpoint.getPosition();
-       Position p = new Position();
+        Position p = new Position();
         p.x = -pos.getX(DistanceUnit.INCH);
         p.y = pos.getY(DistanceUnit.INCH);
         p.h = pos.getHeading(AngleUnit.DEGREES);
