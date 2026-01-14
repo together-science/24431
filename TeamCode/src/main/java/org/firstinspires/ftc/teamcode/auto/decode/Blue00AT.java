@@ -11,16 +11,16 @@ import java.util.List;
 @Autonomous(name = "Blue00AT", group="Robot")
 public class Blue00AT extends BaseAutoDecode {
     @Override
-    protected void auto(){
+    protected void auto() {
         getObeliskId();
         devices.leftCannon.spinUp();
         devices.rightCannon.spinUp();
-        chassis.strafeTo(0, 74, ScorpChassisOtos.DRIVE_SPEED_FAST);
-        getObeliskId(); // try looking one more time
+        chassis.strafeTo(0, 78, ScorpChassisOtos.DRIVE_SPEED_FAST);
+        getObeliskId();
         chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 45);
         fire();
         chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 0);
-        chassis.strafeTo(0, 15, ScorpChassisBase.DRIVE_SPEED_FAST);
-        chassis.turnToHeading(ScorpChassisBase .DRIVE_SPEED_NORMAL, -100);
+        chassis.strafeTo(0, 25, ScorpChassisBase.DRIVE_SPEED_FAST);
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, -100);
     }
 }

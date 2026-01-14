@@ -306,9 +306,9 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
-        double axial   = Math.cos(Math.PI/180*(direction-heading));
-        double lateral = Math.sin(Math.PI/180*(direction-heading));
-        double turn = _getSteeringCorrection(heading, P_TURN_GAIN);
+        double axial   = Math.cos(Math.PI/180*(direction-getHeading()));
+        double lateral = Math.sin(Math.PI/180*(direction-getHeading()));
+        double turn = 0; //_getSteeringCorrection(heading, P_TURN_GAIN);
         op.telemetry.addData("hd", "%.2f", getHeading());
         op.telemetry.addData("dh", "%.2f", heading);
         op.telemetry.addData("ax", "%.2f", axial);

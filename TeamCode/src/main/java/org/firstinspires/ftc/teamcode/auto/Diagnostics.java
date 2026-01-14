@@ -2,20 +2,20 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.decode.BaseAutoDecode;
+import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 import org.firstinspires.ftc.teamcode.util.Position;
 
 @Autonomous(name = "diagnostics", group = "robot")
 public class Diagnostics extends BaseAutoDecode {
     @Override
     protected void auto(){
-        Position pos;
-        while(opModeIsActive()){
-            pos = chassis.getPosition();
-            telemetry.addData("x position:", pos.x);
-            telemetry.addData("y position:", pos.y);
-            telemetry.addData("heading:", pos.h);
-            telemetry.update();
-        }
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_SLOW, 45);
+        chassis.strafeTo(-24, -24, ScorpChassisBase.DRIVE_SPEED_NORMAL);
+        chassis.strafeTo(-24, 24, ScorpChassisBase.DRIVE_SPEED_NORMAL);
+        chassis.strafeTo(24, 24, ScorpChassisBase.DRIVE_SPEED_NORMAL);
+        chassis.strafeTo(24, -24, ScorpChassisBase.DRIVE_SPEED_NORMAL);
+        chassis.strafeTo(0, 0, ScorpChassisBase.DRIVE_SPEED_NORMAL);
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_SLOW, 0);
     }
 }
 

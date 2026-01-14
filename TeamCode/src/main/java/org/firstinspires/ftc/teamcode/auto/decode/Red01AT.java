@@ -23,4 +23,5 @@ public class Red01AT extends BaseAutoDecode {
         chassis.strafeTo(11, -65, ScorpChassisOtos.DRIVE_SPEED_FAST);
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 145);
     }
-}
+}// Pick the square of a number between 1 and 9
+ // The Ghost of Ronald McDonald 1997 will haunt you in (root(choice)/2) days
