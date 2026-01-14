@@ -11,65 +11,15 @@ import java.util.List;
 public class Red00AT extends BaseAutoDecode {
     @Override
     protected void auto(){
-        List<Integer> tags = Arrays.asList(21,22,23);
-        AprilTagDetection tag;
-        int id = 0;
-        tag = chassis.camera.getDetection(tags);
-        if (tag != null) {
-            id = tag.id;
-        }
-        chassis.camera.off();
+        getObeliskId();
         devices.leftCannon.spinUp();
         devices.rightCannon.spinUp();
         chassis.strafeTo(0, 62, ScorpChassisOtos.DRIVE_SPEED_FAST);
-        chassis.camera.on();
-        if (tag == null) {
-            // look again
-            tag = chassis.camera.getDetection(tags);
-            if (tag != null) {
-                id = tag.id;
-            }
-        }
-        chassis.camera.off();
+        getObeliskId();
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, -45);
-        fire(id);
+        fire();
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 0);
         chassis.strafeTo(0, 15, ScorpChassisOtos.DRIVE_SPEED_FAST);
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 100);
-    }
-
-
-    private void fire(int tagId) {
-        /*   Tag             RAMP MOTIF
-                             Index   1    2    3    4    5    6    7    8    9
-             21 GPP          GATE  [ G ][ P ][ P ][ G ][ P ][ P ][ G ][ P ][ P ]  SQUARE
-             22 PGP          GATE  [ P ][ G ][ P ][ P ][ G ][ P ][ P ][ G ][ P ]  SQUARE
-             23 PPG          GATE  [ P ][ P ][ G ][ P ][ P ][ G ][ P ][ P ][ G ]  SQUARE
-         */
-        // assumption: left cannon = preloaded purple, right cannon = preloaded green
-
-        ScorpCannon purple = devices.leftCannon;
-        ScorpCannon green = devices.rightCannon;
-
-        switch (tagId) {
-            case 21:
-                green.fire();
-                sleep(2500); // pause to let first ball find ramp
-                purple.fire();
-                break;
-            case 22:
-                purple.fire();
-                sleep(2500); // pause to let first ball find ramp
-                green.fire();
-                break;
-            case 23:
-            default:
-                // didn't see the tag, or it's asking for 2 purple first, which we don't have
-                // doesn't really matter what we do here. No reason to pause between, either
-                purple.fire();
-                green.fire();
-                break;
-        }
-        sleep(1000); // pause to let fire routine complete (separate thread)
     }
 }
