@@ -6,8 +6,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.util.Position;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 
 
 public class ScorpChassisPinpoint extends ScorpChassisOdometry {
@@ -79,7 +77,7 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
             Position p = new Position();
             p.x = 0;
             p.y = 0;
-            p.h = 361;
+            p.h = 0;
             return p;
         }
         Pose2D pos = pinpoint.getPosition();
@@ -88,5 +86,11 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
         p.y = pos.getY(DistanceUnit.INCH);
         p.h = pos.getHeading(AngleUnit.DEGREES);
         return p;
+    }
+
+    @Override
+    public void resetPositionAndHeading() {
+        super.resetPositionAndHeading();
+        pinpoint.resetPosAndIMU();
     }
 }

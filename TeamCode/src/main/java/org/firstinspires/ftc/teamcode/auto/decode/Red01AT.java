@@ -1,27 +1,31 @@
 package org.firstinspires.ftc.teamcode.auto.decode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.chassis.ScorpChassisOtos;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannon;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import java.util.Arrays;
-import java.util.List;
+import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 
 @Autonomous(name = "Red01AT", group="Robot")
 public class Red01AT extends BaseAutoDecode {
     @Override
     protected void auto(){
-        chassis.strafeTo(0, -45, ScorpChassisOtos.DRIVE_SPEED_FAST);
-        chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 45);
-        getObeliskId();
+        // get cannons running
         devices.leftCannon.spinUp();
         devices.rightCannon.spinUp();
+
+        // drive forward to firing point
+        chassis.strafeTo(0, -45, ScorpChassisBase.DRIVE_SPEED_FAST);
+
+        // look at obelisk and try to get id
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 45);
         getObeliskId();
-        chassis.turnToHeading(0.5, 0);
+
+        // turn back to goal, fire
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, -45);
         fire();
-        chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 45);
-        chassis.strafeTo(11, -65, ScorpChassisOtos.DRIVE_SPEED_FAST);
-        chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, 145);
+
+        // turn back towards obelisk, drive backward close to base, turn toward human player
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 45);
+        chassis.strafeTo(0, -53, ScorpChassisBase.DRIVE_SPEED_FAST);
+        chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 100);
     }
-}// Pick the square of a number between 1 and 9
- // The Ghost of Ronald McDonald 1997 will haunt you in (root(choice)/2) days
+}
+

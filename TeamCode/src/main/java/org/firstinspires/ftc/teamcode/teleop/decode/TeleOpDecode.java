@@ -46,27 +46,34 @@ public class TeleOpDecode extends BaseTeleOpDecode {
 
         // compute speeds and directions and headings
         double direction = headingFromRelativePosition(x, y);
-        currentHeading = chassis.getHeading();
+        currentHeading = chassis.getIMUHeading();
         double turnInput = Math.abs(yaw);
-        double turnWhileStrafingSpeed = yaw*speedFactor*10;
+        double turnWhileStrafingSpeed = yaw*speedFactor;
         double turnSpeed = yaw*speedFactor;
         double driveInput = Math.sqrt(x*x + y*y);
         double driveSpeed = Math.min(driveInput, 1.0)*speedFactor;
+        boolean forward = Math.abs(direction) < 90;
 
         // and drive
         if (driveInput > 0.05) {
-            if (turnInput > 0.05) {
-                chassis.startStrafe(driveSpeed, direction, turnWhileStrafingSpeed, chassis.getHeading());
-                heading = chassis.getHeading();
+            if (turnInput > 0.05 && forward) {
+                // forward turn
+                chassis.startStrafe(driveSpeed, direction, turnWhileStrafingSpeed, chassis.getIMUHeading());
+                heading = chassis.getIMUHeading();
+            } else if (turnInput > 0.05) {
+                // backward turn
+                chassis.startStrafe(driveSpeed, direction, -turnWhileStrafingSpeed, chassis.getIMUHeading());
+                heading = chassis.getIMUHeading();
             } else {
+                // straight
                 chassis.startStrafe(driveSpeed, direction, 0, heading);
             }
         } else if (turnInput > 0.05) {
             chassis.startTurn(turnSpeed);
-            heading = chassis.getHeading();
+            heading = chassis.getIMUHeading();
         } else {
             chassis.stopDrive();
-            heading = chassis.getHeading();
+            heading = chassis.getIMUHeading();
         }
 
         // fire the cannons!

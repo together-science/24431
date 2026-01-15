@@ -26,7 +26,10 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
 
     @Override
     public Position getPosition() {
-        return new Position(0,0,getHeading());
+        return new Position(0,0, getIMUHeading());
+    }
+    public void resetPositionAndHeading() {
+        imu.resetYaw();
     }
 
     public ScorpChassisOdometry(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String imuName) {
@@ -89,12 +92,16 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     }
     //void moveTo(double x, double y, double driveSpeed);
     public void strafeTo(double x, double y, double driveSpeed){
-        strafeTo(x, y, driveSpeed, getHeading());
+        strafeTo(x, y, driveSpeed, 0);
     }
     public void strafeTo(double x, double y, double driveSpeed, double heading){
         if (lf == null || lb == null || rf == null || rb == null) {
             return;
         }
+        // new: This resets us before strafe.
+        // x, y are relative to current heading and position
+        this.resetPositionAndHeading();
+
         heading = normalizeAngle(heading);
         Position pos = getPosition();
         double dx = x - pos.x;
@@ -138,13 +145,16 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
+
+        // new: this makes heading relative to current heading
+        resetPositionAndHeading();
 //        this.op.telemetry.addLine("++++++++++++++++++++ start of: turnToHeading");
 //        this.op.telemetry.update();
 //        this.op.sleep(3000);
         heading = normalizeAngle(heading);
         double turnSpeed;
         //_getSteeringCorrection(heading, P_DRIVE_GAIN);
-        double current = getHeading();
+        double current = getIMUHeading();
         double headingError = normalizeAngle(heading - current);
         while (op.opModeIsActive() && (Math.abs(headingError) > HEADING_THRESHOLD)) {
             turnSpeed = _getSteeringCorrection(heading, P_TURN_GAIN);
@@ -155,8 +165,8 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
                 turnSpeed = Range.clip(turnSpeed, -0.3, 0.3);
             }
             _moveRobot(0, turnSpeed);
-            current = getHeading();
-            headingError = heading - current;
+            current = getIMUHeading();
+            headingError = normalizeAngle(heading - current);
 
 //            this.op.telemetry.addLine("++++++++++++++++++++ turnToHeading");
 //            this.op.telemetry.addData("turnSpeed:", "%.4f", turnSpeed);
@@ -195,7 +205,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     }
 
     // can be overriden by subclass
-    public double getHeading() {
+    public double getIMUHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
@@ -206,7 +216,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     }
 
     protected double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
-        double headingError = getHeading() - desiredHeading;
+        double headingError = getIMUHeading() - desiredHeading;
 
         headingError = normalizeAngle(headingError);
         op.telemetry.addData("he", "%.2f", headingError);
@@ -299,17 +309,17 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     }
 
     public void startStrafeAbsolute(double speed, double direction) {
-        this.startStrafeAbsolute(speed, direction, this.getHeading());
+        this.startStrafeAbsolute(speed, direction, this.getIMUHeading());
     }
 
     public void startStrafeAbsolute(double speed, double direction, double heading) {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
-        double axial   = Math.cos(Math.PI/180*(direction-getHeading()));
-        double lateral = Math.sin(Math.PI/180*(direction-getHeading()));
-        double turn = 0; //_getSteeringCorrection(heading, P_TURN_GAIN);
-        op.telemetry.addData("hd", "%.2f", getHeading());
+        double axial   = Math.cos(Math.PI/180*(direction- getIMUHeading()));
+        double lateral = Math.sin(Math.PI/180*(direction- getIMUHeading()));
+        double turn = _getSteeringCorrection(heading, P_TURN_GAIN);
+        op.telemetry.addData("hd", "%.2f", getIMUHeading());
         op.telemetry.addData("dh", "%.2f", heading);
         op.telemetry.addData("ax", "%.2f", axial);
         op.telemetry.addData("lt", "%.2f", lateral);
@@ -344,7 +354,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
 
     @Override
     public void startStrafe(double speed, double direction, double turn) {
-        startStrafe(speed, direction, turn, getHeading());
+        startStrafe(speed, direction, turn, getIMUHeading());
     }
 
     @Override

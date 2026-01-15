@@ -15,7 +15,7 @@ public abstract class ScorpChassisBase {
     public abstract void init();
     // nav
     public abstract Position getPosition();
-    public abstract double getHeading();
+    public abstract double getIMUHeading();
     public abstract String getPositionString();
 
     // basic movement
