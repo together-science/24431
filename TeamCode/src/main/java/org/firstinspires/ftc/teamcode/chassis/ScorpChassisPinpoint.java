@@ -33,8 +33,7 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
              *  The Y pod offset refers to how far forwards from the tracking point the Y (strafe) odometry pod is.
              *  Forward of center is a positive number, backwards is a negative number.
              */
-            pinpoint.setOffsets(-84.0, -168.0, DistanceUnit.MM); //these are tuned for 3110-0002-0001 Product Insight #1
-                                        //-84       -168
+            pinpoint.setOffsets(-50.0, 50.0, DistanceUnit.MM); //these are tuned for 3110-0002-0001 Product Insight #1
             /*
              * Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
              * the goBILDA_SWINGARM_POD, or the goBILDA_4_BAR_POD.
@@ -49,7 +48,7 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
              * increase when you move the robot forward. And the Y (strafe) pod should increase when
              * you move the robot to the left.
              */
-            pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
             /*
              * Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary

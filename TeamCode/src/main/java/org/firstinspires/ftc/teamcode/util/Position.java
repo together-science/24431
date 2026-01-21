@@ -13,7 +13,14 @@ public class Position {
     }
 
     static public double headingFromRelativePosition(double x, double y) {
-        double h = Math.atan2(y, x)*(180/Math.PI)-90;
+        // using the pinpoint coordinate system:
+        // x positive is forward
+        // y positive is left
+        // which is rotated from a normal cartesian system by 90 deg counter-clockwise
+        // use atan2 like with regular coordinates (x pos right, y pos forward)
+        // gives us angle relative to forward
+        //
+        double h = Math.atan2(y, x)*(180/Math.PI);
         return normalizeAngle(h);
     }
 

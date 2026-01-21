@@ -28,7 +28,7 @@ public abstract class BaseAutoDecode extends BaseAuto {
     protected void getObeliskId() {
         // only if we don't have one
         if (id == 0) {
-            sleep(500); // give the camera a chance to see stuff
+            //sleep(500); // give the camera a chance to see stuff
             // look (again)
             AprilTagDetection tag;
             tag = chassis.camera.getDetection(Arrays.asList(21,22,23));

@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.chassis;
 import org.firstinspires.ftc.teamcode.util.Position;
 
 public abstract class ScorpChassisBase {
-    public static final double DRIVE_SPEED_FAST = 0.4;
+    public static final double DRIVE_SPEED_FAST = 0.8;
     public static final double DRIVE_SPEED_NORMAL = 0.3;
     public static final double DRIVE_SPEED_SLOW = 0.2;
-    static final double HEADING_THRESHOLD = 2.0;
+    static final double HEADING_THRESHOLD = 3.0;
     static final double P_TURN_GAIN = 0.05;
     static final double P_DRIVE_GAIN = 0.03;
     static final double ACCURACY = 2.0;

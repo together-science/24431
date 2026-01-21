@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 
-@Autonomous(name = "Blue01AT", group="Robot")
+@Autonomous(name = "_Blue01", group="Robot")
 public class Blue01AT extends BaseAutoDecode {
     @Override
     protected void auto(){

@@ -100,7 +100,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         }
         // new: This resets us before strafe.
         // x, y are relative to current heading and position
-        this.resetPositionAndHeading();
+        // this.resetPositionAndHeading();
 
         heading = normalizeAngle(heading);
         Position pos = getPosition();
@@ -147,10 +147,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         }
 
         // new: this makes heading relative to current heading
-        resetPositionAndHeading();
-//        this.op.telemetry.addLine("++++++++++++++++++++ start of: turnToHeading");
-//        this.op.telemetry.update();
-//        this.op.sleep(3000);
+        // resetPositionAndHeading();
         heading = normalizeAngle(heading);
         double turnSpeed;
         //_getSteeringCorrection(heading, P_DRIVE_GAIN);
@@ -168,18 +165,13 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             current = getIMUHeading();
             headingError = normalizeAngle(heading - current);
 
-//            this.op.telemetry.addLine("++++++++++++++++++++ turnToHeading");
-//            this.op.telemetry.addData("turnSpeed:", "%.4f", turnSpeed);
-//            this.op.telemetry.addData("Current heading:", "%.4f", current);
-//            this.op.telemetry.addData("Heading error:", "%.4f", headingError);
-//            this.op.telemetry.update();
+            this.op.telemetry.addLine("++++++++++++++++++++ turnToHeading");
+            this.op.telemetry.addData("turnSpeed:", "%.4f", turnSpeed);
+            this.op.telemetry.addData("Current heading:", "%.4f", current);
+            this.op.telemetry.addData("Heading error:", "%.4f", headingError);
+            this.op.telemetry.update();
         }
-//        this.op.sleep(3000);
-//        this.op.telemetry.addLine("xxxxxxxxxxxxxxxxxxxxx done with turn code, before stop");
-//        this.op.telemetry.update();
         stopDrive();
-//        this.op.telemetry.addLine("yyyyyyyyyyyyyyyyyyyyy done with turn code, after stop");
-//        this.op.telemetry.update();
     }
     private void _startDriveStraight(double maxDriveSpeed, double h) {
         if (lf == null || lb == null || rf == null || rb == null ) {
@@ -317,8 +309,8 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             return;
         }
         double axial   = Math.cos(Math.PI/180*(direction- getIMUHeading()));
-        double lateral = Math.sin(Math.PI/180*(direction- getIMUHeading()));
-        double turn = _getSteeringCorrection(heading, P_TURN_GAIN);
+        double lateral = Math.sin(Math.PI/180*(direction- getIMUHeading()))*6;
+        double turn = _getSteeringCorrection(heading, P_TURN_GAIN)*2;
         op.telemetry.addData("hd", "%.2f", getIMUHeading());
         op.telemetry.addData("dh", "%.2f", heading);
         op.telemetry.addData("ax", "%.2f", axial);

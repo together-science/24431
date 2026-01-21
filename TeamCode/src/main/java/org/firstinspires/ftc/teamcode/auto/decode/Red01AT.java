@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 
-@Autonomous(name = "Red01AT", group="Robot")
+@Autonomous(name = "_Red01", group="Robot")
 public class Red01AT extends BaseAutoDecode {
     @Override
     protected void auto(){
@@ -24,7 +24,7 @@ public class Red01AT extends BaseAutoDecode {
 
         // turn back towards obelisk, drive backward close to base, turn toward human player
         chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 45);
-        chassis.strafeTo(0, -53, ScorpChassisBase.DRIVE_SPEED_FAST);
+        chassis.strafeTo(0, -30, ScorpChassisBase.DRIVE_SPEED_FAST);
         chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_NORMAL, 100);
     }
 }
