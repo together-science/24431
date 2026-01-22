@@ -33,8 +33,8 @@ public abstract class BaseTeleOp extends LinearOpMode {
     }
 
     protected void readGamepad() {
-        x = gamepad1.left_stick_x;
-        y = -gamepad1.left_stick_y;
+        x = -gamepad1.left_stick_y;
+        y = -gamepad1.left_stick_x;
         yaw = -gamepad1.right_stick_x;
         faster = fasterButton.getStatus();
         slower = slowerButton.getStatus();
