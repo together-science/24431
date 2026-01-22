@@ -45,7 +45,7 @@ public class TeleOpDecode extends BaseTeleOpDecode {
         }
 
         // compute speeds and directions and headings
-        double direction = headingFromRelativePosition(x, y);
+        double direction = headingFromRelativePosition(x,y);
         currentHeading = chassis.getIMUHeading();
         double turnInput = Math.abs(yaw);
         double turnWhileStrafingSpeed = yaw*speedFactor;
