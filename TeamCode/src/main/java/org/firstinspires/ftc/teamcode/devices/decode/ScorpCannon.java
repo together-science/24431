@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class ScorpCannon {
     private static final long SERVO_DELAY = 500;
-    private static final long SPINUP_DELAY = 4000;
-    private static final long SPINDOWN_AFTER_DELAY = 2000;
-    private static final long SPINUP_AFTER_INTAKE_DELAY = 6000;
+    private static final long SPINUP_DELAY = 5000;
+    private static final long SPINDOWN_AFTER_DELAY = 4000;
+    private static final long SPINUP_AFTER_INTAKE_DELAY = 3500;
     private Servo trigger = null;
     private final LinearOpMode op;
     private double power;
