@@ -207,6 +207,32 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         return "h: "+p.h+", x: "+p.x+", y:"+p.y;
     }
 
+    @Override
+    public void turnToTicks(int ticks) {
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lf.setTargetPosition(ticks);
+        rf.setTargetPosition(ticks);
+        lb.setTargetPosition(ticks);
+        rb.setTargetPosition(ticks);
+
+        lf.setPower(0.3);
+        rf.setPower(0.3);
+        lb.setPower(0.3);
+        rb.setPower(0.3);
+
+        while(lf.isBusy() || rf.isBusy() || lb.isBusy() || rb.isBusy()) {
+        }
+
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     protected double _getSteeringCorrection(double desiredHeading, double proportionalGain) {
         double headingError = getIMUHeading() - desiredHeading;
 

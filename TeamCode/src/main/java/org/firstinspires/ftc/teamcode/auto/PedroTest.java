@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode.auto;
-import com.pedropathing.follower.FollowerConstants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.decode.BaseAutoDecode;
-import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "pedro", group = "robot")
 public class PedroTest extends BaseAutoDecode {

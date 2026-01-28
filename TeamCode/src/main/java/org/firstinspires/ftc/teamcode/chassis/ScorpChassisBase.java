@@ -17,6 +17,7 @@ public abstract class ScorpChassisBase {
     public abstract Position getPosition();
     public abstract double getIMUHeading();
     public abstract String getPositionString();
+    public abstract void turnToTicks(int ticks);
 
     // basic movement
     public abstract void stopDrive();

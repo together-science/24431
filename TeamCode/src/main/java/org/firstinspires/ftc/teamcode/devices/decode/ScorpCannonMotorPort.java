@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.devices.decode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class ScorpCannonMotorPort extends ScorpCannon {
-    private DcMotor wheel = null;
+    private DcMotorEx wheel = null;
 
     ScorpCannonMotorPort(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
         super(op, triggerName, power, direction);
         try {
-            this.wheel = op.hardwareMap.get(DcMotor.class, wheelName);
+            this.wheel = op.hardwareMap.get(DcMotorEx.class, wheelName);
+            this.wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            this.wheel.setVelocity(0);
         } catch(Exception ignored) {
         }
 
@@ -19,7 +22,7 @@ public class ScorpCannonMotorPort extends ScorpCannon {
     }
 
     protected void setPower(double power) {
-        wheel.setPower(power);
+        wheel.setVelocity(power*2000);
     }
 
     protected boolean noWheel() {
@@ -29,9 +32,9 @@ public class ScorpCannonMotorPort extends ScorpCannon {
     public double getPower() {
         // check if we in fact have a cannon
         if (this.noWheel()) {
-            return 0.0;
+            return 0.0f;
         }
-        return wheel.getPower();
+        return wheel.getVelocity()/2000;
     }
 
 }
