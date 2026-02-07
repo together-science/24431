@@ -4,10 +4,14 @@ import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePo
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.devices.decode.DecodeDevices;
+import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannon;
+
 @TeleOp(name="TuneCannonPIDF", group="Linear Opmode")
 
 public class TuneCannonPIDF extends BaseTeleOpDecode {
-    String selectedCannonName = "left";
+    String selectedCannonName;
+    ScorpCannon sc = null;
 
     double kp = 0;
     double ki = 0;
@@ -15,13 +19,15 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
     double kf = 0;
 
     @Override
+    protected void teleInit() {
+        super.teleInit();
+        selectedCannonName = "left";
+        sc = devices.leftCannon;
+    }
+
+    @Override
     protected void teleIteration() {
-        PIDFCoefficients c;
-        if (selectedCannonName.equals("left")) {
-            c = devices.leftCannon.getPIDFCoeffs();
-        } else {
-            c = devices.rightCannon.getPIDFCoeffs();
-        }
+        PIDFCoefficients c = sc.getPIDFCoeffs();
 
         kp = c.p;
         ki = c.i;
@@ -54,25 +60,31 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
 
         // select
         if (fireLeft) {
-            selectedCannonName = "left";
+            sc = devices.leftCannon;
+            selectedCannonName = "Left";
             devices.leftCannon.spinUp();
             devices.rightCannon.spinDown();
         }
         if (fireRight) {
-            selectedCannonName = "right";
+            sc = devices.rightCannon;
+            selectedCannonName = "Right";
             devices.rightCannon.spinUp();
             devices.leftCannon.spinDown();
         }
 
-        telemetry.clearAll();
-        telemetry.addLine("Cannon "+selectedCannonName);
-        telemetry.addData("PIDF current", "%.2f %.2f %.2f %.2f");
-        if (selectedCannonName.equals("left")) {
-            telemetry.addData("Left cannon", "%.2f of %.2f",
-                    devices.leftCannon.getPower(), devices.leftCannon.getPowerLevel());
-        } else if (selectedCannonName.equals("right")) {
-            telemetry.addData("Right cannon", "%.2f of %.2f", devices.rightCannon.getPower(),
-                    devices.rightCannon.getPowerLevel());
+        if (slower) {
+            sc.spinDown();
+        } else if (faster) {
+            sc.spinUp();
         }
+
+        c = new PIDFCoefficients(kp, ki, kd, kf);
+        sc.setPIDFCoeffs(c);
+
+        telemetry.clearAll();
+        telemetry.addLine("Cannon: "+selectedCannonName);
+        telemetry.addData("PIDF current", "%.2f %.2f %.2f %.2f", kp, ki, kd, kf);
+        telemetry.addData("Speed", "%.2f of %.2f",
+                sc.getPower(), sc.getPowerLevel());
     }
 }
