@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.devices.decode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class ScorpCannon {
@@ -39,6 +41,14 @@ public abstract class ScorpCannon {
         this.power = power;
     }
     abstract protected boolean noWheel();
+
+    public void setPIDFCoeffs(PIDFCoefficients c) {
+    }
+
+    public PIDFCoefficients getPIDFCoeffs() {
+        return null;
+    }
+
     public void reset() {
         if(trigger != null) {
             this.trigger.setPosition(0.0);

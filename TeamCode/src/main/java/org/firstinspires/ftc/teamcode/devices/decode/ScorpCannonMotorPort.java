@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 public class ScorpCannonMotorPort extends ScorpCannon {
     private DcMotorEx wheel = null;
@@ -19,6 +20,16 @@ public class ScorpCannonMotorPort extends ScorpCannon {
         if (wheel != null) {
             wheel.setDirection(direction);
         }
+    }
+
+    @Override
+    public void setPIDFCoeffs(PIDFCoefficients c) {
+        wheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
+    }
+
+    @Override
+    public PIDFCoefficients getPIDFCoeffs() {
+        return this.wheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     protected void setPower(double power) {
