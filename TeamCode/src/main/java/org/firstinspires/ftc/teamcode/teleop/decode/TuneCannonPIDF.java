@@ -28,6 +28,7 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
     @Override
     protected void teleIteration() {
         PIDFCoefficients c = sc.getPIDFCoeffs();
+        double increment = 0.5;
 
         kp = c.p;
         ki = c.i;
@@ -39,28 +40,33 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
         // kd: y+/x-
         // ki: b+/a-
 
+        // left 50 0 15 15
+        // right 100 0 25 18
+
+
+
         if (intakeReverse) {
-            kp += 0.05;
+            kp += increment;
         } else if (intakeOn) {
-            kp -= 0.05;
+            kp -= increment;
         }
 
         if (intakeEmergency) {
-            kf += 0.05;
+            kf += increment;
         } else if (intakeOff) {
-            kf -= 0.05;
+            kf -= increment;
         }
 
         if (leftCannonMorePower) {
-            kd += 0.05;
+            kd += increment;
         } else if (leftCannonLessPower) {
-            kd -= 0.05;
+            kd -= increment;
         }
 
         if (rightCannonMorePower) {
-            ki += 0.05;
+            ki += increment;
         } else if (rightCannonLessPower) {
-            ki -= 0.05;
+            ki -= increment;
         }
 
         // select

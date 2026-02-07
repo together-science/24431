@@ -69,7 +69,7 @@ public abstract class ScorpCannon {
             return;
         }
 
-        setPowerRaw(-0.70);
+        setPower(-0.70);
 //        if (!stayOn) {
 //            spinUpAfterDelay();
 //        }
