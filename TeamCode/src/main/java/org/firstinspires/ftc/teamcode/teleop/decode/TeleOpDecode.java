@@ -3,6 +3,8 @@ import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePo
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import java.util.Arrays;
+
 @TeleOp(name="TeleOpDecode", group="Linear Opmode")
 
 public class TeleOpDecode extends BaseTeleOpDecode {
@@ -18,7 +20,9 @@ public class TeleOpDecode extends BaseTeleOpDecode {
             devices.leftCannon.cannonIntake();
             devices.rightCannon.cannonIntake();
         } else if (intakeReverse) {
-            devices.intake.reverse();
+            devices.intake.off();
+            devices.leftCannon.spinUp();
+            devices.rightCannon.spinUp();
         } else if (intakeEmergency) {
             devices.leftCannon.cannonIntakeEmergencyPower();
             devices.rightCannon.cannonIntakeEmergencyPower();
@@ -78,13 +82,11 @@ public class TeleOpDecode extends BaseTeleOpDecode {
 
         // fire the cannons!
         if (fireLeft) {
-            telemetry.addLine("Before calling fire");
-            telemetry.update();
+            //chassis.autoAim(Arrays.asList(20, 24));
             devices.leftCannon.fire();
-            telemetry.addLine("After calling fire");
-            telemetry.update();
         }
         if (fireRight) {
+            //chassis.autoAim(Arrays.asList(20, 24));
             devices.rightCannon.fire();
         }
 
@@ -98,5 +100,7 @@ public class TeleOpDecode extends BaseTeleOpDecode {
                 devices.leftCannon.getPower(), devices.leftCannon.getPowerLevel());
         telemetry.addData("Right cannon", "%.2f of %.2f", devices.rightCannon.getPower(),
                 devices.rightCannon.getPowerLevel());
+        telemetry.addData("fireRight", fireRight);
+        telemetry.addData("fireLeft", fireLeft);
     }
 }

@@ -34,6 +34,7 @@ public abstract class ScorpCannon {
         }
     }
     abstract protected void setPower(double power);
+    abstract protected void setPowerRaw(double power);
     void setPowerLevel(double power){
         this.power = power;
     }
@@ -57,10 +58,11 @@ public abstract class ScorpCannon {
         if(noWheel()){
             return;
         }
-        setPower(-0.70);
-        if (!stayOn) {
-            spinUpAfterDelay();
-        }
+
+        setPowerRaw(-0.70);
+//        if (!stayOn) {
+//            spinUpAfterDelay();
+//        }
     }
     public void cannonIntakeEmergencyPower() {
         if(noWheel()){

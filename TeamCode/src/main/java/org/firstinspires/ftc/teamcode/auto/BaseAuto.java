@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisPinpoint;
 
 public abstract class BaseAuto extends LinearOpMode {

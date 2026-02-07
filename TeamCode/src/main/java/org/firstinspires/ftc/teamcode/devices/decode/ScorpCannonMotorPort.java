@@ -22,7 +22,12 @@ public class ScorpCannonMotorPort extends ScorpCannon {
     }
 
     protected void setPower(double power) {
+        wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wheel.setVelocity(power*2000);
+    }
+    protected void setPowerRaw(double power){
+        wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheel.setPower(power);
     }
 
     protected boolean noWheel() {

@@ -22,6 +22,9 @@ public class ScorpCannonServoPort extends ScorpCannon {
     protected void setPower(double power) {
         wheel.setPower(power);
     }
+    protected void setPowerRaw(double power) {
+        wheel.setPower(power);
+    }
 
     protected boolean noWheel() {
         return wheel == null;

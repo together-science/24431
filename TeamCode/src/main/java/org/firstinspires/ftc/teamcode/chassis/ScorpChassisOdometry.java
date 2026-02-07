@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.chassis;
 import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePosition;
 import static org.firstinspires.ftc.teamcode.util.Position.normalizeAngle;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.Position;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,20 +73,28 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             imu.resetYaw();
         }
     }
-    public void autoAim(){
-//        List<Integer> tags = Arrays.asList(24, 25);
-//        AprilTagDetection tag;
-//        int id = 0;
-//        tag = camera.getDetection(tags);
-//        if (tag != null) {
-//            id = tag.id;
-//        }
+    public void autoAim(List<Integer> desiredTags){
+        int id = 0;
+        double bearing = 1000;
 
-        List<Integer> tags = Arrays.asList(24, 20); // red - 24, blue - 20
+        Position p = getPosition();
+        op.telemetry.addData("hd(imu) ", "%.2f", getIMUHeading());
+        op.telemetry.addData("hd(ppt) ", "%.2f", p.h);
+        op.telemetry.addData("x ", "%.2f", p.x);
+        op.telemetry.addData("y ", "%.2f", p.y);
+
         AprilTagDetection tag;
-        tag = camera.getDetection(tags);
-        if(tag != null){
+        tag = camera.getDetection(desiredTags);
+        if (tag != null) {
+            id = tag.id;
+            if (id != 0) {
+                AprilTagPoseFtc ftc = tag.ftcPose;
+                bearing = ftc.bearing;
+            }
+        }
 
+        if (bearing != 0) {
+            turnToDegrees(-bearing, 0.3);
         }
     }
     //void moveTo(double x, double y, double driveSpeed);
@@ -141,6 +148,8 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             this.op.telemetry.update();
         }
     }
+
+
     public void turnToHeading(double maxTurnSpeed, double heading) {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
@@ -207,24 +216,39 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         return "h: "+p.h+", x: "+p.x+", y:"+p.y;
     }
 
+    public void turnToDegrees(double angle, double power){
+        turnToTicks((int)(angle/101.7*1000), power);
+        // It says angle pekaus mr mein broke my DREAMS! AND MY HOPES!
+    }
+
     @Override
-    public void turnToTicks(int ticks) {
+    public void turnToTicks(int ticks, double power) {
+//        if (Math.abs(ticks) < 50) {
+//            ticks += 30*(int)Math.signum(ticks);
+//        }
+
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        lf.setTargetPosition(ticks);
-        rf.setTargetPosition(ticks);
-        lb.setTargetPosition(ticks);
-        rb.setTargetPosition(ticks);
+        lf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        lf.setPower(0.3);
-        rf.setPower(0.3);
-        lb.setPower(0.3);
-        rb.setPower(0.3);
+        lf.setTargetPosition(ticks);
+        rf.setTargetPosition(-ticks);
+        lb.setTargetPosition(ticks);
+        rb.setTargetPosition(-ticks);
+
+        lf.setPower(power);
+        rf.setPower(power);
+        lb.setPower(power);
+        rb.setPower(power);
 
         while(lf.isBusy() || rf.isBusy() || lb.isBusy() || rb.isBusy()) {
+            op.sleep(5);
         }
 
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
