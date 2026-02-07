@@ -34,6 +34,11 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
         kd = c.d;
         kf = c.f;
 
+        // kp: DPAD right+/left-
+        // kf: DPAD up+/down-
+        // kd: y+/x-
+        // ki: b+/a-
+
         if (intakeReverse) {
             kp += 0.05;
         } else if (intakeOn) {
