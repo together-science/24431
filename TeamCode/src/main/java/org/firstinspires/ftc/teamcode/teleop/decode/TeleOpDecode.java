@@ -81,12 +81,13 @@ public class TeleOpDecode extends BaseTeleOpDecode {
         }
 
         // fire the cannons!
+//        if (fireLeft || fireRight) {
+//            chassis.autoAim(Arrays.asList(20, 24));
+//        }
         if (fireLeft) {
-            //chassis.autoAim(Arrays.asList(20, 24));
             devices.leftCannon.fire();
         }
         if (fireRight) {
-            //chassis.autoAim(Arrays.asList(20, 24));
             devices.rightCannon.fire();
         }
 

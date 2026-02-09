@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.chassis;
 
 import org.firstinspires.ftc.teamcode.util.Position;
 
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class ScorpChassisBase {
@@ -31,6 +32,7 @@ public abstract class ScorpChassisBase {
     public abstract void turnToHeading(double maxTurnSpeed, double heading);
     public abstract void autoAim(List<Integer> desiredTags);
 
+    public abstract void cameraInit();
     // differential movement
     public abstract void startDrive(double speed, double direction, double turnSpeed);
     public abstract void startStrafeAbsolute(double speed, double direction);
@@ -40,4 +42,3 @@ public abstract class ScorpChassisBase {
     public abstract void startStrafe(double speed, double direction);
     public abstract void startTurn(double turnSpeed);
 }
-

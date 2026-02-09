@@ -55,6 +55,7 @@ public abstract class BaseTeleOpDecode extends BaseTeleOp {
     protected void tele() {
         devices.leftCannon.reset();
         devices.rightCannon.reset();
+        chassis.cameraInit();
         super.tele();
     }
 }

@@ -31,6 +31,12 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         imu.resetYaw();
     }
 
+    @Override
+    public void cameraInit() {
+        // gratuitous camera search to maybe kick it off
+        camera.getDetection(Arrays.asList(20, 24));
+    }
+
     public ScorpChassisOdometry(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String imuName) {
         try {
             this.lf = op.hardwareMap.get(DcMotor.class, lfName);
@@ -91,9 +97,15 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
                 AprilTagPoseFtc ftc = tag.ftcPose;
                 bearing = ftc.bearing;
             }
+        } else {
+            return;
         }
 
-        if (bearing != 0) {
+        if (bearing >= 1.0) {
+            op.telemetry.addData("bearing ", "%.2f", bearing);
+            op.telemetry.update();
+            op.sleep(3000);
+
             turnToDegrees(-bearing, 0.3);
         }
     }
@@ -232,15 +244,15 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        lf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         lf.setTargetPosition(ticks);
         rf.setTargetPosition(-ticks);
         lb.setTargetPosition(ticks);
         rb.setTargetPosition(-ticks);
+
+        lf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         lf.setPower(power);
         rf.setPower(power);
@@ -248,6 +260,12 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         rb.setPower(power);
 
         while(lf.isBusy() || rf.isBusy() || lb.isBusy() || rb.isBusy()) {
+//            op.telemetry.addData("tg ", "%d", ticks);
+//            op.telemetry.addData("lf ", "%d", lf.getCurrentPosition());
+//            op.telemetry.addData("rf ", "%d", rf.getCurrentPosition());
+//            op.telemetry.addData("lb ", "%d", lb.getCurrentPosition());
+//            op.telemetry.addData("rb ", "%d", rb.getCurrentPosition());
+//            op.telemetry.update();
             op.sleep(5);
         }
 
@@ -261,7 +279,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         double headingError = getIMUHeading() - desiredHeading;
 
         headingError = normalizeAngle(headingError);
-        op.telemetry.addData("he", "%.2f", headingError);
+//        op.telemetry.addData("he", "%.2f", headingError);
 
          return Range.clip(-headingError * proportionalGain, -0.3, 0.3);
     }
@@ -361,11 +379,11 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         double axial   = Math.cos(Math.PI/180*(direction- getIMUHeading()));
         double lateral = Math.sin(Math.PI/180*(direction- getIMUHeading()))*6;
         double turn = _getSteeringCorrection(heading, P_TURN_GAIN)*2;
-        op.telemetry.addData("hd", "%.2f", getIMUHeading());
-        op.telemetry.addData("dh", "%.2f", heading);
-        op.telemetry.addData("ax", "%.2f", axial);
-        op.telemetry.addData("lt", "%.2f", lateral);
-        op.telemetry.addData("tn", "%.2f", turn);
+//        op.telemetry.addData("hd", "%.2f", getIMUHeading());
+//        op.telemetry.addData("dh", "%.2f", heading);
+//        op.telemetry.addData("ax", "%.2f", axial);
+//        op.telemetry.addData("lt", "%.2f", lateral);
+//        op.telemetry.addData("tn", "%.2f", turn);
 
         double leftFrontPower  = (axial - lateral - turn);
         double rightFrontPower = (axial + lateral + turn);
@@ -386,10 +404,10 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         leftBackPower *= speed;
         rightBackPower *= speed;
 
-        op.telemetry.addData("LF", "%.2f", leftFrontPower);
-        op.telemetry.addData("RF", "%.2f", rightFrontPower);
-        op.telemetry.addData("LB", "%.2f", leftBackPower);
-        op.telemetry.addData("RB", "%.2f", rightBackPower);
+//        op.telemetry.addData("LF", "%.2f", leftFrontPower);
+//        op.telemetry.addData("RF", "%.2f", rightFrontPower);
+//        op.telemetry.addData("LB", "%.2f", leftBackPower);
+//        op.telemetry.addData("RB", "%.2f", rightBackPower);
 
         _strafeRobot(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower, 0);
     }
@@ -409,15 +427,15 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         if (lf == null || lb == null || rf == null || rb == null ) {
             return;
         }
-        op.telemetry.addData("sp", "%.2f", speed);
-        op.telemetry.addData("dr", "%.2f", direction);
-        op.telemetry.addData("ts", "%.2f", turn);
+//        op.telemetry.addData("sp", "%.2f", speed);
+//        op.telemetry.addData("dr", "%.2f", direction);
+//        op.telemetry.addData("ts", "%.2f", turn);
         double axial   = Math.cos(Math.PI/180*(direction));
         double lateral = Math.sin(Math.PI/180*(direction));
         if (turn == 0) {
             turn = _getSteeringCorrection(heading, P_TURN_GAIN)*Math.abs(lateral);
         }
-        op.telemetry.addData("tn", "%.2f", turn);
+//        op.telemetry.addData("tn", "%.2f", turn);
 
         double leftFrontPower  = (axial - lateral - turn);
         double rightFrontPower = (axial + lateral + turn);
@@ -438,10 +456,10 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         leftBackPower *= speed;
         rightBackPower *= speed;
 
-        op.telemetry.addData("LF", "%.2f", leftFrontPower);
-        op.telemetry.addData("RF", "%.2f", rightFrontPower);
-        op.telemetry.addData("LB", "%.2f", leftBackPower);
-        op.telemetry.addData("RB", "%.2f", rightBackPower);
+//        op.telemetry.addData("LF", "%.2f", leftFrontPower);
+//        op.telemetry.addData("RF", "%.2f", rightFrontPower);
+//        op.telemetry.addData("LB", "%.2f", leftBackPower);
+//        op.telemetry.addData("RB", "%.2f", rightBackPower);
 
         // double turn = _getSteeringCorrection(getHeading()+deltaHeading, turnSpeed/10);
 
