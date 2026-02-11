@@ -98,13 +98,18 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
                 bearing = ftc.bearing;
             }
         } else {
+            op.telemetry.clearAll();
+            op.telemetry.addLine("not found ");
+            op.telemetry.update();
+            op.sleep(1000);
             return;
         }
 
         if (bearing >= 1.0) {
+            op.telemetry.clearAll();
             op.telemetry.addData("bearing ", "%.2f", bearing);
             op.telemetry.update();
-            op.sleep(3000);
+            op.sleep(1000);
 
             turnToDegrees(-bearing, 0.3);
         }
@@ -239,6 +244,8 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
 //            ticks += 30*(int)Math.signum(ticks);
 //        }
 
+        DcMotor.RunMode mode = lf.getMode();
+
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -273,6 +280,11 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lf.setMode(mode);
+        rf.setMode(mode);
+        lb.setMode(mode);
+        rb.setMode(mode);
     }
 
     protected double _getSteeringCorrection(double desiredHeading, double proportionalGain) {

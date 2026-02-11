@@ -81,14 +81,28 @@ public class TeleOpDecode extends BaseTeleOpDecode {
         }
 
         // fire the cannons!
+        boolean autoAim = false;
         if (fireLeft || fireRight) {
             chassis.autoAim(Arrays.asList(20, 24));
+            autoAim = true;
         }
+
+        double lc = devices.leftCannon.getPower();
+        double lcl = devices.leftCannon.getPowerLevel();
+        double rc = devices.rightCannon.getPower();
+        double rcl = devices.rightCannon.getPowerLevel();
+        if (lc >= lcl-0.01 && rc >= rcl-0.01) {
+            gamepad1.rumble(100);
+        }
+
+
         if (fireLeft) {
             devices.leftCannon.fire();
+            devices.rightCannon.fire();
         }
         if (fireRight) {
             devices.rightCannon.fire();
+            devices.leftCannon.fire();
         }
 
         // add the elapsed game time
