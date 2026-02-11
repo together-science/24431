@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class TeleOpDecode extends BaseTeleOpDecode {
     double heading = 0;
+    boolean rumble = false;
     @Override
     protected void teleIteration() {
         // compute what the intakeState should be
@@ -23,6 +24,7 @@ public class TeleOpDecode extends BaseTeleOpDecode {
             devices.intake.off();
             devices.leftCannon.spinUp();
             devices.rightCannon.spinUp();
+            rumble = true;
         } else if (intakeEmergency) {
             devices.leftCannon.cannonIntakeEmergencyPower();
             devices.rightCannon.cannonIntakeEmergencyPower();
@@ -91,18 +93,21 @@ public class TeleOpDecode extends BaseTeleOpDecode {
         double lcl = devices.leftCannon.getPowerLevel();
         double rc = devices.rightCannon.getPower();
         double rcl = devices.rightCannon.getPowerLevel();
-        if (lc >= lcl-0.01 && rc >= rcl-0.01) {
+        if (rumble && lc >= lcl-0.01 && rc >= rcl-0.01) {
             gamepad1.rumble(100);
+            rumble = false;
         }
 
 
         if (fireLeft) {
             devices.leftCannon.fire();
             devices.rightCannon.fire();
+            rumble = false;
         }
         if (fireRight) {
             devices.rightCannon.fire();
             devices.leftCannon.fire();
+            rumble = false;
         }
 
         // add the elapsed game time
