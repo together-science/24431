@@ -287,7 +287,6 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     public void turnTo(double turnSpeed, double heading) {
         throw new UnsupportedOperationException();
     }
-
     protected void _moveRobot(double drive, double turn) {
         double leftSpeed  = drive - turn;
         double rightSpeed = drive + turn;
