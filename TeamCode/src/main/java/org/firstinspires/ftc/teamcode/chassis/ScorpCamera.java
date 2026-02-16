@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.chassis;
 
+import android.util.Size;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -39,6 +41,7 @@ public class ScorpCamera {
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
                 .setCamera(cam)
+                .setCameraResolution(new Size(640, 480))
                 .addProcessor(aprilTag)
                 .build();
     }
