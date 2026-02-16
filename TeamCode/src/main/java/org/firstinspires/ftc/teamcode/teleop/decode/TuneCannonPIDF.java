@@ -73,20 +73,18 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
         if (fireLeft) {
             sc = devices.leftCannon;
             selectedCannonName = "Left";
-            devices.leftCannon.spinUp();
-            devices.rightCannon.spinDown();
         }
         if (fireRight) {
             sc = devices.rightCannon;
             selectedCannonName = "Right";
-            devices.rightCannon.spinUp();
-            devices.leftCannon.spinDown();
         }
 
         if (slower) {
-            sc.spinDown();
+            devices.rightCannon.spinDown();
+            devices.leftCannon.spinDown();
         } else if (faster) {
-            sc.spinUp();
+            devices.leftCannon.spinUp();
+            devices.rightCannon.spinUp();
         }
 
         c = new PIDFCoefficients(kp, ki, kd, kf);
