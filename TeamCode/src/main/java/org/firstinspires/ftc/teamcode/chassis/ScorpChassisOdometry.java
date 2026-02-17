@@ -79,15 +79,34 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             imu.resetYaw();
         }
     }
+
+    public double getGoalDetection() {
+        AprilTagDetection tag;
+        tag = camera.getDetection(Arrays.asList(20, 24));
+        if (tag != null) {
+            int id = tag.id;
+            if (id != 0) {
+                AprilTagPoseFtc ftc = tag.ftcPose;
+                return ftc.bearing;
+            }
+        }
+
+        return 1000; // invalid angle
+    }
     public void autoAim(List<Integer> desiredTags){
         int id = 0;
         double bearing = 1000;
 
         Position p = getPosition();
-        op.telemetry.addData("hd(imu) ", "%.2f", getIMUHeading());
-        op.telemetry.addData("hd(ppt) ", "%.2f", p.h);
-        op.telemetry.addData("x ", "%.2f", p.x);
-        op.telemetry.addData("y ", "%.2f", p.y);
+//        op.telemetry.addData("hd(imu) ", "%.2f", getIMUHeading());
+//        op.telemetry.addData("hd(ppt) ", "%.2f", p.h);
+//        op.telemetry.addData("x ", "%.2f", p.x);
+//        op.telemetry.addData("y ", "%.2f", p.y);
+
+//        op.telemetry.clearAll();
+//        op.telemetry.addLine("auto aim");
+//        op.telemetry.update();
+//        op.sleep(3000);
 
         AprilTagDetection tag;
         tag = camera.getDetection(desiredTags);
@@ -98,18 +117,18 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
                 bearing = ftc.bearing;
             }
         } else {
-            op.telemetry.clearAll();
-            op.telemetry.addLine("not found ");
-            op.telemetry.update();
-            op.sleep(1000);
+//            op.telemetry.clearAll();
+//            op.telemetry.addLine("not found ");
+//            op.telemetry.update();
+//            op.sleep(3000);
             return;
         }
 
-        if (bearing >= 1.0) {
-            op.telemetry.clearAll();
-            op.telemetry.addData("bearing ", "%.2f", bearing);
-            op.telemetry.update();
-            op.sleep(1000);
+        if (Math.abs(bearing) >= 1.0) {
+//            op.telemetry.clearAll();
+//            op.telemetry.addData("bearing ", "%.2f", bearing);
+//            op.telemetry.update();
+//            op.sleep(3000);
 
             turnToDegrees(-bearing, 0.3);
         }

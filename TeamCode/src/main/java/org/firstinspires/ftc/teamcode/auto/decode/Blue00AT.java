@@ -3,6 +3,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 
+import java.util.Arrays;
+
 @Autonomous(name = "_Blue00", group="Robot")
 public class Blue00AT extends BaseAutoDecode {
     @Override
@@ -18,6 +20,7 @@ public class Blue00AT extends BaseAutoDecode {
 
         // turn toward goal, fire
         chassis.turnToHeading(ScorpChassisBase.DRIVE_SPEED_FAST, 30);
+        chassis.autoAim(Arrays.asList(20, 24));
         fire();
 
         // turn back towards obelisk, drive backward close to base, turn toward human player

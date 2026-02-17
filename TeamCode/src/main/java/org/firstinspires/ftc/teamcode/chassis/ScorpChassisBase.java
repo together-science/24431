@@ -31,6 +31,8 @@ public abstract class ScorpChassisBase {
     public abstract void strafeTo(double x, double y, double driveSpeed, double heading);
     public abstract void turnToHeading(double maxTurnSpeed, double heading);
     public abstract void autoAim(List<Integer> desiredTags);
+    public abstract double getGoalDetection();
+
 
     public abstract void cameraInit();
     // differential movement

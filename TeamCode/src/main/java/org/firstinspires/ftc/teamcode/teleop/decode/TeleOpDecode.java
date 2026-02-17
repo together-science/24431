@@ -122,5 +122,7 @@ public class TeleOpDecode extends BaseTeleOpDecode {
                 devices.rightCannon.getPowerLevel());
         telemetry.addData("fireRight", fireRight);
         telemetry.addData("fireLeft", fireLeft);
+        double angle = chassis.getGoalDetection();
+        telemetry.addLine("Detections: "+(angle < 1000?Double.toString(angle):"--------"));
     }
 }
