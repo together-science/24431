@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Arrays;
 
-@TeleOp(name="TeleOpDecode", group="Linear Opmode")
+@TeleOp(name="Amarra", group="Linear Opmode")
 
-public class TeleOpDecode extends BaseTeleOpDecode {
+public class Amarra extends BaseTeleOpDecode {
     double heading = 0;
     boolean rumble = false;
     @Override
