@@ -460,6 +460,46 @@ h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); color: var(--text); margin-bottom:
 .sponsor-card .name { font-weight: 800; font-size: 1.02rem; color: var(--text); }
 .sponsor-card .desc { font-size: 0.85rem; color: var(--text-faint); }
 
+.give-block { margin-top: 44px; }
+
+.give-intro { color: var(--text-dim); font-size: 0.95rem; margin: 0 0 18px; max-width: 520px; }
+
+.give-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.give-card {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 22px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.give-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+.give-preferred { border-color: var(--gold); background: linear-gradient(135deg, rgba(242,182,50,0.1), var(--panel) 60%); }
+
+.give-badge {
+  position: absolute;
+  top: -11px;
+  right: 18px;
+  background: var(--gold);
+  color: #14110a;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.give-method { font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 6px; }
+.give-value { font-size: 0.92rem; color: var(--gold-bright); font-weight: 700; word-break: break-word; }
+
 .sponsor-cta {
   margin-top: 44px;
   display: flex;
