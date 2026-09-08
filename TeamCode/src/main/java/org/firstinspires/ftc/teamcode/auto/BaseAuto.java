@@ -39,3 +39,5 @@ public abstract class BaseAuto extends LinearOpMode {
         }
     }
 }
+
+// New device git agreeable test
