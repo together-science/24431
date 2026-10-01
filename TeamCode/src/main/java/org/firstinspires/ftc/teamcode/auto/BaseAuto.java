@@ -14,7 +14,6 @@ public abstract class BaseAuto extends LinearOpMode {
                 "imu");
         chassis.init();
     }
-
     protected void autoStart() {
     }
     protected abstract void auto();
