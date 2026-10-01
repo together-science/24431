@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 
 import java.util.Arrays;
 
-@Autonomous(name = "_Blue00", group="Robot")
+@Autonomous(name = "_BluOgga Boogae00", group="Robot")
 public class Blue00AT extends BaseAutoDecode {
     @Override
     protected void auto() {
