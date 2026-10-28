@@ -14,7 +14,7 @@ public class temp01 extends BaseAutoDecode {
     protected void auto(){
         chassis.strafeTo(xStart, yStart, ScorpChassisOtos.DRIVE_SPEED_NORMAL);
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, turn);
-        devices.leftCannon.fire();
+        devices.launcher.fire();
         sleep(delay);
         devices.rightCannon.fire();
         chassis.strafeTo(xEnd, yEnd, ScorpChassisOtos.DRIVE_SPEED_NORMAL);

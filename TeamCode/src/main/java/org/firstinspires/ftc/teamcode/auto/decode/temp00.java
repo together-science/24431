@@ -8,11 +8,11 @@ public class temp00 extends BaseAutoDecode {
 
     @Override
     protected void auto(){
-        devices.leftCannon.spinUp();
+        devices.launcher.spinUp();
         devices.rightCannon.spinUp();
         chassis.strafeTo(xStart, yStart, ScorpChassisOtos.DRIVE_SPEED_FAST);
         chassis.turnToHeading(ScorpChassisOtos.DRIVE_SPEED_NORMAL, turn);
-        devices.leftCannon.fire();
+        devices.launcher.fire();
         sleep(sleep);
         devices.rightCannon.fire();
         sleep(sleep);

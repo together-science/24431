@@ -10,7 +10,7 @@ public class Blue00AT extends BaseAutoDecode {
     @Override
     protected void auto() {
         // spin up cannon, see if we can get obelisk id
-        devices.leftCannon.spinUp();
+        devices.launcher.spinUp();
         devices.rightCannon.spinUp();
         getObeliskId();
 

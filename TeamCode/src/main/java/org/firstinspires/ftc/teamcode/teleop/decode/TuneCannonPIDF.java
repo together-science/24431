@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleop.decode;
-import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.teamcode.devices.decode.DecodeDevices;
 import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannon;
 
 @TeleOp(name="TuneCannonPIDF", group="Linear Opmode")
@@ -22,7 +20,7 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
     protected void teleInit() {
         super.teleInit();
         selectedCannonName = "left";
-        sc = devices.leftCannon;
+        sc = devices.launcher;
     }
 
     @Override
@@ -57,9 +55,9 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
             kf -= increment;
         }
 
-        if (leftCannonMorePower) {
+        if (launcherMorePower) {
             kd += increment;
-        } else if (leftCannonLessPower) {
+        } else if (launcherLessPower) {
             kd -= increment;
         }
 
@@ -70,8 +68,8 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
         }
 
         // select
-        if (fireLeft) {
-            sc = devices.leftCannon;
+        if (fire) {
+            sc = devices.launcher;
             selectedCannonName = "Left";
         }
         if (fireRight) {
@@ -81,9 +79,9 @@ public class TuneCannonPIDF extends BaseTeleOpDecode {
 
         if (slower) {
             devices.rightCannon.spinDown();
-            devices.leftCannon.spinDown();
+            devices.launcher.spinDown();
         } else if (faster) {
-            devices.leftCannon.spinUp();
+            devices.launcher.spinUp();
             devices.rightCannon.spinUp();
         }
 

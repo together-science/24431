@@ -8,7 +8,7 @@ public class Red01AT extends BaseAutoDecode {
     @Override
     protected void auto(){
         // get cannons running
-        devices.leftCannon.spinUp();
+        devices.launcher.spinUp();
         devices.rightCannon.spinUp();
 
         // drive forward to firing point

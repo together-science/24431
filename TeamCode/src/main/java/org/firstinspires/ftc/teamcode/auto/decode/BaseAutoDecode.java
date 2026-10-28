@@ -21,7 +21,7 @@ public abstract class BaseAutoDecode extends BaseAuto {
     @Override
     protected void autoStart() {
         super.autoStart();
-        devices.leftCannon.reset();
+        devices.launcher.reset();
         devices.rightCannon.reset();
     }
 
@@ -49,7 +49,7 @@ public abstract class BaseAutoDecode extends BaseAuto {
          */
         // assumption: left cannon = preloaded purple, right cannon = preloaded green
 
-        ScorpCannon purple = devices.leftCannon;
+        ScorpCannon purple = devices.launcher;
         ScorpCannon green = devices.rightCannon;
 
         switch (this.id) {

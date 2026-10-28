@@ -6,14 +6,14 @@ import org.firstinspires.ftc.teamcode.teleop.BaseTeleOp;
 public abstract class BaseTeleOpDecode extends BaseTeleOp {
     protected DecodeDevices devices = null;
 
-    protected boolean fireLeft = false;
+    protected boolean fire = false;
     protected boolean fireRight = false;
     protected boolean intakeOn = false;
     protected boolean intakeReverse = false;
     protected boolean intakeOff = false;
     protected boolean intakeEmergency = false;
-    protected boolean leftCannonMorePower = false;
-    protected boolean leftCannonLessPower = false;
+    protected boolean launcherMorePower = false;
+    protected boolean launcherLessPower = false;
     protected boolean rightCannonMorePower = false;
     protected boolean rightCannonLessPower = false;
 
@@ -40,20 +40,20 @@ public abstract class BaseTeleOpDecode extends BaseTeleOp {
 
     protected void readGamepad() {
         super.readGamepad();
-        fireLeft = fireLeftActionButton.getStatus();
+        fire = fireLeftActionButton.getStatus();
         fireRight = fireRightActionButton.getStatus();
         intakeOn = intakeOnActionButton.getStatus();
         intakeReverse = intakeReverseActionButton.getStatus();
         intakeOff = intakeOffActionButton.getStatus();
         intakeEmergency = intakeEmergencyActionButton.getStatus();
-        leftCannonMorePower = leftMorePowerActionButton.getStatus();
-        leftCannonLessPower = leftLessPowerActionButton.getStatus();
+        launcherMorePower = leftMorePowerActionButton.getStatus();
+        launcherLessPower = leftLessPowerActionButton.getStatus();
         rightCannonMorePower = rightMorePowerActionButton.getStatus();
         rightCannonLessPower = rightLessPowerActionButton.getStatus();
     }
 
     protected void tele() {
-        devices.leftCannon.reset();
+        devices.launcher.reset();
         devices.rightCannon.reset();
         chassis.cameraInit();
         super.tele();
