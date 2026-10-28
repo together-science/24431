@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class A00Preload extends BaseAutoDecode {
     @Override
     protected void auto(){
-        devices.leftCannon.cannonIntake(true);
+        devices.launcher.cannonIntake(true);
         devices.rightCannon.cannonIntake(true);
         sleep(10000);
-        devices.leftCannon.spinDown();
+        devices.launcher.spinDown();
         devices.rightCannon.spinDown();
     }
 }

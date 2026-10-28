@@ -14,19 +14,19 @@ public class Sacha extends BaseTeleOpDecode {
     protected void teleIteration() {
         // compute what the intakeState should be
         if (intakeOff) {
-            devices.leftCannon.spinDown();
+            devices.launcher.spinDown();
             devices.rightCannon.spinDown();
         } else if (intakeOn) {
             devices.intake.on();
-            devices.leftCannon.cannonIntake();
+            devices.launcher.cannonIntake();
             devices.rightCannon.cannonIntake();
         } else if (intakeReverse) {
             devices.intake.off();
-            devices.leftCannon.spinUp();
+            devices.launcher.spinUp();
             devices.rightCannon.spinUp();
             rumble = true;
         } else if (intakeEmergency) {
-            devices.leftCannon.cannonIntakeEmergencyPower();
+            devices.launcher.cannonIntakeEmergencyPower();
             devices.rightCannon.cannonIntakeEmergencyPower();
         }
 
@@ -39,10 +39,10 @@ public class Sacha extends BaseTeleOpDecode {
         }
 
         // adjust cannon wheel speed
-        if (leftCannonMorePower) {
-            devices.leftCannon.morePower();
-        } else if (leftCannonLessPower) {
-            devices.leftCannon.lessPower();
+        if (launcherMorePower) {
+            devices.launcher.morePower();
+        } else if (launcherLessPower) {
+            devices.launcher.lessPower();
         }
         if (rightCannonMorePower) {
             devices.rightCannon.morePower();
@@ -84,13 +84,13 @@ public class Sacha extends BaseTeleOpDecode {
 
         // fire the cannons!
         boolean autoAim = false;
-        if (fireLeft || fireRight) {
+        if (fire || fireRight) {
             chassis.autoAim(Arrays.asList(20, 24));
             autoAim = true;
         }
 
-        double lc = devices.leftCannon.getPower();
-        double lcl = devices.leftCannon.getPowerLevel();
+        double lc = devices.launcher.getPower();
+        double lcl = devices.launcher.getPowerLevel();
         double rc = devices.rightCannon.getPower();
         double rcl = devices.rightCannon.getPowerLevel();
         if (rumble && lc >= lcl-0.01 && rc >= rcl-0.01) {
@@ -98,8 +98,8 @@ public class Sacha extends BaseTeleOpDecode {
             rumble = false;
         }
 
-        if (fireLeft) {
-            devices.leftCannon.fire();
+        if (fire) {
+            devices.launcher.fire();
             rumble = false;
         }
         if (fireRight) {
@@ -114,11 +114,11 @@ public class Sacha extends BaseTeleOpDecode {
         telemetry.addData("yaw", "%.2f", yaw);
         telemetry.addData("turnSpeed", "%.2f", turnSpeed);
         telemetry.addData("Left cannon", "%.2f of %.2f",
-                devices.leftCannon.getPower(), devices.leftCannon.getPowerLevel());
+                devices.launcher.getPower(), devices.launcher.getPowerLevel());
         telemetry.addData("Right cannon", "%.2f of %.2f", devices.rightCannon.getPower(),
                 devices.rightCannon.getPowerLevel());
         telemetry.addData("fireRight", fireRight);
-        telemetry.addData("fireLeft", fireLeft);
+        telemetry.addData("fireLeft", fire);
         double angle = chassis.getGoalDetection();
         telemetry.addLine("Detections: "+(angle < 1000?Double.toString(angle):"--------"));
     }
