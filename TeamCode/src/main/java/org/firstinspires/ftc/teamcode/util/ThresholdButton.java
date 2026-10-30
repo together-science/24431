@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.util;
 
 public class ThresholdButton {
+
+    public interface LevelButtonInput {
+        double getInput();
+    }
+
     LevelButtonInput levelButtonInput;
     double threshold;
 

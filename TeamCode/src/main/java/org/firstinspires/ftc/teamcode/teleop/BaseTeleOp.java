@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 import org.firstinspires.ftc.teamcode.chassis.ScorpChassisOdometry;
+import org.firstinspires.ftc.teamcode.util.TempMessages;
 import org.firstinspires.ftc.teamcode.util.ThresholdButton;
 
 public abstract class BaseTeleOp extends LinearOpMode {
@@ -20,9 +21,10 @@ public abstract class BaseTeleOp extends LinearOpMode {
     public ThresholdButton fasterButton = new ThresholdButton(() -> gamepad1.right_trigger, 0.1);
     public ThresholdButton slowerButton = new ThresholdButton(() -> gamepad1.left_trigger, 0.1);
     public double currentHeading;
+    public TempMessages tms = new TempMessages();
 
     protected void teleInit() {
-        chassis = new ScorpChassisOdometry(this, "left_front_drive", "right_front_drive", "left_back_drive", "right_back_drive", "imu");
+        chassis = new ScorpChassisOdometry(this, "lf", "rf", "lb", "rb", "imu");
         chassis.init();
     }
 
@@ -51,6 +53,9 @@ public abstract class BaseTeleOp extends LinearOpMode {
             // add the elapsed game time
             telemetry.addData("Base", "Run Time:  " + runtime);
             telemetry.addData("Base", "Iterations: " + (++iterations));
+            for (String s : tms.getAllCurrent()) {
+                telemetry.addData("Temp:", s);
+            }
             telemetry.update();
         }
     }

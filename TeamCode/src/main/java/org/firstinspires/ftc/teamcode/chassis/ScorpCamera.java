@@ -24,7 +24,7 @@ public class ScorpCamera {
         try {
             this.cam = op.hardwareMap.get(WebcamName.class, cameraName);
         } catch (Exception ignored) {
-            return;
+            this.cam = null;
         }
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder().build();

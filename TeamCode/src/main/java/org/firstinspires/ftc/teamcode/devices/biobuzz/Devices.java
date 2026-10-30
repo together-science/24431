@@ -3,20 +3,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannon;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannonMotorPort;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpIntakeDCMotor;
-import org.firstinspires.ftc.teamcode.devices.decode.ScorpSorter;
+import org.firstinspires.ftc.teamcode.teleop.BaseTeleOp;
 
 public class Devices {
     public Launcher launcher;
+    public Intake intake;
+    public Flipper flipper;
 
-    public Devices(LinearOpMode op) {
-        launcher = new Launcher(op, "launcher", "rigger_l", "trigger_r",
+    public Devices(BaseTeleOp op) {
+        launcher = new Launcher(op, "launcher", "trigger_l", "trigger_r",
                  0.75, DcMotorSimple.Direction.FORWARD,
                 new PIDFCoefficients(50, 0.2, 30, 15));
-//        intake = new Intake(op, "intake");
-//        flipper = new Flipper(op, "flipper");
+        intake = new Intake(op, "intake");
+        flipper = new Flipper(op, "flipper");
         //camera = new ScorpCamera(op, "Webcam 1");
     }
 }

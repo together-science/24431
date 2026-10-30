@@ -6,6 +6,10 @@ public class ActionButton {
     private boolean triggered = false;
     private static final long DELAY = 200;
 
+    public interface ActionButtonInput {
+        boolean getInput();
+    }
+
     public ActionButton(ActionButtonInput actionButtonInput) {
         this.actionButtonInput = actionButtonInput;
     }

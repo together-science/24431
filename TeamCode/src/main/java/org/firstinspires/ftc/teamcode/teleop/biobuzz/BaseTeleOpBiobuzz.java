@@ -1,38 +1,38 @@
 package org.firstinspires.ftc.teamcode.teleop.biobuzz;
 
-import org.firstinspires.ftc.teamcode.devices.decode.DecodeDevices;
+import org.firstinspires.ftc.teamcode.devices.biobuzz.Devices;
 import org.firstinspires.ftc.teamcode.teleop.BaseTeleOp;
 import org.firstinspires.ftc.teamcode.util.ActionButton;
 
 public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
-    protected DecodeDevices devices = null;
+    protected Devices devices = null;
 
-    protected boolean fireLeft = false;
-    protected boolean fireRight = false;
+    protected boolean spinup = false;
+    protected boolean fire = false;
     protected boolean intakeOn = false;
     protected boolean intakeReverse = false;
     protected boolean intakeOff = false;
-    protected boolean intakeEmergency = false;
-    protected boolean leftCannonMorePower = false;
-    protected boolean leftCannonLessPower = false;
-    protected boolean rightCannonMorePower = false;
-    protected boolean rightCannonLessPower = false;
+    protected boolean launcherMorePower = false;
+    protected boolean launcherLessPower = false;
 
-    protected ActionButton fireLeftActionButton = new ActionButton(() -> gamepad1.left_bumper);
-    protected ActionButton fireRightActionButton = new ActionButton(() -> gamepad1.right_bumper);
+    protected ActionButton spinupActionButton = new ActionButton(() -> gamepad1.left_bumper);
+    protected ActionButton fireActionButton = new ActionButton(() -> gamepad1.right_bumper);
     protected ActionButton intakeOnActionButton = new ActionButton(() -> gamepad1.dpad_left);
     protected ActionButton intakeReverseActionButton = new ActionButton(() -> gamepad1.dpad_right);
     protected ActionButton intakeOffActionButton = new ActionButton(() -> gamepad1.dpad_down);
-    protected ActionButton intakeEmergencyActionButton = new ActionButton(() -> gamepad1.dpad_up);
-    protected ActionButton leftMorePowerActionButton = new ActionButton(() -> gamepad1.y);
-    protected ActionButton leftLessPowerActionButton = new ActionButton(() -> gamepad1.x);
-    protected ActionButton rightMorePowerActionButton = new ActionButton(() -> gamepad1.b && !gamepad1.start);
-    protected ActionButton rightLessPowerActionButton = new ActionButton(() -> gamepad1.a && !gamepad1.start);
+    protected ActionButton launcherMorePowerActionButton = new ActionButton(() -> gamepad1.y);
+    protected ActionButton launcherLessPowerActionButton = new ActionButton(() -> gamepad1.x);
 
     protected void teleInit() {
         super.teleInit();
         chassis.init();
-        devices = new DecodeDevices(this);
+        try {
+            devices = new Devices(this);
+        } catch (Exception e) {
+            this.telemetry.addData("Exception:", e.getLocalizedMessage());
+            this.telemetry.update();
+            this.sleep(5000);
+        }
     }
 
     protected void doRegularTasks() {
@@ -41,22 +41,18 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
 
     protected void readGamepad() {
         super.readGamepad();
-        fireLeft = fireLeftActionButton.getStatus();
-        fireRight = fireRightActionButton.getStatus();
+        spinup = spinupActionButton.getStatus();
+        fire = fireActionButton.getStatus();
         intakeOn = intakeOnActionButton.getStatus();
         intakeReverse = intakeReverseActionButton.getStatus();
         intakeOff = intakeOffActionButton.getStatus();
-        intakeEmergency = intakeEmergencyActionButton.getStatus();
-        leftCannonMorePower = leftMorePowerActionButton.getStatus();
-        leftCannonLessPower = leftLessPowerActionButton.getStatus();
-        rightCannonMorePower = rightMorePowerActionButton.getStatus();
-        rightCannonLessPower = rightLessPowerActionButton.getStatus();
+        launcherMorePower = launcherMorePowerActionButton.getStatus();
+        launcherLessPower = launcherLessPowerActionButton.getStatus();
     }
 
     protected void tele() {
         devices.launcher.reset();
-        devices.rightCannon.reset();
-        chassis.cameraInit();
+        //chassis.cameraInit();
         super.tele();
     }
 }
