@@ -3,25 +3,20 @@ import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePo
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.teleop.decode.BaseTeleOpDecode;
-
-import java.util.Arrays;
-
 @TeleOp(name="Amarra BioBuzz", group="BioBuzz")
 
-public class Amarra extends BaseTeleOpDecode {
+public class Amarra extends BaseTeleOpBiobuzz {
     double heading = 0;
-    boolean rumble = false;
     @Override
     protected void teleIteration() {
         // compute what the intakeState should be
-        if (intakeOff) {
-            devices.intake.on();
-        } else if (intakeOn) {
-            devices.intake.on();
-        } else if (intakeReverse) {
-            devices.intake.off();
-        }
+//        if (intakeOff) {
+//            devices.intake.on();
+//        } else if (intakeOn) {
+//            devices.intake.on();
+//        } else if (intakeReverse) {
+//            devices.intake.off();
+//        }
 
         // compute faster/slower
         double speedFactor = 0.5;
@@ -36,11 +31,6 @@ public class Amarra extends BaseTeleOpDecode {
             devices.launcher.morePower();
         } else if (launcherLessPower) {
             devices.launcher.lessPower();
-        }
-        if (rightCannonMorePower) {
-            devices.rightCannon.morePower();
-        } else if (rightCannonLessPower) {
-            devices.rightCannon.lessPower();
         }
 
         // compute speeds and directions and headings
@@ -76,22 +66,22 @@ public class Amarra extends BaseTeleOpDecode {
         }
 
         // fire the cannons!
-        boolean autoAim = false;
-        if (fire) {
-            chassis.autoAim(Arrays.asList(20, 24));
-            autoAim = true;
+//        boolean autoAim = false;
+//        if (fire) {
+//            chassis.autoAim(Arrays.asList(20, 24));
+//            autoAim = true;
+//            wasTriggered = true;
+//        }
+
+
+        if (spinup) {
+            tms.add("spinup requested", 5000);
+            devices.launcher.spinUp();
         }
 
-        double lc = devices.launcher.getPower();
-        double lcl = devices.launcher.getPowerLevel();
-        if (rumble && lc >= lcl-0.01) {
-            gamepad1.rumble(100);
-            rumble = false;
-        }
-
         if (fire) {
+            tms.add("Fire requested", 5000);
             devices.launcher.fire();
-            rumble = false;
         }
 
         // add the elapsed game time
@@ -102,8 +92,8 @@ public class Amarra extends BaseTeleOpDecode {
         telemetry.addData("turnSpeed", "%.2f", turnSpeed);
         telemetry.addData("Launcher", "%.2f of %.2f",
                 devices.launcher.getPower(), devices.launcher.getPowerLevel());
-        telemetry.addData("trigger", fire);
-        double angle = chassis.getGoalDetection();
+        telemetry.addData("trigger raw", gamepad1.left_bumper);
+        double angle = 1000; // chassis.getGoalDetection();
         telemetry.addLine("Detections: "+(angle < 1000?Double.toString(angle):"--------"));
     }
 }
