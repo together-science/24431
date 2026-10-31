@@ -47,11 +47,12 @@ public class Flipper {
         }
 
         thread = new Thread(()->{
+            open();
             try {
                 do {
-                    flipperServo.setPosition(OPEN);
+                    open();
                     Thread.sleep(2000);
-                    flipperServo.setPosition(CLOSED);
+                    close();
                     Thread.sleep(2000);
                 } while (true);
             } catch (InterruptedException ignored) {
@@ -71,6 +72,7 @@ public class Flipper {
 
         thread.interrupt();
         thread = null;
+        close();
     }
 
 
