@@ -10,6 +10,8 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
     protected boolean spinup = false;
     protected boolean fire = false;
     protected boolean toggleFlipper = false;
+    protected boolean openFlipper = false;
+    protected boolean closeFlipper = false;
     protected boolean intakeOn = false;
     protected boolean intakeReverse = false;
     protected boolean intakeOff = false;
@@ -19,6 +21,8 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
     protected ActionButton spinupActionButton = new ActionButton(() -> gamepad1.left_bumper);
     protected ActionButton fireActionButton = new ActionButton(() -> gamepad1.right_bumper);
     protected ActionButton toggleActionButton = new ActionButton(() -> gamepad1.a && !gamepad1.options);
+    protected ActionButton openFlipperActionButton = new ActionButton(() -> gamepad1.x && !gamepad1.options);
+    protected ActionButton closeFlipperActionButton = new ActionButton(() -> gamepad1.y && !gamepad1.options);
     protected ActionButton intakeOnActionButton = new ActionButton(() -> gamepad1.dpad_left);
     protected ActionButton intakeReverseActionButton = new ActionButton(() -> gamepad1.dpad_right);
     protected ActionButton intakeOffActionButton = new ActionButton(() -> gamepad1.dpad_down);

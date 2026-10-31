@@ -15,7 +15,6 @@ public class Flipper {
         this.op = op;
         try {
             flipperServo = op.hardwareMap.get(Servo.class, flipperName);
-//            op.tms.add("found flipper servo");
         } catch (Exception ignored) {
         }
     }
@@ -25,6 +24,10 @@ public class Flipper {
             return ;
         }
 
+        if (thread != null) {
+            thread.interrupt();
+            thread = null;
+        }
         flipperServo.setPosition(OPEN);
     }
 
@@ -33,6 +36,10 @@ public class Flipper {
             return ;
         }
 
+        if (thread != null) {
+            thread.interrupt();
+            thread = null;
+        }
         flipperServo.setPosition(CLOSED);
     }
 
@@ -50,10 +57,10 @@ public class Flipper {
             open();
             try {
                 do {
-                    open();
+                    flipperServo.setPosition(OPEN);
                     //noinspection BusyWait
                     Thread.sleep(1000);
-                    close();
+                    flipperServo.setPosition(CLOSED);
                     //noinspection BusyWait
                     Thread.sleep(1000);
                 } while (true);

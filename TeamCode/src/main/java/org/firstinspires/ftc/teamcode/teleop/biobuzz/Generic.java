@@ -20,6 +20,10 @@ public class Generic extends BaseTeleOpBiobuzz {
 
         if (toggleFlipper) {
             devices.flipper.toggle();
+        } else if (openFlipper) {
+            devices.flipper.open();
+        } else if (closeFlipper) {
+            devices.flipper.close();
         }
 
         // compute faster/slower
