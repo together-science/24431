@@ -51,8 +51,10 @@ public class Flipper {
             try {
                 do {
                     open();
+                    //noinspection BusyWait
                     Thread.sleep(1000);
                     close();
+                    //noinspection BusyWait
                     Thread.sleep(1000);
                 } while (true);
             } catch (InterruptedException ex) {
