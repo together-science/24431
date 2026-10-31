@@ -18,4 +18,10 @@ public class Devices {
         flipper = new Flipper(op, "flipper");
         //camera = new ScorpCamera(op, "Webcam 1");
     }
+
+    public void reset() {
+        intake.off();
+        flipper.close();
+        launcher.reset();
+    }
 }

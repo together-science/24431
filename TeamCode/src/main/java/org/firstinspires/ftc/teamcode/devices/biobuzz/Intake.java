@@ -13,17 +13,18 @@ public class Intake {
         this.op = op;
         try {
             intakeServo = op.hardwareMap.get(CRServo.class, leftName);
-            op.tms.add("found intake servo");
+//            op.tms.add("found intake servo");
         } catch (Exception ignored) {
         }
     }
 
     public void on() {
+        op.tms.add("switching intake on:before check");
         if (intakeServo == null) {
             return ;
         }
-
-        intakeServo.setPower(SPEED);
+        op.tms.add("switching intake on");
+        intakeServo.setPower(-SPEED);
     }
 
     public void off() {
@@ -31,6 +32,7 @@ public class Intake {
             return ;
         }
 
+        op.tms.add("switching intake off");
         intakeServo.setPower(0);
     }
 
@@ -39,6 +41,7 @@ public class Intake {
             return ;
         }
 
-        intakeServo.setPower(-SPEED);
+        op.tms.add("switching intake to reverse");
+        intakeServo.setPower(SPEED);
     }
 }

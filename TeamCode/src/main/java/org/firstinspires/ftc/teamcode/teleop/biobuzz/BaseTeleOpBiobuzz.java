@@ -9,6 +9,7 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
 
     protected boolean spinup = false;
     protected boolean fire = false;
+    protected boolean toggleFlipper = false;
     protected boolean intakeOn = false;
     protected boolean intakeReverse = false;
     protected boolean intakeOff = false;
@@ -17,6 +18,7 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
 
     protected ActionButton spinupActionButton = new ActionButton(() -> gamepad1.left_bumper);
     protected ActionButton fireActionButton = new ActionButton(() -> gamepad1.right_bumper);
+    protected ActionButton toggleActionButton = new ActionButton(() -> gamepad1.a && !gamepad1.options);
     protected ActionButton intakeOnActionButton = new ActionButton(() -> gamepad1.dpad_left);
     protected ActionButton intakeReverseActionButton = new ActionButton(() -> gamepad1.dpad_right);
     protected ActionButton intakeOffActionButton = new ActionButton(() -> gamepad1.dpad_down);
@@ -43,6 +45,7 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
         super.readGamepad();
         spinup = spinupActionButton.getStatus();
         fire = fireActionButton.getStatus();
+        toggleFlipper = toggleActionButton.getStatus();
         intakeOn = intakeOnActionButton.getStatus();
         intakeReverse = intakeReverseActionButton.getStatus();
         intakeOff = intakeOffActionButton.getStatus();
@@ -51,7 +54,7 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
     }
 
     protected void tele() {
-        devices.launcher.reset();
+        devices.reset();
         //chassis.cameraInit();
         super.tele();
     }
