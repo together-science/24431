@@ -51,14 +51,16 @@ public class Flipper {
             try {
                 do {
                     open();
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     close();
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } while (true);
-            } catch (InterruptedException ignored) {
-                // will exit
+            } catch (InterruptedException ex) {
+                op.tms.add("Flipper thread exception:"+ex.getMessage());
             }
         });
+        thread.start();
+        op.tms.add("Flipper on");
     }
 
     public void off() {
@@ -73,6 +75,7 @@ public class Flipper {
         thread.interrupt();
         thread = null;
         close();
+        op.tms.add("Flipper off");
     }
 
 
