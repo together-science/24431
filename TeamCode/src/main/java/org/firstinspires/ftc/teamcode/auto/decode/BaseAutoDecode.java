@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.decode;
 import org.firstinspires.ftc.teamcode.devices.decode.DecodeDevices;
 import org.firstinspires.ftc.teamcode.auto.BaseAuto;
 import org.firstinspires.ftc.teamcode.devices.decode.ScorpCannon;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagSingleDetection;
 
 import java.util.Arrays;
 
@@ -30,7 +30,7 @@ public abstract class BaseAutoDecode extends BaseAuto {
         if (id == 0) {
             //sleep(500); // give the camera a chance to see stuff
             // look (again)
-            AprilTagDetection tag;
+            AprilTagSingleDetection tag;
             tag = chassis.camera.getDetection(Arrays.asList(21,22,23));
             if (tag != null) {
                 id = tag.id;

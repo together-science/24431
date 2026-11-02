@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.Position;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagSingleDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import java.util.Arrays;
 import java.util.List;
@@ -81,7 +81,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     }
 
     public double getGoalDetection() {
-        AprilTagDetection tag;
+        AprilTagSingleDetection tag;
         tag = camera.getDetection(Arrays.asList(20, 24));
         if (tag != null) {
             int id = tag.id;
@@ -108,7 +108,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
 //        op.telemetry.update();
 //        op.sleep(3000);
 
-        AprilTagDetection tag;
+        AprilTagSingleDetection tag;
         tag = camera.getDetection(desiredTags);
         if (tag != null) {
             id = tag.id;

@@ -1,20 +1,20 @@
 package org.firstinspires.ftc.teamcode.devices.decode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.teamcode.ScorpionLinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class ScorpIntakeDCMotor {
     private DcMotor left = null;
     private DcMotor right = null;
     private static final double SPEED = 1.0;
-    private final LinearOpMode op;
+    private final ScorpionLinearOpMode op;
 
-    ScorpIntakeDCMotor(LinearOpMode op, String leftName, String rightName) {
+    ScorpIntakeDCMotor(ScorpionLinearOpMode op, String leftName, String rightName) {
         this.op = op;
         try {
             left = op.hardwareMap.get(DcMotor.class, leftName);
             right = op.hardwareMap.get(DcMotor.class, rightName);
-            this.op.telemetry.addLine("found intake servos");
+            this.op.tms.add("found intake servos");
         } catch (Exception ignored) {
         }
 

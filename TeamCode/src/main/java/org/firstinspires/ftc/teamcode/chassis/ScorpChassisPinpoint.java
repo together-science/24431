@@ -3,21 +3,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.ScorpionLinearOpMode;
 import org.firstinspires.ftc.teamcode.util.Position;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 
 public class ScorpChassisPinpoint extends ScorpChassisOdometry {
-    private GoBildaPinpointDriver pinpoint;
+    private GoBildaPinpointDriver pinpoint = null;
 
-    public ScorpChassisPinpoint(LinearOpMode op, String lfName, String rfName, String lbName, String rbName, String pinpointName, String imuName) {
+    public ScorpChassisPinpoint(ScorpionLinearOpMode op, String lfName, String rfName, String lbName, String rbName, String pinpointName, String imuName) {
         super(op, lfName, rfName, lbName, rbName, imuName);
         try {
             this.pinpoint = op.hardwareMap.get(GoBildaPinpointDriver.class, pinpointName);
         }
         catch (Exception ignored) {
-            op.telemetry.addLine("don pinpoint device not found");
+            op.tms.add("don pinpoint device not found");
         }
     }
     public void init(){
@@ -63,9 +64,9 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
             // Set the location of the robot - this should be the place you are starting the robot from
             pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0));
         } else{
-            op.telemetry.addLine("NULL PINPOINT ODMY");
-            op.telemetry.update();
-            op.sleep(10000);
+//            op.telemetry.addLine("NULL PINPOINT ODMY");
+//            op.telemetry.update();
+//            op.sleep(10000);
         }
     }
 

@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.devices.decode;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.teamcode.ScorpionLinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class ScorpCannonServoPort extends ScorpCannon {
     private CRServo wheel = null;
 
-    ScorpCannonServoPort(LinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
+    ScorpCannonServoPort(ScorpionLinearOpMode op, String wheelName, String triggerName, double power, DcMotorSimple.Direction direction) {
         super(op, triggerName, power, direction);
         try {
             this.wheel = op.hardwareMap.get(CRServo.class, wheelName);
-            op.telemetry.addLine("found wheel");
+            op.tms.add("found wheel");
         } catch(Exception ignored) {
         }
 

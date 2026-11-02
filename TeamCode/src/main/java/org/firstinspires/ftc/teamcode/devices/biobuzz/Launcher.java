@@ -36,17 +36,13 @@ public class Launcher {
             left = op.hardwareMap.get(Servo.class, leftName);
             right = op.hardwareMap.get(Servo.class, rightName);
             if (wheel != null && left != null && right != null) {
-                this.op.telemetry.addLine("launcher construction succeeded");
+                this.op.tms.add("launcher construction succeeded");
             } else {
-                this.op.telemetry.addLine("launcher construction failed");
-                this.op.telemetry.update();
-                this.op.sleep(2000);
+                this.op.tms.add("launcher construction failed");
                 throw new RuntimeException();
             }
         } catch(Exception ex) {
-            this.op.telemetry.addLine("launcher construction failed");
-            this.op.telemetry.update();
-            this.op.sleep(2000);
+            this.op.tms.add("launcher construction failed");
             throw ex;
         }
 

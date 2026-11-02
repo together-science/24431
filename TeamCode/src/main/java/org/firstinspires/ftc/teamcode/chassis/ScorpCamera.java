@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.Exposur
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagSingleDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
@@ -55,18 +56,23 @@ public class ScorpCamera {
     public void on(){
         visionPortal.resumeStreaming();
     }
-    public AprilTagDetection getDetection(final List<Integer> desiredTagIds) {
+    public AprilTagSingleDetection getDetection(final List<Integer> desiredTagIds) {
         if (this.cam == null) {
             return null;
         }
         // Step through the list of detected tags and look for a matching tag
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentDetections) {
+            // SDK 12: id and metadata live on AprilTagSingleDetection, not the base class.
+            if (!(detection instanceof AprilTagSingleDetection)) {
+                continue;
+            }
+            AprilTagSingleDetection single = (AprilTagSingleDetection) detection;
             // Look to see if we have size info on this tag.
-            if (detection.metadata != null) {
+            if (single.metadata != null) {
                 //  Check to see if we want to track towards this tag.
-                if (desiredTagIds.contains(detection.id)) {
-                    return detection;
+                if (desiredTagIds.contains(single.id)) {
+                    return single;
                 }
             }
         }

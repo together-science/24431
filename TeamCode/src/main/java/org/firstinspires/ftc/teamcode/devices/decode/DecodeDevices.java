@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.devices.decode;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.teamcode.ScorpionLinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
@@ -10,7 +10,7 @@ public class DecodeDevices {
     public ScorpSorter sorter;
     //public ScorpCamera camera;
 
-    public DecodeDevices(LinearOpMode op) {
+    public DecodeDevices(ScorpionLinearOpMode op) {
         launcher = new ScorpCannonMotorPort(op, "left_cannon_wheel",
                 "left_cannon_trigger", 0.75, DcMotorSimple.Direction.FORWARD,
                 new PIDFCoefficients(50, 0.2, 30, 15));
