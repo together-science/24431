@@ -35,9 +35,8 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
         try {
             devices = new Devices(this);
         } catch (Exception e) {
-            this.telemetry.addData("Exception:", e.getLocalizedMessage());
-            this.telemetry.update();
-            this.sleep(5000);
+            tms.add("Exception: " +e.getLocalizedMessage());
+            throw e;
         }
     }
 
