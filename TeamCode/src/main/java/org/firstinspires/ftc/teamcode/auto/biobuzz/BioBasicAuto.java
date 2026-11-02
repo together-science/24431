@@ -9,6 +9,6 @@ import org.firstinspires.ftc.teamcode.chassis.ScorpChassisBase;
 public class BioBasicAuto extends BaseAutoBiobuzz {
     @Override
     protected void auto() {
-        chassis.strafeTo(0, 1, ScorpChassisBase.DRIVE_SPEED_SLOW);
+        chassis.strafeTo(0, 24, ScorpChassisBase.DRIVE_SPEED_SLOW);
     }
 }
