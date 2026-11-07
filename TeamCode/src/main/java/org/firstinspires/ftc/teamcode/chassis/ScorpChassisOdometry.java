@@ -47,6 +47,8 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             this.op = op;
             this.camera = new ScorpCamera(op, "Webcam 1");
         } catch (Exception ignored) {
+            op.telemetry.addLine("Woah I shouldn't be here, something is off");
+            op.telemetry.update();
         }
     }
     public void init(){
@@ -185,6 +187,16 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
         }
     }
 
+    public void crudeWheelPowersSet(double power) {
+        crudeWheelPowersSet(power, power, power, power);
+    }
+
+    public void crudeWheelPowersSet(double lfp, double lbp, double rfp, double rbp) {
+        lf.setPower(lfp);
+        lb.setPower(lbp);
+        rf.setPower(rfp);
+        rb.setPower(rbp);
+    }
 
     public void turnToHeading(double maxTurnSpeed, double heading) {
         if (lf == null || lb == null || rf == null || rb == null ) {
