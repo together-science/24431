@@ -20,7 +20,7 @@ public class Generic extends BaseTeleOpBiobuzz {
 
         if (toggleFlipper) {
             devices.flipper.toggle();
-        } else if (openFlipper) {
+        } else if (gamepad1.a) {
             devices.flipper.open();
         } else if (closeFlipper) {
             devices.flipper.close();

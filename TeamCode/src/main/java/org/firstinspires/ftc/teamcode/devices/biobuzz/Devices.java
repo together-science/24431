@@ -12,7 +12,7 @@ public class Devices {
 
     public Devices(BaseTeleOp op) {
         launcher = new Launcher(op, "launcher", "trigger_l", "trigger_r",
-                 0.75, DcMotorSimple.Direction.FORWARD,
+                 0.675, DcMotorSimple.Direction.FORWARD,
                 new PIDFCoefficients(50, 0.2, 30, 15));
         intake = new Intake(op, "intake");
         flipper = new Flipper(op, "flipper");

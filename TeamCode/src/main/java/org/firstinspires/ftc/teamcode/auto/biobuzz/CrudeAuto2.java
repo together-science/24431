@@ -7,9 +7,9 @@ public class CrudeAuto2 extends BaseAutoBiobuzz {
     @Override
     protected void auto() {
         chassis.crudeWheelPowersSet(0.4);
-        sleep(600);
-        chassis.crudeWheelPowersSet(0.4, -0.4, -0.4, 0.4);
         sleep(500);
+        chassis.crudeWheelPowersSet(0.4, -0.4, -0.4, 0.4);
+        sleep(450);
         chassis.crudeWheelPowersSet(0);
     }
 }
