@@ -2,14 +2,25 @@ package org.firstinspires.ftc.teamcode.teleop.biobuzz;
 import static org.firstinspires.ftc.teamcode.util.Position.headingFromRelativePosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Generic BioBuzz", group="BioBuzz")
 
 public class Generic extends BaseTeleOpBiobuzz {
     double heading = 0;
+    ElapsedTime intakeTimer = runtime;
     @Override
     protected void teleIteration() {
         // compute what the intakeState should be
+
+//        if (intakeOff) {
+//            devices.intake.on();
+//            intakeTimer = runtime;
+//        }
+//        if (runtime.milliseconds() - intakeTimer.milliseconds() > 2500) {
+//            devices.intake.reverse();
+//        }
+
         if (intakeOff) {
             devices.intake.on();
         } else if (intakeOn) {
@@ -39,6 +50,7 @@ public class Generic extends BaseTeleOpBiobuzz {
             devices.launcher.morePower();
         } else if (launcherLessPower) {
             devices.launcher.lessPower();
+        } if (gamepad1.a) {
         }
 
         // compute speeds and directions and headings
