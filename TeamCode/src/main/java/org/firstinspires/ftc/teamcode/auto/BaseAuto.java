@@ -41,5 +41,3 @@ public abstract class BaseAuto extends ScorpionLinearOpMode {
         }
     }
 }
-
-// New device git agreeable test

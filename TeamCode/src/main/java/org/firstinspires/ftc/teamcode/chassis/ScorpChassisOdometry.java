@@ -21,7 +21,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     protected DcMotor rb = null;
     protected IMU imu = null;
     protected LinearOpMode op = null;
-    public ScorpCamera camera;
+    public ScorpCamera camera = null;
 
     @Override
     public Position getPosition() {
@@ -141,6 +141,7 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
     }
     public void strafeTo(double x, double y, double driveSpeed, double heading){
         if (lf == null || lb == null || rf == null || rb == null) {
+
             return;
         }
         // new: This resets us before strafe.

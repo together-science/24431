@@ -28,7 +28,7 @@ public abstract class BaseTeleOp extends ScorpionLinearOpMode {
         chassis.init();
     }
 
-    // this method will be implemented by the sub class
+    // this method will be implemented by the subclass
     protected abstract void teleIteration();
 
     protected void doRegularTasks() {

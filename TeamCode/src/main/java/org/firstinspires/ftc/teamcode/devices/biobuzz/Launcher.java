@@ -68,6 +68,10 @@ public class Launcher {
         wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheel.setPower(power);
     }
+    // Other set power functions are protected, use this with wisdom
+    public void setPowerTrusting(double power) {
+        setPower(power);
+    }
 
     protected boolean noWheel() {
         return wheel == null;
