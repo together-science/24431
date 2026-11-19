@@ -32,12 +32,7 @@ public abstract class BaseTeleOpBiobuzz extends BaseTeleOp {
     protected void teleInit() {
         super.teleInit();
         chassis.init();
-        try {
-            devices = new Devices(this);
-        } catch (Exception e) {
-            tms.add("Exception: " +e.getLocalizedMessage());
-            throw e;
-        }
+        devices = new Devices(this);
     }
 
     protected void doRegularTasks() {

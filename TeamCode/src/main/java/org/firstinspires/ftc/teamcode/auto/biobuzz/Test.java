@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.auto.biobuzz;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+@Autonomous(name = "TestA")
 public class Test extends LinearOpMode {
     DcMotor lfdrv = null;
     DcMotor rfdrv = null;

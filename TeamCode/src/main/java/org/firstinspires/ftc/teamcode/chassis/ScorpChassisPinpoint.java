@@ -18,7 +18,6 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
             this.pinpoint = op.hardwareMap.get(GoBildaPinpointDriver.class, pinpointName);
         }
         catch (Exception ignored) {
-            op.tms.add("don pinpoint device not found");
         }
     }
     public void init(){
@@ -82,7 +81,7 @@ public class ScorpChassisPinpoint extends ScorpChassisOdometry {
         }
         Pose2D pos = pinpoint.getPosition();
         Position p = new Position();
-        p.x = -pos.getX(DistanceUnit.INCH);
+        p.x = pos.getX(DistanceUnit.INCH);
         p.y = pos.getY(DistanceUnit.INCH);
         p.h = pos.getHeading(AngleUnit.DEGREES);
         return p;

@@ -26,25 +26,22 @@ public class Launcher {
     Launcher(BaseTeleOp op, String wheelName, String leftName, String rightName,
              double power,
              DcMotorSimple.Direction direction, PIDFCoefficients c) {
-        try {
-            this.wheel = op.hardwareMap.get(DcMotorEx.class, wheelName);
-            this.wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            this.wheel.setVelocity(power);
-            this.c = c;
-            this.op = op;
-            this.power = power;
-            left = op.hardwareMap.get(Servo.class, leftName);
-            right = op.hardwareMap.get(Servo.class, rightName);
-            if (wheel != null && left != null && right != null) {
-                this.op.tms.add("launcher construction succeeded");
-            } else {
-                this.op.tms.add("launcher construction failed");
-                throw new RuntimeException();
-            }
-        } catch(Exception ex) {
-            this.op.tms.add("launcher construction failed");
-            throw ex;
-        }
+try {
+    this.wheel = op.hardwareMap.get(DcMotorEx.class, wheelName);
+    this.wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    this.wheel.setVelocity(power);
+    this.c = c;
+    this.op = op;
+    this.power = power;
+    left = op.hardwareMap.get(Servo.class, leftName);
+    right = op.hardwareMap.get(Servo.class, rightName);
+    if (wheel != null && left != null && right != null) {
+    } else {
+
+    }
+} catch (Exception e) {
+
+}
 
         if (wheel != null) {
             wheel.setDirection(direction);

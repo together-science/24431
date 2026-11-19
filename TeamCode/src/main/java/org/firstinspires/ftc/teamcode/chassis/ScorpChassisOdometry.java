@@ -45,10 +45,11 @@ public class ScorpChassisOdometry extends ScorpChassisBase {
             this.rb = op.hardwareMap.get(DcMotor.class, rbName);
             this.imu = op.hardwareMap.get(IMU.class, imuName);
             this.op = op;
-            this.camera = new ScorpCamera(op, "Webcam 1");
+            //this.camera = new ScorpCamera(op, "Webcam 1");
         } catch (Exception ignored) {
             op.telemetry.addLine("Woah I shouldn't be here, something is off");
             op.telemetry.update();
+            op.sleep(5000);
         }
     }
     public void init(){

@@ -11,11 +11,12 @@ public class Intake {
 
     Intake(BaseTeleOp op, String leftName) {
         this.op = op;
-        try {
-            intakeServo = op.hardwareMap.get(CRServo.class, leftName);
+    try {
+        intakeServo = op.hardwareMap.get(CRServo.class, leftName);
 //            op.tms.add("found intake servo");
-        } catch (Exception ignored) {
-        }
+    } catch (Exception e) {
+
+    }
     }
 
     public void on() {

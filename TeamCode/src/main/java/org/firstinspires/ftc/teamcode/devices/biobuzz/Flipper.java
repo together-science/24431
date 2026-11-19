@@ -13,9 +13,11 @@ public class Flipper {
 
     Flipper(BaseTeleOp op, String flipperName) {
         this.op = op;
+
         try {
             flipperServo = op.hardwareMap.get(Servo.class, flipperName);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+
         }
     }
 
